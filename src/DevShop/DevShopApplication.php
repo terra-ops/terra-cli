@@ -4,7 +4,7 @@ namespace DevShop;
 use Symfony\Component\Console\Application as BaseApplication;
 use DevShop\Console\Command\StatusCommand;
 
-class Application extends BaseApplication
+class DevShopApplication extends BaseApplication
 {
   const NAME = 'DevShop';
   const VERSION = '2.0';
