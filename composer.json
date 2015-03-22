@@ -1,13 +1,26 @@
 {
     "name": "opendevshop/devshop",
-    "description": "DevOps Command & Control for Drupal",
-    "require": {
-        "drupal/drupal": "8.0.*@dev"
-    },
+    "description": "DevOps Command & Control (for Drupal)",
+    "version": "2.0.*@dev",
+    "license": "GPL-2.0+",
     "authors": [
         {
             "name": "Jon Pugh",
             "email": "jon@thinkdrop.net"
         }
+    ],
+    "support": {
+      "forum": "https://www.drupal.org/project/issues/devshop",
+      "irc": "irc://irc.freenode.org/devshop"
+    },
+    "require": {
+      "symfony/console": "3.0.*@dev",
+      "drush/drush": "7.0.*@dev"
+    },
+    "suggest": {
+      "opendevshop/devmaster": "Provides the web control panel for DevShop."
+    },
+    "bin": [
+      "devshop"
     ]
 }
