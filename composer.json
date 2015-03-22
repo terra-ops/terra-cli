@@ -1,0 +1,13 @@
+{
+    "name": "opendevshop/devshop",
+    "description": "DevOps Command & Control for Drupal",
+    "require": {
+        "drupal/drupal": "8.0.*@dev"
+    },
+    "authors": [
+        {
+            "name": "Jon Pugh",
+            "email": "jon@thinkdrop.net"
+        }
+    ]
+}
