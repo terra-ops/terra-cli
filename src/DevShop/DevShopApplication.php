@@ -2,7 +2,7 @@
 namespace DevShop;
 
 use Symfony\Component\Console\Application as BaseApplication;
-use DevShop\Console\Command\StatusCommand;
+use DevShop\Command\StatusCommand;
 
 class DevShopApplication extends BaseApplication
 {
