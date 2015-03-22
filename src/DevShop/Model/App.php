@@ -7,11 +7,6 @@ namespace DevShop\Model;
 class App {
 
   /**
-   * @var integer
-   */
-  protected $id;
-
-  /**
    * @var string
    * The app's machine name.  Must be unique.
    */
