@@ -2,6 +2,7 @@
 
 namespace DevShop\Command;
 
+use DevShop\DevShopApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,6 +11,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class StatusCommand extends Command
 {
+  public $app;
+
+  function __construct(DevShopApplication $app) {
+    parent::__construct();
+    $this->app = $app;
+  }
+
   protected function configure()
   {
     $this
@@ -29,6 +37,7 @@ class StatusCommand extends Command
     if (!$name) {
       $name = 'localhost';
     }
-    $output->writeln("Hello $name...");
+    $output->writeln("Hello World!");
+    $output->writeln("Server: " . $this->app->data['server']);
   }
 }
