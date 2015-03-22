@@ -1,6 +1,7 @@
 <?php
 namespace DevShop;
 
+use DevShop\Command\AppUpdateCommand;
 use Symfony\Component\Console\Application as BaseApplication;
 use DevShop\Command\StatusCommand;
 use DevShop\Command\AppAddCommand;
@@ -23,6 +24,7 @@ class DevShopApplication extends BaseApplication
     // Add available commands to this devshop.
     $this->add(new StatusCommand($this));
     $this->add(new AppAddCommand($this));
+    $this->add(new AppUpdateCommand($this));
 
     // Load Data
     $this->loadData();
