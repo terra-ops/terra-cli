@@ -40,8 +40,26 @@ class StatusCommand extends Command
     $output->writeln("Hello World!");
     $output->writeln("Server: " . $this->app->data['server']);
 
+    // SERVERS table.
     $table = $this->getHelper('table');
-    $table->setHeaders(array('Name', 'Description', 'Repo'));
+    $table->setHeaders(array('SERVERS', 'Provider'));
+
+    $rows = array();
+    foreach ($this->app->data['servers'] as $server) {
+      $server = (object) $server;
+      $row = array(
+        $server->hostname,
+        $server->provider,
+      );
+      $rows[] = $row;
+    }
+    $table->setRows($rows);
+    $table->render($output);
+
+
+    // APPS table.
+    $table = $this->getHelper('table');
+    $table->setHeaders(array('APPS', 'Description', 'Repo'));
 
     $rows = array();
     foreach ($this->app->data['apps'] as $app) {
@@ -55,5 +73,7 @@ class StatusCommand extends Command
     }
     $table->setRows($rows);
     $table->render($output);
+
+
   }
 }
