@@ -59,7 +59,7 @@ class StatusCommand extends Command
 
     // APPS table.
     $table = $this->getHelper('table');
-    $table->setHeaders(array('APPS', 'Description', 'Repo'));
+    $table->setHeaders(array('APPS', 'Description', 'Repo', 'environments'));
 
     $rows = array();
     foreach ($this->app->data['apps'] as $app) {
@@ -68,6 +68,7 @@ class StatusCommand extends Command
         $app->name,
         $app->description,
         $app->source_url,
+        implode(', ', array_keys($this->app->data['apps'][$app->name]['environments']))
       );
       $rows[] = $row;
     }

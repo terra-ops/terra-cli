@@ -6,6 +6,7 @@ use DevShop\Command\ServerAddCommand;
 use Symfony\Component\Console\Application as BaseApplication;
 use DevShop\Command\StatusCommand;
 use DevShop\Command\AppAddCommand;
+use DevShop\Command\EnvironmentAddCommand;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Yaml\Yaml;
@@ -27,6 +28,7 @@ class DevShopApplication extends BaseApplication
     $this->add(new AppAddCommand($this));
     $this->add(new AppUpdateCommand($this));
     $this->add(new ServerAddCommand($this));
+    $this->add(new EnvironmentAddCommand($this));
 
     // Load Data
     $this->loadData();
