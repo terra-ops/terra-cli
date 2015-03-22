@@ -43,16 +43,17 @@ class StatusCommand extends Command
     $table = $this->getHelper('table');
     $table->setHeaders(array('Name', 'Description', 'Repo'));
 
+    $rows = array();
     foreach ($this->app->data['apps'] as $app) {
       $app = (object) $app;
-      $table->setRows(array(
-        array(
-          $app->name,
-          $app->description,
-          $app->source_url,
-        )
-      ));
+      $row = array(
+        $app->name,
+        $app->description,
+        $app->source_url,
+      );
+      $rows[] = $row;
     }
+    $table->setRows($rows);
     $table->render($output);
   }
 }
