@@ -22,6 +22,11 @@
     "suggest": {
       "opendevshop/devmaster": "Provides the web control panel for DevShop."
     },
+    "autoload": {
+      "psr-0": {
+        "": "src/"
+      }
+    },
     "bin": [
       "devshop"
     ]
