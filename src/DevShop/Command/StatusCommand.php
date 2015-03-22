@@ -39,5 +39,20 @@ class StatusCommand extends Command
     }
     $output->writeln("Hello World!");
     $output->writeln("Server: " . $this->app->data['server']);
+
+    $table = $this->getHelper('table');
+    $table->setHeaders(array('Name', 'Description', 'Repo'));
+
+    foreach ($this->app->data['apps'] as $app) {
+      $app = (object) $app;
+      $table->setRows(array(
+        array(
+          $app->name,
+          $app->description,
+          $app->source_url,
+        )
+      ));
+    }
+    $table->render($output);
   }
 }
