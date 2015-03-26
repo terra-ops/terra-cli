@@ -64,11 +64,14 @@ class StatusCommand extends Command
     $rows = array();
     foreach ($this->app->data['apps'] as $app) {
       $app = (object) $app;
+      $environments_list = !empty($this->app->data['apps'][$app->name]['environments'])?
+        implode(', ', array_keys($this->app->data['apps'][$app->name]['environments'])):
+        '';
       $row = array(
         $app->name,
         $app->description,
         $app->source_url,
-        implode(', ', array_keys($this->app->data['apps'][$app->name]['environments']))
+        $environments_list,
       );
       $rows[] = $row;
     }
