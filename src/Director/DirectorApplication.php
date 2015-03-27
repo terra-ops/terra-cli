@@ -8,6 +8,7 @@ use Director\Command\StatusCommand;
 use Director\Command\AppAddCommand;
 use Director\Command\AppInitCommand;
 use Director\Command\EnvironmentAddCommand;
+use Director\Command\RoleAddCommand;
 use Director\Model\App;
 use Director\Service\AppService;
 
@@ -46,6 +47,7 @@ class DirectorApplication extends BaseApplication
     $this->add(new AppUpdateCommand($this));
     $this->add(new ServerAddCommand($this));
     $this->add(new EnvironmentAddCommand($this));
+    $this->add(new RoleAddCommand($this));
 
     // Load Data
     $this->loadData();

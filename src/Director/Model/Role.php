@@ -19,10 +19,17 @@ class Role {
   public $description;
 
   /**
+   * @var string
+   * The ansible galaxy role.
+   */
+  public $galaxy_role;
+
+  /**
    * Initiate the Role object.
    */
-  public function __construct($name, $description = NULL) {
+  public function __construct($name, $galaxy_role, $description = NULL) {
     $this->name = $name;
+    $this->galaxy_role = $galaxy_role;
     $this->description = $description;
   }
 }
