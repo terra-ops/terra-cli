@@ -5,6 +5,6 @@ before_script:
   - composer install --no-interaction --prefer-source --dev
 
 script:
-  - ./ director
-  - ./ director status
+  - ./director
+  - ./director status
   - echo "Hello!"
