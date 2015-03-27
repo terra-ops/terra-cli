@@ -46,6 +46,7 @@ class ServerAddCommand extends Command
     $question = new ChoiceQuestion(
       'Server Provider? ',
       array(
+        'none',
         'vagrant',
       ),
       0
