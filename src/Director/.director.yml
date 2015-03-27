@@ -1,0 +1,13 @@
+---
+server: localhost
+apps:
+  director:
+    name: director
+    description: The director application.
+    source_url: git@github.com:jonpugh/director.git
+servers:
+  localhost:
+    hostname: localhost
+    provider: localhost
+    ip_addresses:
+      - 127.0.0.1

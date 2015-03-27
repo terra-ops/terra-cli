@@ -72,22 +72,7 @@ class DirectorApplication extends BaseApplication
     // If there's an exception, write a default config.
     catch (\InvalidArgumentException $e) {
       $path = $GLOBALS['_SERVER']['HOME'] . '/.director.yml';
-      $data = <<<YML
----
-server: localhost
-apps:
-  director:
-    name: director
-    description: The director application.
-    source_url: git@github.com:opendevshop/director.git
-servers:
-  localhost:
-    hostname: localhost
-    provider: localhost
-    ip_addresses:
-      - 127.0.0.1
-
-YML;
+      $data = file_get_contents(__DIR__ . '/.director.yml');
       file_put_contents($path, $data);
       $this->dataPath = $locator->locate('.director.yml');
     }
