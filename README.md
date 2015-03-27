@@ -10,23 +10,23 @@ More coming soon.
 Current Commands
 ----------------
 
-status
+- status
 
   Outputs the current servers and apps in the registry.
 
-server:add
+- server:add
 
   Adds a server to the registry.
 
-app:add
+- app:add
 
   Adds an app to the registry.
 
-app:update
+- app:update
 
   Update the apps information.
 
-app:init
+- app:init
 
   Clones the app's source code to the desired path.
 
@@ -34,22 +34,22 @@ app:init
 Next Steps
 ----------
 
-role:add
+- role:add
 
   Adds a role to the registry.
   Adds the role to .playbook.yml
 
-server:assign
+- server:assign
 
   Assigns a role to a server.
   Adds the server to .inventory
 
-server:unassign
+- server:unassign
 
   Unassigns a role to a server.
   Removes the server from .inventory
 
-director:direct
+- director:direct
 
   Runs ansible-playbook using current .playbook.yml and .inventory.
   Updates all of the servers.

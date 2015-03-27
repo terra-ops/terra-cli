@@ -2,6 +2,7 @@
 namespace Director\Service;
 use Director\DirectorApplication;
 use GitWrapper\GitWrapper;
+
 /**
  * Service for an App.
  */
