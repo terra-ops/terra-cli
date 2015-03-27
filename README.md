@@ -7,13 +7,36 @@ Coupled with Ansible, Director makes it easy to track and manage large numbers o
 
 More coming soon.
 
+Current Commands
+----------------
+
+status
+
+  Outputs the current servers and apps in the registry.
+
+server:add
+
+  Adds a server to the registry.
+
+app:add
+
+  Adds an app to the registry.
+
+app:update
+
+  Update the apps information.
+
+app:init
+
+  Clones the app's source code to the desired path.
+
 
 Next Steps
 ----------
 
 role:add
 
-  Adds to the available server roles.
+  Adds a role to the registry.
   Adds the role to .playbook.yml
 
 server:assign
