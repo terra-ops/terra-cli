@@ -1,8 +1,8 @@
-DevShop 2
-=========
+Director
+========
 
-This is a prototype for devshop 2.0.
+Director is a console tool for orchestrating your server & your software.
 
-It is a complete rewrite from scratch.
+Coupled with Ansible, Director makes it easy to track and manage large numbers of servers.
 
-Stay tuned as we progress through this.
+More coming soon.
