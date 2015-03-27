@@ -18,7 +18,8 @@
       "symfony/console": "2.6.4",
       "symfony/yaml": "2.6.4",
       "symfony/http-kernel": "*",
-      "symfony/config": "*"
+      "symfony/config": "*",
+      "cpliakas/git-wrapper": "dev-master"
     },
     "suggest": {
       "opendevshop/devmaster": "Provides the web control panel for DevShop."

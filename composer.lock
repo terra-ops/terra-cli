@@ -4,8 +4,63 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "be3809b243fbf233e3113596198b804f",
+    "hash": "a8766ab6a4e157098b8aecc4273e7ede",
     "packages": [
+        {
+            "name": "cpliakas/git-wrapper",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cpliakas/git-wrapper.git",
+                "reference": "bcd97f214ca9251fd3e28717ef070a133169fc04"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cpliakas/git-wrapper/zipball/bcd97f214ca9251fd3e28717ef070a133169fc04",
+                "reference": "bcd97f214ca9251fd3e28717ef070a133169fc04",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "symfony/event-dispatcher": ">=2.3",
+                "symfony/process": ">=2.3"
+            },
+            "require-dev": {
+                "pdepend/pdepend": "~1.0",
+                "phploc/phploc": "~2.0",
+                "phpmd/phpmd": "~1.0",
+                "phpunit/phpunit": "~3.0",
+                "psr/log": "~1.0",
+                "scrutinizer/ocular": "~1.0",
+                "sebastian/phpcpd": "~2.0",
+                "symfony/filesystem": "~2.0"
+            },
+            "suggest": {
+                "monolog/monolog": "Enables logging of executed git commands"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "GitWrapper": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Pliakas",
+                    "email": "opensource@chrispliakas.com"
+                }
+            ],
+            "description": "A PHP wrapper around the Git command line utility.",
+            "homepage": "https://github.com/cpliakas/git-wrapper",
+            "keywords": [
+                "git"
+            ],
+            "time": "2015-01-22 14:19:59"
+        },
         {
             "name": "d11wtq/boris",
             "version": "v1.0.10",
@@ -48,12 +103,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/drush-ops/drush.git",
-                "reference": "e0a075302401e999cc1e78da86f5dd6e08235717"
+                "reference": "e419d744eedb220e64c2072d54df57d9e3b492cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drush-ops/drush/zipball/e0a075302401e999cc1e78da86f5dd6e08235717",
-                "reference": "e0a075302401e999cc1e78da86f5dd6e08235717",
+                "url": "https://api.github.com/repos/drush-ops/drush/zipball/e419d744eedb220e64c2072d54df57d9e3b492cc",
+                "reference": "e419d744eedb220e64c2072d54df57d9e3b492cc",
                 "shasum": ""
             },
             "require": {
@@ -124,7 +179,7 @@
             ],
             "description": "Drush is a command line shell and scripting interface for Drupal, a veritable Swiss Army knife designed to make life easier for those of us who spend some of our working hours hacking away at the command prompt.",
             "homepage": "http://www.drush.org",
-            "time": "2015-03-21 01:16:26"
+            "time": "2015-03-26 02:28:49"
         },
         {
             "name": "pear/console_table",
@@ -630,6 +685,56 @@
             "time": "2015-03-17 14:58:46"
         },
         {
+            "name": "symfony/process",
+            "version": "v2.6.5",
+            "target-dir": "Symfony/Component/Process",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Process.git",
+                "reference": "4d717f34f3d1d6ab30fbe79f7132960a27f4a0dc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/4d717f34f3d1d6ab30fbe79f7132960a27f4a0dc",
+                "reference": "4d717f34f3d1d6ab30fbe79f7132960a27f4a0dc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Process\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Symfony Process Component",
+            "homepage": "http://symfony.com",
+            "time": "2015-03-12 10:28:44"
+        },
+        {
             "name": "symfony/var-dumper",
             "version": "v2.6.3",
             "target-dir": "Symfony/Component/VarDumper",
@@ -734,7 +839,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "drush/drush": 20
+        "drush/drush": 20,
+        "cpliakas/git-wrapper": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

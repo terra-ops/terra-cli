@@ -38,14 +38,14 @@ class StatusCommand extends Command
       $name = 'localhost';
     }
     $output->writeln("Hello World!");
-    $output->writeln("Server: " . $this->app->data['server']);
+    $output->writeln("Server: " . $this->app->raw_data['server']);
 
     // SERVERS table.
     $table = $this->getHelper('table');
     $table->setHeaders(array('SERVERS', 'Provider'));
 
     $rows = array();
-    foreach ($this->app->data['servers'] as $server) {
+    foreach ($this->app->raw_data['servers'] as $server) {
       $server = (object) $server;
       $row = array(
         $server->hostname,
@@ -62,10 +62,10 @@ class StatusCommand extends Command
     $table->setHeaders(array('APPS', 'Description', 'Repo', 'environments'));
 
     $rows = array();
-    foreach ($this->app->data['apps'] as $app) {
+    foreach ($this->app->raw_data['apps'] as $app) {
       $app = (object) $app;
-      $environments_list = !empty($this->app->data['apps'][$app->name]['environments'])?
-        implode(', ', array_keys($this->app->data['apps'][$app->name]['environments'])):
+      $environments_list = !empty($this->raw_data->data['apps'][$app->name]['environments'])?
+        implode(', ', array_keys($this->raw_data->data['apps'][$app->name]['environments'])):
         '';
       $row = array(
         $app->name,

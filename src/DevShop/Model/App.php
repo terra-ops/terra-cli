@@ -37,4 +37,8 @@ class App {
     $this->description = $description;
     $this->source_url = $source_url;
   }
+
+  public function init() {
+    
+  }
 }

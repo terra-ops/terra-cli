@@ -8,6 +8,8 @@ use DevShop\Command\StatusCommand;
 use DevShop\Command\AppAddCommand;
 use DevShop\Command\AppInitCommand;
 use DevShop\Command\EnvironmentAddCommand;
+use DevShop\Model\App;
+use DevShop\Service\AppService;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Yaml\Yaml;
@@ -20,6 +22,19 @@ class DevShopApplication extends BaseApplication
 {
   const NAME = 'DevShop';
   const VERSION = '2.0';
+
+  /**
+   * @var array
+   * An array of AppService for each App that is tracked.
+   */
+  public $apps = array();
+
+  /**
+   * @var array
+   * Raw data loaded from devshop.yml
+   */
+  public $data = array();
+  private $dataPath = '';
 
   public function __construct() {
     parent::__construct(static::NAME, static::VERSION);
@@ -36,8 +51,6 @@ class DevShopApplication extends BaseApplication
     $this->loadData();
   }
 
-  public $data = array();
-  private $dataPath = '';
 
   /**
    * Loads data from dataDirectories.
@@ -69,7 +82,14 @@ YML;
 
     $loaderResolver = new LoaderResolver(array(new DevShopConfigLoader($locator)));
     $delegatingLoader = new DelegatingLoader($loaderResolver);
-    $this->data = $delegatingLoader->load($this->dataPath);
+
+    // Load raw data about this devshop.
+    $this->raw_data = $delegatingLoader->load($this->dataPath);
+
+    // Load each available App
+    foreach ($this->raw_data['apps'] as $name => $data) {
+      $this->apps[$name] = new AppService($name, $data, $this);
+    }
   }
 
   /**
@@ -79,6 +99,14 @@ YML;
     $dumper = new Dumper();
     $output = $dumper->dump($this->data, 4);
     file_put_contents($this->dataPath, $output);
+  }
+
+  /**
+   * Get an App
+   */
+  public function getApp($name){
+    $data = $this->data['apps'][$name];
+    return new App($data['name'], $data['source_url'], $data['description']);
   }
 }
 
