@@ -19,10 +19,17 @@
       "symfony/yaml": "2.6.4",
       "symfony/http-kernel": "*",
       "symfony/config": "*",
-      "cpliakas/git-wrapper": "dev-master"
+      "cpliakas/git-wrapper": "dev-master",
+      "opendevshop/ansible-role-drupal": "dev-master"
     },
     "suggest": {
       "opendevshop/devmaster": "Provides the web control panel for DevShop."
+    },
+    "extra": {
+      "installer-paths": {
+        "roles/opendevshop.drupal": ["opendevshop/ansible-role-drupal"],
+        "roles/opendevshop.apache": ["opendevshop/ansible-role-apache"]
+      }
     },
     "autoload": {
       "psr-0": {

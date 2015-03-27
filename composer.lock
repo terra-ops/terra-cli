@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a8766ab6a4e157098b8aecc4273e7ede",
+    "hash": "fc0ce8b9a7be3eea3c7c14bd3122ab73",
     "packages": [
         {
             "name": "cpliakas/git-wrapper",
@@ -180,6 +180,78 @@
             "description": "Drush is a command line shell and scripting interface for Drupal, a veritable Swiss Army knife designed to make life easier for those of us who spend some of our working hours hacking away at the command prompt.",
             "homepage": "http://www.drush.org",
             "time": "2015-03-26 02:28:49"
+        },
+        {
+            "name": "monofone/ansible-installer",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/monofone/ansible-installer.git",
+                "reference": "ef3200b8a550c4f7d96b0c0d81873143331b5fca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/monofone/ansible-installer/zipball/ef3200b8a550c4f7d96b0c0d81873143331b5fca",
+                "reference": "ef3200b8a550c4f7d96b0c0d81873143331b5fca",
+                "shasum": ""
+            },
+            "require-dev": {
+                "composer/composer": "1.0.*@dev",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "composer-installer",
+            "extra": {
+                "class": "Composer\\Installers\\Installer",
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Composer\\Installers\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kyle Robinson Young",
+                    "email": "kyle@dontkry.com",
+                    "homepage": "https://github.com/shama",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Installer for ansible roles",
+            "homepage": "http://github.com/monofone/ansible-installer/",
+            "keywords": [
+                "ansible",
+                "installer"
+            ],
+            "time": "2014-05-05 19:52:34"
+        },
+        {
+            "name": "opendevshop/ansible-role-drupal",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/opendevshop/ansible-role-drupal.git",
+                "reference": "4cac8469a9d0bbfe35df1c0edee07b285df1be5e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/opendevshop/ansible-role-drupal/zipball/4cac8469a9d0bbfe35df1c0edee07b285df1be5e",
+                "reference": "4cac8469a9d0bbfe35df1c0edee07b285df1be5e",
+                "shasum": ""
+            },
+            "require": {
+                "monofone/ansible-installer": "~1.0"
+            },
+            "type": "ansible-role",
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Ansible role for drupal service for devshop2.  An experiment for devshop2.",
+            "time": "2015-03-27 03:49:48"
         },
         {
             "name": "pear/console_table",
@@ -840,7 +912,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "drush/drush": 20,
-        "cpliakas/git-wrapper": 20
+        "cpliakas/git-wrapper": 20,
+        "opendevshop/ansible-role-drupal": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
