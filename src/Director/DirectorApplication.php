@@ -2,6 +2,7 @@
 namespace Director;
 
 use Director\Command\AppUpdateCommand;
+use Director\Command\DirectorDirectCommand;
 use Director\Command\ServerAddCommand;
 use Symfony\Component\Console\Application as BaseApplication;
 use Director\Command\StatusCommand;
@@ -43,6 +44,7 @@ class DirectorApplication extends BaseApplication
     parent::__construct(static::NAME, static::VERSION);
 
     // Add available commands to this director.
+    $this->add(new DirectorDirectCommand($this));
     $this->add(new StatusCommand($this));
     $this->add(new AppAddCommand($this));
     $this->add(new AppInitCommand($this));
