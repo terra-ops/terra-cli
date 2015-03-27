@@ -93,8 +93,10 @@ class DirectorApplication extends BaseApplication
     }
 
     // Load each available Role
-    foreach ($this->config['roles'] as $name => $data) {
-      $this->roles[$name] = new Role($data['name'], $data['galaxy_role'], $data['description']);
+    if (is_array($this->config['roles'])){
+      foreach ($this->config['roles'] as $name => $data) {
+        $this->roles[$name] = new Role($data['name'], $data['galaxy_role'], $data['description']);
+      }
     }
   }
 
