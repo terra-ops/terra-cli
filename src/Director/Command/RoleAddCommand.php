@@ -81,7 +81,7 @@ class RoleAddCommand extends Command
 
     // Confirmation
     $helper = $this->getHelper('question');
-    $question = new ConfirmationQuestion("Install Ansible Galaxy Role?", false);
+    $question = new ConfirmationQuestion("Install this Ansible Galaxy Role? ", false);
     if ($helper->ask($input, $output, $question)) {
       exec("ansible-galaxy install {$role->galaxy_role} -p roles");
     }
