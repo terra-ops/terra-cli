@@ -1,9 +1,9 @@
 <?php
 
-namespace DevShop\Command;
+namespace Director\Command;
 
-use DevShop\DevShopApplication;
-use DevShop\Model\Server;
+use Director\DirectorApplication;
+use Director\Model\Server;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,11 +17,11 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 
 class ServerAddCommand extends Command
 {
-  public $app;
+  public $director;
 
-  function __construct(DevShopApplication $app) {
+  function __construct(DirectorApplication $director) {
     parent::__construct();
-    $this->app = $app;
+    $this->director = $director;
   }
 
   protected function configure()
@@ -55,9 +55,9 @@ class ServerAddCommand extends Command
     $provider = $helper->ask($input, $output, $question);
 
     $server = new Server($hostname,  $provider);
-    $this->app->config['servers'][$hostname] = (array) $server;
+    $this->director->config['servers'][$hostname] = (array) $server;
 
     $output->writeln("OK Saving server $hostname");
-    $this->app->saveData();
+    $this->director->saveData();
   }
 }

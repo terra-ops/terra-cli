@@ -1,15 +1,15 @@
 <?php
-namespace DevShop;
+namespace Director;
 
-use DevShop\Command\AppUpdateCommand;
-use DevShop\Command\ServerAddCommand;
+use Director\Command\AppUpdateCommand;
+use Director\Command\ServerAddCommand;
 use Symfony\Component\Console\Application as BaseApplication;
-use DevShop\Command\StatusCommand;
-use DevShop\Command\AppAddCommand;
-use DevShop\Command\AppInitCommand;
-use DevShop\Command\EnvironmentAddCommand;
-use DevShop\Model\App;
-use DevShop\Service\AppService;
+use Director\Command\StatusCommand;
+use Director\Command\AppAddCommand;
+use Director\Command\AppInitCommand;
+use Director\Command\EnvironmentAddCommand;
+use Director\Model\App;
+use Director\Service\AppService;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Yaml\Yaml;
@@ -18,10 +18,10 @@ use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 
-class DevShopApplication extends BaseApplication
+class DirectorApplication extends BaseApplication
 {
-  const NAME = 'DevShop';
-  const VERSION = '2.0';
+  const NAME = 'Director';
+  const VERSION = '0.1';
 
   /**
    * @var array
@@ -92,7 +92,7 @@ YML;
       $this->dataPath = $locator->locate('.director.yml');
     }
 
-    $loaderResolver = new LoaderResolver(array(new DevShopConfigLoader($locator)));
+    $loaderResolver = new LoaderResolver(array(new DirectorConfigLoader($locator)));
     $delegatingLoader = new DelegatingLoader($loaderResolver);
 
     // Load raw data about this director.
@@ -127,7 +127,7 @@ YML;
  * Class DevShopConfigLoader
  * @package DevShop
  */
-class DevShopConfigLoader extends FileLoader
+class DirectorConfigLoader extends FileLoader
 {
   public function load($resource, $type = null)
   {

@@ -1,5 +1,5 @@
 <?php
-namespace DevShop\Model;
+namespace Director\Model;
 
 /**
  * An app, website, project... whatever you call the thing you are working on.

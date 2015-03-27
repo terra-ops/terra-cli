@@ -1,9 +1,9 @@
 <?php
 
-namespace DevShop\Command;
+namespace Director\Command;
 
-use DevShop\DevShopApplication;
-use DevShop\Model\App;
+use Director\DirectorApplication;
+use Director\Model\App;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,11 +16,11 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 
 class AppUpdateCommand extends Command
 {
-  public $devshop;
+  public $director;
 
-  function __construct(DevShopApplication $devshop) {
+  function __construct(DirectorApplication $director) {
     parent::__construct();
-    $this->devshop = $devshop;
+    $this->director = $director;
   }
 
   protected function configure()
@@ -45,7 +45,7 @@ class AppUpdateCommand extends Command
     else {
       $question = new ChoiceQuestion(
         'Which app would you like to update?',
-        array_keys($this->devshop->config['apps']),
+        array_keys($this->director->config['apps']),
         0
       );
       $question->setErrorMessage('Color %s is invalid.');
@@ -54,7 +54,7 @@ class AppUpdateCommand extends Command
       $output->writeln('You have just selected: ' . $app_name);
     }
 
-    $app = &$this->devshop->config['apps'][$app_name];
+    $app = &$this->director->config['apps'][$app_name];
 
     // App Name
     $question = new Question("System name of your project? ({$app['name']})", $app['name']);
@@ -68,6 +68,6 @@ class AppUpdateCommand extends Command
     $question = new Question("Source code repository URL? ({$app['source_url']})", $app['source_url']);
     $app['source_url'] = $helper->ask($input, $output, $question);
 
-    $this->devshop->saveData();
+    $this->director->saveData();
   }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace DevShop\Command;
+namespace Director\Command;
 
-use DevShop\DevShopApplication;
-use DevShop\Model\App;
-use DevShop\Service\AppService;
+use Director\DirectorApplication;
+use Director\Model\App;
+use Director\Service\AppService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,14 +18,14 @@ use Symfony\Component\Console\Question\Question;
 class AppInitCommand extends Command
 {
   /**
-   * @var \DevShop\DevShopApplication
+   * @var \Director\DirectorApplication
    * The director application.
    */
-  public $devshop;
+  public $director;
 
-  function __construct(DevShopApplication $devshop) {
+  function __construct(DirectorApplication $director) {
     parent::__construct();
-    $this->devshop = $devshop;
+    $this->director = $director;
   }
 
   protected function configure()
@@ -49,7 +49,7 @@ class AppInitCommand extends Command
   protected function execute(InputInterface $input, OutputInterface $output)
   {
     // Get our App
-    $app = $this->devshop->apps[$input->getArgument('name')];
+    $app = $this->director->apps[$input->getArgument('name')];
 
     // Determine what path to init in.
     // This command acts like git clone.  $path defaults to $name.

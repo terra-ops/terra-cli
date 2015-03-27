@@ -1,9 +1,9 @@
 <?php
 
-namespace DevShop\Command;
+namespace Director\Command;
 
-use DevShop\DevShopApplication;
-use DevShop\Model\App;
+use Director\DirectorApplication;
+use Director\Model\App;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,11 +16,11 @@ use Symfony\Component\Console\Question\Question;
 
 class AppAddCommand extends Command
 {
-  public $devshop;
+  public $director;
 
-  function __construct(DevShopApplication $devshop) {
+  function __construct(DirectorApplication $director) {
     parent::__construct();
-    $this->devshop = $devshop;
+    $this->director = $director;
   }
 
   protected function configure()
@@ -48,10 +48,10 @@ class AppAddCommand extends Command
     $repo = $helper->ask($input, $output, $question);
 
     $app = new App($name, $repo, $description);
-    $this->devshop->config['apps'][$name] = (array) $app;
+    $this->director->config['apps'][$name] = (array) $app;
 
     $output->writeln("OK Saving app $name");
 
-    $this->devshop->saveData();
+    $this->director->saveData();
   }
 }

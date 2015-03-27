@@ -1,6 +1,6 @@
 <?php
 
-namespace DevShop\Model;
+namespace Director\Model;
 
 class Environment {
   /**

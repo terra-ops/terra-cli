@@ -1,6 +1,6 @@
 <?php
-namespace DevShop\Service;
-use DevShop\DevShopApplication;
+namespace Director\Service;
+use Director\DirectorApplication;
 use GitWrapper\GitWrapper;
 /**
  * Service for an App.
@@ -9,11 +9,11 @@ class AppService {
 
   public $name;
   public $app;
-  public $devshop;
+  public $director;
 
-  public function __construct($name, $data, DevShopApplication $devshop) {
+  public function __construct($name, $data, DirectorApplication $director) {
     $this->name = $name;
-    $this->devshop = $devshop;
+    $this->director = $director;
     $this->app = (object) $data;
 
     $this->description = $this->app->description;
