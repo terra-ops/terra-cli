@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fc0ce8b9a7be3eea3c7c14bd3122ab73",
+    "hash": "738fa107781eea0fe2037df6c6b56626",
     "packages": [
         {
             "name": "cpliakas/git-wrapper",
@@ -237,21 +237,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/opendevshop/ansible-role-drupal.git",
-                "reference": "4cac8469a9d0bbfe35df1c0edee07b285df1be5e"
+                "reference": "0a08516e8c17068ba431ae0f065e292a6b2d3a95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opendevshop/ansible-role-drupal/zipball/4cac8469a9d0bbfe35df1c0edee07b285df1be5e",
-                "reference": "4cac8469a9d0bbfe35df1c0edee07b285df1be5e",
+                "url": "https://api.github.com/repos/opendevshop/ansible-role-drupal/zipball/0a08516e8c17068ba431ae0f065e292a6b2d3a95",
+                "reference": "0a08516e8c17068ba431ae0f065e292a6b2d3a95",
                 "shasum": ""
             },
             "require": {
-                "monofone/ansible-installer": "~1.0"
+                "monofone/ansible-installer": "~1.0",
+                "opendevshop/ansible-role-drupal": "dev-master"
             },
             "type": "ansible-role",
             "notification-url": "https://packagist.org/downloads/",
             "description": "Ansible role for drupal service for devshop2.  An experiment for devshop2.",
-            "time": "2015-03-27 03:49:48"
+            "time": "2015-03-27 03:57:48"
         },
         {
             "name": "pear/console_table",
