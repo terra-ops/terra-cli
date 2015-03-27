@@ -81,6 +81,20 @@ class StatusCommand extends Command
     $table->setRows($rows);
     $table->render($output);
 
+    // ROLES table.
+    $table = $this->getHelper('table');
+    $table->setHeaders(array('ROLES', 'Galaxy Role', 'Description'));
 
+    $rows = array();
+    foreach ($this->director->roles as $role) {
+      $row = array(
+        $role->name,
+        $role->galaxy_role,
+        $role->description,
+      );
+      $rows[] = $row;
+    }
+    $table->setRows($rows);
+    $table->render($output);
   }
 }

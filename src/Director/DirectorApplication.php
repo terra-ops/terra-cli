@@ -10,6 +10,7 @@ use Director\Command\AppInitCommand;
 use Director\Command\EnvironmentAddCommand;
 use Director\Command\RoleAddCommand;
 use Director\Model\App;
+use Director\Model\Role;
 use Director\Service\AppService;
 
 use Symfony\Component\Config\FileLocator;
@@ -29,6 +30,7 @@ class DirectorApplication extends BaseApplication
    * An array of AppService for each App that is tracked.
    */
   public $apps = array();
+  public $roles = array();
 
   /**
    * @var array
@@ -88,6 +90,11 @@ class DirectorApplication extends BaseApplication
     // Load each available App
     foreach ($this->config['apps'] as $name => $data) {
       $this->apps[$name] = new AppService($name, $data, $this);
+    }
+
+    // Load each available Role
+    foreach ($this->config['roles'] as $name => $data) {
+      $this->roles[$name] = new Role($data['name'], $data['galaxy_role'], $data['description']);
     }
   }
 
