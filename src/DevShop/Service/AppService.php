@@ -15,6 +15,10 @@ class AppService {
     $this->name = $name;
     $this->devshop = $devshop;
     $this->app = (object) $data;
+
+    $this->description = $this->app->description;
+    $this->source_url = $this->app->source_url;
+
   }
 
   /**

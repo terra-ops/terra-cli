@@ -11,11 +11,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class StatusCommand extends Command
 {
-  public $app;
+  public $devshop;
 
-  function __construct(DevShopApplication $app) {
+  function __construct(DevShopApplication $devshop) {
     parent::__construct();
-    $this->app = $app;
+    $this->devshop = $devshop;
   }
 
   protected function configure()
@@ -38,18 +38,22 @@ class StatusCommand extends Command
       $name = 'localhost';
     }
     $output->writeln("Hello World!");
-    $output->writeln("Server: " . $this->app->config['server']);
+    $output->writeln("Server: " . $this->devshop->config['server']);
 
     // SERVERS table.
     $table = $this->getHelper('table');
-    $table->setHeaders(array('SERVERS', 'Provider'));
+    $table->setHeaders(array('SERVERS', 'Provider', 'IP'));
 
     $rows = array();
-    foreach ($this->app->config['servers'] as $server) {
+    foreach ($this->devshop->config['servers'] as $name => $server) {
       $server = (object) $server;
+      $ips = !empty($server->ip_addresses)?
+        implode(', ', $server->ip_addresses):
+        '';
       $row = array(
         $server->hostname,
         $server->provider,
+        $ips,
       );
       $rows[] = $row;
     }
@@ -62,10 +66,9 @@ class StatusCommand extends Command
     $table->setHeaders(array('APPS', 'Description', 'Repo', 'environments'));
 
     $rows = array();
-    foreach ($this->app->config['apps'] as $app) {
-      $app = (object) $app;
-      $environments_list = !empty($this->raw_data->data['apps'][$app->name]['environments'])?
-        implode(', ', array_keys($this->raw_data->data['apps'][$app->name]['environments'])):
+    foreach ($this->devshop->apps as $app) {
+      $environments_list = !empty($app->environments)?
+        implode(', ', array_keys($app->environments)):
         '';
       $row = array(
         $app->name,

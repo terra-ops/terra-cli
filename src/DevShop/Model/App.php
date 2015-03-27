@@ -39,6 +39,6 @@ class App {
   }
 
   public function init() {
-    
+
   }
 }

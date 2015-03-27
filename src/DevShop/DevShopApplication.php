@@ -75,6 +75,18 @@ class DevShopApplication extends BaseApplication
       $data = <<<YML
 ---
 server: localhost
+apps:
+  devshop:
+    name: devshop
+    description: The devshop application.
+    source_url: git@github.com:opendevshop/devshop.git
+servers:
+  localhost:
+    hostname: localhost
+    provider: localhost
+    ip_addresses:
+      - 127.0.0.1
+
 YML;
       file_put_contents($path, $data);
       $this->dataPath = $locator->locate('.devshop.yml');
