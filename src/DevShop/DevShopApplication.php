@@ -31,7 +31,7 @@ class DevShopApplication extends BaseApplication
 
   /**
    * @var array
-   * Raw data loaded from devshop.yml
+   * Raw data loaded from director.yml
    */
   public $config = array();
   private $dataPath = '';
@@ -39,7 +39,7 @@ class DevShopApplication extends BaseApplication
   public function __construct() {
     parent::__construct(static::NAME, static::VERSION);
 
-    // Add available commands to this devshop.
+    // Add available commands to this director.
     $this->add(new StatusCommand($this));
     $this->add(new AppAddCommand($this));
     $this->add(new AppInitCommand($this));
@@ -67,19 +67,19 @@ class DevShopApplication extends BaseApplication
 
     // Attempt to locate data file
     try {
-      $this->dataPath = $locator->locate('.devshop.yml');
+      $this->dataPath = $locator->locate('.director.yml');
     }
     // If there's an exception, write a default config.
     catch (\InvalidArgumentException $e) {
-      $path = $GLOBALS['_SERVER']['HOME'] . '/.devshop.yml';
+      $path = $GLOBALS['_SERVER']['HOME'] . '/.director.yml';
       $data = <<<YML
 ---
 server: localhost
 apps:
-  devshop:
-    name: devshop
-    description: The devshop application.
-    source_url: git@github.com:opendevshop/devshop.git
+  director:
+    name: director
+    description: The director application.
+    source_url: git@github.com:opendevshop/director.git
 servers:
   localhost:
     hostname: localhost
@@ -89,13 +89,13 @@ servers:
 
 YML;
       file_put_contents($path, $data);
-      $this->dataPath = $locator->locate('.devshop.yml');
+      $this->dataPath = $locator->locate('.director.yml');
     }
 
     $loaderResolver = new LoaderResolver(array(new DevShopConfigLoader($locator)));
     $delegatingLoader = new DelegatingLoader($loaderResolver);
 
-    // Load raw data about this devshop.
+    // Load raw data about this director.
     $this->config = $delegatingLoader->load($this->dataPath);
 
     // Load each available App

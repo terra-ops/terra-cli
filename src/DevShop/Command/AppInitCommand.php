@@ -19,7 +19,7 @@ class AppInitCommand extends Command
 {
   /**
    * @var \DevShop\DevShopApplication
-   * The devshop application.
+   * The director application.
    */
   public $devshop;
 

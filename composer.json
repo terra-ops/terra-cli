@@ -1,7 +1,7 @@
 {
-    "name": "opendevshop/devshop",
-    "description": "DevOps Command & Control (for Drupal)",
-    "version": "2.0.*@dev",
+    "name": "jonpugh/director",
+    "description": "DevOps Command & Control",
+    "version": "0.1.*@dev",
     "license": "GPL-2.0+",
     "authors": [
         {
@@ -10,8 +10,8 @@
         }
     ],
     "support": {
-      "forum": "https://www.drupal.org/project/issues/devshop",
-      "irc": "irc://irc.freenode.org/devshop"
+      "forum": "https://github.com/jonpugh/director/issues",
+      "irc": "irc://irc.freenode.org/director"
     },
     "require": {
       "drush/drush": "7.0.*@dev",
