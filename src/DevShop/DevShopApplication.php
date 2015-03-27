@@ -33,7 +33,7 @@ class DevShopApplication extends BaseApplication
    * @var array
    * Raw data loaded from devshop.yml
    */
-  public $data = array();
+  public $config = array();
   private $dataPath = '';
 
   public function __construct() {
@@ -84,10 +84,10 @@ YML;
     $delegatingLoader = new DelegatingLoader($loaderResolver);
 
     // Load raw data about this devshop.
-    $this->raw_data = $delegatingLoader->load($this->dataPath);
+    $this->config = $delegatingLoader->load($this->dataPath);
 
     // Load each available App
-    foreach ($this->raw_data['apps'] as $name => $data) {
+    foreach ($this->config['apps'] as $name => $data) {
       $this->apps[$name] = new AppService($name, $data, $this);
     }
   }
@@ -97,7 +97,7 @@ YML;
    */
   public function saveData() {
     $dumper = new Dumper();
-    $output = $dumper->dump($this->data, 4);
+    $output = $dumper->dump($this->config, 4);
     file_put_contents($this->dataPath, $output);
   }
 
@@ -105,7 +105,7 @@ YML;
    * Get an App
    */
   public function getApp($name){
-    $data = $this->data['apps'][$name];
+    $data = $this->config['apps'][$name];
     return new App($data['name'], $data['source_url'], $data['description']);
   }
 }

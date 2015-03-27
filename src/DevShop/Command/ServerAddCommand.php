@@ -54,7 +54,7 @@ class ServerAddCommand extends Command
     $provider = $helper->ask($input, $output, $question);
 
     $server = new Server($hostname,  $provider);
-    $this->app->data['servers'][$hostname] = (array) $server;
+    $this->app->config['servers'][$hostname] = (array) $server;
 
     $output->writeln("OK Saving server $hostname");
     $this->app->saveData();

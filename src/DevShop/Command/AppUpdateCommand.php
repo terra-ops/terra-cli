@@ -16,11 +16,11 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 
 class AppUpdateCommand extends Command
 {
-  public $app;
+  public $devshop;
 
-  function __construct(DevShopApplication $app) {
+  function __construct(DevShopApplication $devshop) {
     parent::__construct();
-    $this->app = $app;
+    $this->devshop = $devshop;
   }
 
   protected function configure()
@@ -45,7 +45,7 @@ class AppUpdateCommand extends Command
     else {
       $question = new ChoiceQuestion(
         'Which app would you like to update?',
-        array_keys($this->app->data['apps']),
+        array_keys($this->devshop->config['apps']),
         0
       );
       $question->setErrorMessage('Color %s is invalid.');
@@ -54,7 +54,7 @@ class AppUpdateCommand extends Command
       $output->writeln('You have just selected: ' . $app_name);
     }
 
-    $app = &$this->app->data['apps'][$app_name];
+    $app = &$this->devshop->config['apps'][$app_name];
 
     // App Name
     $question = new Question("System name of your project? ({$app['name']})", $app['name']);
@@ -68,6 +68,6 @@ class AppUpdateCommand extends Command
     $question = new Question("Source code repository URL? ({$app['source_url']})", $app['source_url']);
     $app['source_url'] = $helper->ask($input, $output, $question);
 
-    $this->app->saveData();
+    $this->devshop->saveData();
   }
 }

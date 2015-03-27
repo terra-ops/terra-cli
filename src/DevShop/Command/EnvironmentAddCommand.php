@@ -40,7 +40,7 @@ class EnvironmentAddCommand extends Command
     $helper = $this->getHelper('question');
     $question = new ChoiceQuestion(
       'For which app? ',
-        array_keys($this->app->data['apps']),
+        array_keys($this->app->config['apps']),
       0
     );
     $app = $helper->ask($input, $output, $question);
@@ -53,13 +53,13 @@ class EnvironmentAddCommand extends Command
     $helper = $this->getHelper('question');
     $question = new ChoiceQuestion(
       'Server? ',
-      array_keys($this->app->data['servers']),
+      array_keys($this->app->config['servers']),
       0
     );
     $server = $helper->ask($input, $output, $question);
 
     $environment = new Environment($app, $name, $server);
-    $this->app->data['apps'][$app]['environments'][$name] = (array) $environment;
+    $this->app->config['apps'][$app]['environments'][$name] = (array) $environment;
 
     $output->writeln("OK Saving environment $name");
     $this->app->saveData();

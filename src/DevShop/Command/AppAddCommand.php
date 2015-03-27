@@ -16,11 +16,11 @@ use Symfony\Component\Console\Question\Question;
 
 class AppAddCommand extends Command
 {
-  public $app;
+  public $devshop;
 
-  function __construct(DevShopApplication $app) {
+  function __construct(DevShopApplication $devshop) {
     parent::__construct();
-    $this->app = $app;
+    $this->devshop = $devshop;
   }
 
   protected function configure()
@@ -48,10 +48,10 @@ class AppAddCommand extends Command
     $repo = $helper->ask($input, $output, $question);
 
     $app = new App($name, $repo, $description);
-    $this->app->data['apps'][$name] = (array) $app;
+    $this->devshop->config['apps'][$name] = (array) $app;
 
     $output->writeln("OK Saving app $name");
 
-    $this->app->saveData();
+    $this->devshop->saveData();
   }
 }
