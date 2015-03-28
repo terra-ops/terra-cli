@@ -36,6 +36,11 @@ class DirectorDirectCommand extends Command {
     chdir($this->director->configPath);
     $cmd = "ansible-playbook $playbook -i $inventory";
 
+    // If localhost is our only server, run locally.
+    if (count($this->director->servers) == 1 && $this->director->servers['localhost']) {
+      $cmd .= ' --connection=local --sudo --ask-sudo-pass';
+    }
+
     echo "\n RUNNING $cmd \n";
     system($cmd);
 

@@ -118,12 +118,19 @@ class DirectorApplication extends BaseApplication
     // Save Services
     file_put_contents($this->configPath . '/services.yml', $dumper->dump($this->config['services'], 4));
 
+    // Save Ansible Files
 
-    // INVENTORY FILE
-    // Add all servers to default group.
-    $groups = array('default' => array_keys($this->config['servers']));
+    // We can only provision localhost if that is our only server.
+    // This is because ansible is going to SSH to it.
+    // So, if there is more than one server, we remove "localhost" from
+    // the inventory.
+
+    if (count($this->config['servers']) > 1) {
+      unset($this->config['servers']['localhost']);
+    }
 
     // Go through servers and add them to service groups.
+    $groups = array();
     foreach($this->config['servers'] as $server_name => $server) {
       if (is_array($server['services'])) {
         foreach ($server['services'] as $service_name) {
@@ -136,7 +143,7 @@ class DirectorApplication extends BaseApplication
     $inventory_file = array();
     $playbook_file = array(
       '# MANAGED BY DIRECTOR',
-      '---'
+      '---',
     );
     foreach($groups as $group_name => $group_members) {
       // Add to inventory file.
