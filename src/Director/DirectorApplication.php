@@ -132,7 +132,7 @@ class DirectorApplication extends BaseApplication
     // Go through servers and add them to service groups.
     $groups = array();
     foreach($this->config['servers'] as $server_name => $server) {
-      if (is_array($server['services'])) {
+      if (isset($server['services'])) {
         foreach ($server['services'] as $service_name) {
           $groups[$service_name][] = $server['hostname'];
         }
