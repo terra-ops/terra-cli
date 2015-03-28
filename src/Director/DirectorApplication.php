@@ -1,17 +1,21 @@
 <?php
 namespace Director;
 
+use Symfony\Component\Console\Application as BaseApplication;
+
 use Director\Command\AppUpdateCommand;
 use Director\Command\DirectorDirectCommand;
 use Director\Command\ServerAddCommand;
-use Symfony\Component\Console\Application as BaseApplication;
+use Director\Command\ServerRoleCommand;
 use Director\Command\StatusCommand;
 use Director\Command\AppAddCommand;
 use Director\Command\AppInitCommand;
 use Director\Command\EnvironmentAddCommand;
 use Director\Command\RoleAddCommand;
+
 use Director\Model\App;
 use Director\Model\Role;
+use Director\Model\Server;
 use Director\Service\AppService;
 
 use Symfony\Component\Config\FileLocator;
@@ -50,6 +54,7 @@ class DirectorApplication extends BaseApplication
     $this->add(new AppInitCommand($this));
     $this->add(new AppUpdateCommand($this));
     $this->add(new ServerAddCommand($this));
+    $this->add(new ServerRoleCommand($this));
     $this->add(new EnvironmentAddCommand($this));
     $this->add(new RoleAddCommand($this));
 
@@ -100,6 +105,13 @@ class DirectorApplication extends BaseApplication
         $this->roles[$name] = new Role($data['name'], $data['galaxy_role'], $data['description']);
       }
     }
+
+    // Load each available Server
+    if (is_array($this->config['servers'])){
+      foreach ($this->config['servers'] as $name => $data) {
+        $this->servers[$name] = new Server($data['hostname'], $data['provider'], $data['ip_addresses']);
+      }
+    }
   }
 
   /**
@@ -117,6 +129,20 @@ class DirectorApplication extends BaseApplication
   public function getApp($name){
     $data = $this->config['apps'][$name];
     return new App($data['name'], $data['source_url'], $data['description']);
+  }
+
+  /**
+   * Get a Server.
+   */
+  public function getServer($name){
+    return isset($this->config['servers'][$name])? $this->config['servers'][$name]: NULL;
+  }
+
+  /**
+   * Get a Role.
+   */
+  public function getRole($name){
+    return isset($this->config['roles'][$name])? $this->config['roles'][$name]: NULL;
   }
 }
 
