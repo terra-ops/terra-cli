@@ -73,7 +73,7 @@ class ServiceAddCommand extends Command
     }
 
     $service = new Service($name, $galaxy_role, $description);
-    $this->director->config['roles'][$name]= (array) $service;
+    $this->director->config['services'][$name]= (array) $service;
 
     $output->writeln("OK Saving service $name");
     $this->director->saveData();
