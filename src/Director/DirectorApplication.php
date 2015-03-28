@@ -1,6 +1,7 @@
 <?php
 namespace Director;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Console\Application as BaseApplication;
 
 use Director\Command\AppUpdateCommand;
@@ -71,30 +72,32 @@ class DirectorApplication extends BaseApplication
    */
   private function loadData() {
 
-    $default_config_path = realpath(__DIR__ . '/../../config');
-
     // Use $_SERVER['director_config_path'] if present.
+    $data_directories = array();
     if (isset($GLOBALS['_SERVER']['director_config_path'])) {
-      $data_directories = array(
-        $GLOBALS['_SERVER']['director_config_path'],
-        $default_config_path,
-      );
+      $data_directories[] = $GLOBALS['_SERVER']['director_config_path'];
     }
-    else {
-      $data_directories = array(
-        $default_config_path,
-      );
-    }
+    // Default to the config folder within this application.
+    // @TODO: Not sure how to properly deal with this yet.
+    $data_directories[] = __DIR__ . '/../../config';
 
     // Attempt to locate data file
     $locator = new FileLocator($data_directories);
     try {
       $this->configPath = dirname(realpath($locator->locate('director.yml')));
     }
-    // If there's an exception, show a message.
+    // If there's an exception, create a config directory.
     catch (\InvalidArgumentException $e) {
-      $dirs = implode(', ', $data_directories);
-      throw new \Exception("The `director.yml` file was not found in of the directories $dirs.");
+      // Copy default config template to default config directory.
+      $default_path = realpath(__DIR__ . '/../../config-default');
+      $cmd = "cp -r {$default_path} {$data_directories[0]}";
+      system($cmd);
+
+      // Save the configPath.  If it doesn't exist, we have a problem.
+      $this->configPath = realpath($data_directories[0]);
+      if (empty($this->configPath) || !file_exists($this->configPath . '/director.yml')) {
+        throw new \Exception("Unable to find or create a config folder!");
+      }
     }
 
     // YML Loader
@@ -131,30 +134,43 @@ class DirectorApplication extends BaseApplication
    */
   public function saveData() {
     $dumper = new Dumper();
-    $output = $dumper->dump($this->config, 4);
-    file_put_contents($this->dataPath, $output);
+
+    // Save Apps
+    file_put_contents($this->configPath . '/apps.yml', $dumper->dump($this->apps, 4));
+
+    // Save Servers
+    file_put_contents($this->configPath . '/servers.yml', $dumper->dump($this->servers, 4));
+
+    // Save Services
+    file_put_contents($this->configPath . '/services.yml', $dumper->dump($this->services, 4));
+
   }
 
   /**
    * Get an App
    */
   public function getApp($name){
-    $data = $this->config['apps'][$name];
-    return new App($data['name'], $data['source_url'], $data['description']);
+    return  isset($this->apps['apps'][$name])?
+      $this->config['apps'][$name]:
+      NULL;
   }
 
   /**
    * Get a Server.
    */
   public function getServer($name){
-    return isset($this->config['servers'][$name])? $this->config['servers'][$name]: NULL;
+    return isset($this->servers[$name])?
+      $this->servers[$name]:
+      NULL;
   }
 
   /**
-   * Get a Role.
+   * Get a Service.
    */
-  public function getRole($name){
-    return isset($this->config['roles'][$name])? $this->config['roles'][$name]: NULL;
+  public function getService($name){
+    return isset($this->services[$name])?
+      $this->services[$name]:
+      NULL;
   }
 }
 

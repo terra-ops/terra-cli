@@ -1,5 +1,1 @@
----
-director:
-    name: director
-    description: The director application.
-    source_url: git@github.com:jonpugh/director.git
+director: null

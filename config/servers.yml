@@ -1,6 +1,1 @@
----
-localhost:
-  hostname: localhost
-  provider: localhost
-  ip_addresses:
-    - 127.0.0.1
+localhost: null
