@@ -118,6 +118,50 @@ class DirectorApplication extends BaseApplication
     // Save Services
     file_put_contents($this->configPath . '/services.yml', $dumper->dump($this->config['services'], 4));
 
+
+    // INVENTORY FILE
+    // Add all servers to default group.
+    $groups = array('default' => array_keys($this->config['servers']));
+
+    // Go through servers and add them to service groups.
+    foreach($this->config['servers'] as $server_name => $server) {
+      if (is_array($server['services'])) {
+        foreach ($server['services'] as $service_name) {
+          $groups[$service_name][] = $server['hostname'];
+        }
+      }
+    }
+
+    // Build inventory file line array.
+    $inventory_file = array();
+    $playbook_file = array(
+      '# MANAGED BY DIRECTOR',
+      '---'
+    );
+    foreach($groups as $group_name => $group_members) {
+      // Add to inventory file.
+      // Lists what servers are in each group.
+      $inventory_file[] = "[{$group_name}]";
+      foreach ($group_members as $hostname) {
+        $inventory_file[] = $hostname;
+      }
+      $inventory_file[] = '';
+
+      // Add to Playbook file.
+      // Lists what roles are for each group.
+      $playbook_file[] = "- hosts: $group_name";
+      $playbook_file[] = "  user: root";
+
+      if (isset($this->config['services'][$group_name]['galaxy_role'])) {
+        $playbook_file[] = "  roles:";
+        $playbook_file[] = "    - " . $this->config['services'][$group_name]['galaxy_role'];
+      }
+
+    }
+    // Write inventory file.
+    file_put_contents($this->configPath . '/inventory', implode("\n", $inventory_file));
+    file_put_contents($this->configPath . '/playbook.yml', implode("\n", $playbook_file));
+
   }
 
   /**
