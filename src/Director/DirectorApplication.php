@@ -7,6 +7,7 @@ use Symfony\Component\Console\Application as BaseApplication;
 use Director\Command\AppUpdateCommand;
 use Director\Command\DirectorDirectCommand;
 use Director\Command\ServerAddCommand;
+use Director\Command\ServerRemoveCommand;
 use Director\Command\ServerRoleCommand;
 use Director\Command\StatusCommand;
 use Director\Command\AppAddCommand;
@@ -57,6 +58,7 @@ class DirectorApplication extends BaseApplication
     $this->add(new AppUpdateCommand($this));
     $this->add(new ServerAddCommand($this));
     $this->add(new ServerRoleCommand($this));
+    $this->add(new ServerRemoveCommand($this));
     $this->add(new EnvironmentAddCommand($this));
     $this->add(new RoleAddCommand($this));
 
