@@ -1,1 +1,10 @@
-localhost: null
+localhost:
+    hostname: localhost
+    provider: localhost
+    ip_addresses:
+        - 127.0.0.1
+google.com:
+    hostname: google.com
+    ip_addresses:
+        - 173.194.123.7
+    provider: none

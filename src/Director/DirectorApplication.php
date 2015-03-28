@@ -136,13 +136,13 @@ class DirectorApplication extends BaseApplication
     $dumper = new Dumper();
 
     // Save Apps
-    file_put_contents($this->configPath . '/apps.yml', $dumper->dump($this->apps, 4));
+    file_put_contents($this->configPath . '/apps.yml', $dumper->dump($this->config['apps'], 4));
 
     // Save Servers
-    file_put_contents($this->configPath . '/servers.yml', $dumper->dump($this->servers, 4));
+    file_put_contents($this->configPath . '/servers.yml', $dumper->dump($this->config['servers'], 4));
 
     // Save Services
-    file_put_contents($this->configPath . '/services.yml', $dumper->dump($this->services, 4));
+    file_put_contents($this->configPath . '/services.yml', $dumper->dump($this->config['services'], 4));
 
   }
 
