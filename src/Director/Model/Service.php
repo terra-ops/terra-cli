@@ -2,9 +2,9 @@
 namespace Director\Model;
 
 /**
- * A server role.
+ * A Service.
  */
-class Role {
+class Service {
 
   /**
    * @var string

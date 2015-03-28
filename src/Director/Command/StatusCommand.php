@@ -81,16 +81,16 @@ class StatusCommand extends Command
     $table->setRows($rows);
     $table->render($output);
 
-    // ROLES table.
+    // SERVICES table.
     $table = $this->getHelper('table');
-    $table->setHeaders(array('ROLES', 'Galaxy Role', 'Description'));
+    $table->setHeaders(array('SERVICES', 'Galaxy Role', 'Description'));
 
     $rows = array();
-    foreach ($this->director->roles as $role) {
+    foreach ($this->director->services as $service) {
       $row = array(
-        $role->name,
-        $role->galaxy_role,
-        $role->description,
+        $service->name,
+        $service->galaxy_role,
+        $service->description,
       );
       $rows[] = $row;
     }

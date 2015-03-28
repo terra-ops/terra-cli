@@ -14,8 +14,8 @@ use Director\Command\EnvironmentAddCommand;
 use Director\Command\RoleAddCommand;
 
 use Director\Model\App;
-use Director\Model\Role;
 use Director\Model\Server;
+use Director\Model\Service;
 use Director\Service\AppService;
 
 use Symfony\Component\Config\FileLocator;
@@ -116,6 +116,12 @@ class DirectorApplication extends BaseApplication
     if (is_array($this->config['servers'])){
       foreach ($this->config['servers'] as $name => $data) {
         $this->servers[$name] = new Server($data['hostname'], $data['provider'], $data['ip_addresses']);
+      }
+    }
+    // Load each available Server
+    if (is_array($this->config['services'])){
+      foreach ($this->config['services'] as $name => $data) {
+        $this->services[$name] = new Service($name, $data['galaxy_role'], $data['description']);
       }
     }
   }
