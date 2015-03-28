@@ -3,7 +3,7 @@
 namespace Director\Command;
 
 use Director\DirectorApplication;
-use Director\Model\Role;
+use Director\Model\Service;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,9 +13,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Validator\Constraints\Required;
 
-class RoleAddCommand extends Command
+class ServiceAddCommand extends Command
 {
   public $director;
 
@@ -27,12 +26,12 @@ class RoleAddCommand extends Command
   protected function configure()
   {
     $this
-      ->setName('role:add')
-      ->setDescription('Adds an available server Role.')
+      ->setName('service:add')
+      ->setDescription('Adds an available service.')
       ->addArgument(
         'name',
         InputArgument::OPTIONAL,
-        'The name of the role you would like to add.'
+        'The name of the service you would like to add.'
       )
       ->addArgument(
         'galaxy_role',
@@ -43,7 +42,7 @@ class RoleAddCommand extends Command
         'description',
         '',
         InputOption::VALUE_OPTIONAL,
-        'A description of this role.'
+        ''
       )
     ;
   }
@@ -52,10 +51,10 @@ class RoleAddCommand extends Command
   {
     $helper = $this->getHelper('question');
 
-    // Role Name
+    // Service Name
     $name = $input->getArgument('name');
     if (empty($name)) {
-      $question = new Question('Role name: ', '');
+      $question = new Question('Service name: ', '');
       $name = $helper->ask($input, $output, $question);
     }
 
@@ -73,17 +72,17 @@ class RoleAddCommand extends Command
       $description = $helper->ask($input, $output, $question);
     }
 
-    $role = new Role($name, $galaxy_role, $description);
-    $this->director->config['roles'][$name]= (array) $role;
+    $service = new Service($name, $galaxy_role, $description);
+    $this->director->config['roles'][$name]= (array) $service;
 
-    $output->writeln("OK Saving environment $name");
+    $output->writeln("OK Saving service $name");
     $this->director->saveData();
 
     // Confirmation
     $helper = $this->getHelper('question');
     $question = new ConfirmationQuestion("Install this Ansible Galaxy Role? ", false);
     if ($helper->ask($input, $output, $question)) {
-      system("ansible-galaxy install {$role->galaxy_role} -p roles");
+      system("ansible-galaxy install {$service->galaxy_role} -p {$this->director->configPath}/roles");
     }
   }
 }

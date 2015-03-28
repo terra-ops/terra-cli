@@ -14,7 +14,7 @@ use Director\Command\AppAddCommand;
 use Director\Command\AppRemoveCommand;
 use Director\Command\AppInitCommand;
 use Director\Command\EnvironmentAddCommand;
-use Director\Command\RoleAddCommand;
+use Director\Command\ServiceAddCommand;
 
 use Director\Model\App;
 use Director\Model\Server;
@@ -62,7 +62,7 @@ class DirectorApplication extends BaseApplication
     $this->add(new ServerRoleCommand($this));
     $this->add(new ServerRemoveCommand($this));
     $this->add(new EnvironmentAddCommand($this));
-    $this->add(new RoleAddCommand($this));
+    $this->add(new ServiceAddCommand($this));
 
     // Load Data
     $this->loadData();
