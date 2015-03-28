@@ -24,12 +24,19 @@ class DirectorDirectCommand extends Command {
   protected function configure() {
     $this
       ->setName('direct')
-      ->setDescription('Runs ansible on our entire inventory.');
+      ->setDescription('Runs ansible on our entire inventory.')
+    ;
   }
 
   protected function execute(InputInterface $input, OutputInterface $output) {
 
-    $cmd = 'ansible-playbook .playbook.yml -i .inventory';
+    $playbook = $this->director->configPath . '/playbook.yml';
+    $inventory = $this->director->configPath . '/inventory';
+
+    chdir($this->director->configPath);
+    $cmd = "ansible-playbook $playbook -i $inventory";
+
+    echo "\n RUNNING $cmd \n";
     system($cmd);
 
   }

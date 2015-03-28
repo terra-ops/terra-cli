@@ -32,17 +32,18 @@ class DirectorApplication extends BaseApplication
 
   /**
    * @var array
-   * An array of AppService for each App that is tracked.
+   * The Director registry.
    */
   public $apps = array();
-  public $roles = array();
+  public $servers = array();
+  public $services = array();
 
   /**
    * @var array
    * Raw data loaded from director.yml
    */
   public $config = array();
-  private $dataPath = '';
+  public $configPath = '';
 
   public function __construct() {
     parent::__construct(static::NAME, static::VERSION);
@@ -69,41 +70,46 @@ class DirectorApplication extends BaseApplication
    * If no data is found, write a data file.
    */
   private function loadData() {
-    $data_directories = array(
-      $GLOBALS['_SERVER']['HOME'],
-      $GLOBALS['_SERVER']['PWD'],
-    );
 
-    $locator = new FileLocator($data_directories);
+    $default_config_path = realpath(__DIR__ . '/../../config');
+
+    // Use $_SERVER['director_config_path'] if present.
+    if (isset($GLOBALS['_SERVER']['director_config_path'])) {
+      $data_directories = array(
+        $GLOBALS['_SERVER']['director_config_path'],
+        $default_config_path,
+      );
+    }
+    else {
+      $data_directories = array(
+        $default_config_path,
+      );
+    }
 
     // Attempt to locate data file
+    $locator = new FileLocator($data_directories);
     try {
-      $this->dataPath = $locator->locate('.director.yml');
+      $this->configPath = dirname(realpath($locator->locate('director.yml')));
     }
-    // If there's an exception, write a default config.
+    // If there's an exception, show a message.
     catch (\InvalidArgumentException $e) {
-      $path = $GLOBALS['_SERVER']['HOME'] . '/.director.yml';
-      $data = file_get_contents(__DIR__ . '/.director.yml');
-      file_put_contents($path, $data);
-      $this->dataPath = $locator->locate('.director.yml');
+      $dirs = implode(', ', $data_directories);
+      throw new \Exception("The `director.yml` file was not found in of the directories $dirs.");
     }
 
+    // YML Loader
     $loaderResolver = new LoaderResolver(array(new DirectorConfigLoader($locator)));
-    $delegatingLoader = new DelegatingLoader($loaderResolver);
+    $loader = new DelegatingLoader($loaderResolver);
 
-    // Load raw data about this director.
-    $this->config = $delegatingLoader->load($this->dataPath);
+    // Load core director config.
+    $this->config = $loader->load($this->configPath . '/director.yml');
+    $this->config['apps'] = $loader->load($this->configPath . '/apps.yml');
+    $this->config['servers'] = $loader->load($this->configPath . '/servers.yml');
+    $this->config['services'] = $loader->load($this->configPath . '/services.yml');
 
     // Load each available App
     foreach ($this->config['apps'] as $name => $data) {
       $this->apps[$name] = new AppService($name, $data, $this);
-    }
-
-    // Load each available Role
-    if (is_array($this->config['roles'])){
-      foreach ($this->config['roles'] as $name => $data) {
-        $this->roles[$name] = new Role($data['name'], $data['galaxy_role'], $data['description']);
-      }
     }
 
     // Load each available Server

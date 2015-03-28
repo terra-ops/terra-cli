@@ -1,0 +1,8 @@
+---
+php:
+  name: PHP
+  description: PHP Hypertext Preprocessor
+  provisioner: ansible
+  provision_vars:
+    roles:
+      - geerlingguy.composer
