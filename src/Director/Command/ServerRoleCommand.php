@@ -34,9 +34,9 @@ class ServerRoleCommand extends Command
         'The server to add the role to.'
       )
       ->addArgument(
-        'role',
+        'service',
         InputArgument::REQUIRED,
-        'The role to add to the server.'
+        'The service to add to the server.'
       )
       ->addOption(
         'remove',
@@ -50,17 +50,20 @@ class ServerRoleCommand extends Command
   protected function execute(InputInterface $input, OutputInterface $output)
   {
     $server_name = $input->getArgument('server');
-    $role_name = $input->getArgument('role');
+    $service_name = $input->getArgument('service');
 
     $server = $this->director->getServer($server_name);
-    $role = $this->director->getRole($role_name);
+    $service = $this->director->getService($service_name);
 
     // Verify server and role is available.
     if (!$server) {
       throw new \Exception("Server '{$server_name}' not found");
     }
-    if (!$role) {
-      throw new \Exception("Role '{$role_name}' not found");
+    if (!$service) {
+      throw new \Exception("Service '{$service_name}' not found");
     }
+
+    $this->director->config['servers'][$server_name]['services'][] = $service_name;
+    $this->director->saveData();
   }
 }
