@@ -45,6 +45,7 @@ class DirectorDirectCommand extends Command {
 
     // Get wrapper and run command.
     $wrapper = new AnsibleWrapper();
+    $wrapper->setTimeout(0);
     $wrapper->setEnvVar('ANSIBLE_FORCE_COLOR', TRUE);
     $wrapper->streamOutput();
     $wrapper->ansible($cmd);
