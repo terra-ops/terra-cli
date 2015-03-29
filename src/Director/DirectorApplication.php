@@ -66,6 +66,7 @@ class DirectorApplication extends BaseApplication
 
     // Load Data
     $this->loadData();
+    $this->saveData();
   }
 
 
@@ -237,5 +238,13 @@ class DirectorApplication extends BaseApplication
     // YML Loader
     $loaderResolver = new LoaderResolver(array(new DirectorConfigLoader($locator)));
     return new DelegatingLoader($loaderResolver);
+  }
+
+  /**
+   * PROCESS STUFF
+   */
+
+  function streamOutput() {
+
   }
 }

@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "738fa107781eea0fe2037df6c6b56626",
+    "hash": "a8eda5fbbacc113b12258aaa05513243",
     "packages": [
         {
             "name": "cpliakas/git-wrapper",
@@ -103,12 +103,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/drush-ops/drush.git",
-                "reference": "e419d744eedb220e64c2072d54df57d9e3b492cc"
+                "reference": "db69b5b44a3cd4c897342ab690c1a978b172d4df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drush-ops/drush/zipball/e419d744eedb220e64c2072d54df57d9e3b492cc",
-                "reference": "e419d744eedb220e64c2072d54df57d9e3b492cc",
+                "url": "https://api.github.com/repos/drush-ops/drush/zipball/db69b5b44a3cd4c897342ab690c1a978b172d4df",
+                "reference": "db69b5b44a3cd4c897342ab690c1a978b172d4df",
                 "shasum": ""
             },
             "require": {
@@ -179,7 +179,7 @@
             ],
             "description": "Drush is a command line shell and scripting interface for Drupal, a veritable Swiss Army knife designed to make life easier for those of us who spend some of our working hours hacking away at the command prompt.",
             "homepage": "http://www.drush.org",
-            "time": "2015-03-26 02:28:49"
+            "time": "2015-03-27 22:00:45"
         },
         {
             "name": "monofone/ansible-installer",
@@ -230,29 +230,6 @@
                 "installer"
             ],
             "time": "2014-05-05 19:52:34"
-        },
-        {
-            "name": "opendevshop/ansible-role-drupal",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/opendevshop/ansible-role-drupal.git",
-                "reference": "0a08516e8c17068ba431ae0f065e292a6b2d3a95"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/opendevshop/ansible-role-drupal/zipball/0a08516e8c17068ba431ae0f065e292a6b2d3a95",
-                "reference": "0a08516e8c17068ba431ae0f065e292a6b2d3a95",
-                "shasum": ""
-            },
-            "require": {
-                "monofone/ansible-installer": "~1.0",
-                "opendevshop/ansible-role-drupal": "dev-master"
-            },
-            "type": "ansible-role",
-            "notification-url": "https://packagist.org/downloads/",
-            "description": "Ansible role for drupal service for devshop2.  An experiment for devshop2.",
-            "time": "2015-03-27 03:57:48"
         },
         {
             "name": "pear/console_table",
@@ -759,29 +736,26 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.6.5",
+            "version": "v2.4.10",
             "target-dir": "Symfony/Component/Process",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process.git",
-                "reference": "4d717f34f3d1d6ab30fbe79f7132960a27f4a0dc"
+                "reference": "2756ff2bc8e05527f4d5285cc4406e269b12e516"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Process/zipball/4d717f34f3d1d6ab30fbe79f7132960a27f4a0dc",
-                "reference": "4d717f34f3d1d6ab30fbe79f7132960a27f4a0dc",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/2756ff2bc8e05527f4d5285cc4406e269b12e516",
+                "reference": "2756ff2bc8e05527f4d5285cc4406e269b12e516",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "require-dev": {
-                "symfony/phpunit-bridge": "~2.7"
-            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.4-dev"
                 }
             },
             "autoload": {
@@ -805,7 +779,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "http://symfony.com",
-            "time": "2015-03-12 10:28:44"
+            "time": "2014-09-23 05:24:59"
         },
         {
             "name": "symfony/var-dumper",

@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
+use Symfony\Component\Process\Process;
 
 class DirectorDirectCommand extends Command {
   public $director;
@@ -40,9 +41,11 @@ class DirectorDirectCommand extends Command {
     if (count($this->director->servers) == 1 && $this->director->servers['localhost']) {
       $cmd .= ' --connection=local --sudo --ask-sudo-pass';
     }
-
     echo "\n RUNNING $cmd \n";
-    system($cmd);
-
+    $process = new Process($cmd);
+    $process->start();
+    while ($process->isRunning()) {
+      echo $process->getIncrementalOutput();
+    }
   }
 }

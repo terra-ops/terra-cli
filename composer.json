@@ -19,6 +19,7 @@
       "symfony/yaml": "2.6.4",
       "symfony/http-kernel": "*",
       "symfony/config": "*",
+      "symfony/process": "2.4.*",
       "cpliakas/git-wrapper": "dev-master",
       "opendevshop/ansible-role-drupal": "dev-master"
     },
