@@ -73,7 +73,7 @@ class AnsibleWrapper
         if (null === $ansibleBinary) {
             // @codeCoverageIgnoreStart
             $finder = new ExecutableFinder();
-            $ansibleBinary = $finder->find('ansible');
+            $ansibleBinary = $finder->find('ansible-playbook');
             if (!$ansibleBinary) {
                 throw new AnsibleException('Unable to find the Ansible executable.');
             }
@@ -244,16 +244,13 @@ class AnsibleWrapper
     }
 
     /**
-     * Set an alternate private key used to connect to the repository.
+     * Set an alternate private key used to connect to servers.
      *
-     * This method sets the GIT_SSH environment variable to use the wrapper
-     * script included with this library. It also sets the custom GIT_SSH_KEY
-     * and GIT_SSH_PORT environment variables that are used by the script.
+     * This method sets the PRIVATE_KEY_FILE environment variable used by
+     * `ansible-playbook`
      *
      * @param string $privateKey
      *   Path to the private key.
-     * @param int $port
-     *   Port that the SSH server being connected to listens on, defaults to 22.
      * @param string|null $wrapper
      *   Path the the GIT_SSH wrapper script, defaults to null which uses the
      *   script included with this library.
@@ -276,9 +273,7 @@ class AnsibleWrapper
         }
 
         return $this
-            ->setEnvVar('GIT_SSH', $wrapperPath)
-            ->setEnvVar('GIT_SSH_KEY', $privateKeyPath)
-            ->setEnvVar('GIT_SSH_PORT', (int) $port)
+            ->setEnvVar('PRIVATE_KEY_FILE', $privateKeyPath)
         ;
     }
 
@@ -290,9 +285,7 @@ class AnsibleWrapper
     public function unsetPrivateKey()
     {
         return $this
-            ->unsetEnvVar('GIT_SSH')
-            ->unsetEnvVar('GIT_SSH_KEY')
-            ->unsetEnvVar('GIT_SSH_PORT')
+            ->unsetEnvVar('PRIVATE_KEY_FILE')
         ;
     }
 
@@ -366,18 +359,18 @@ class AnsibleWrapper
         return $this;
     }
 
-    /**
-     * Returns an object that interacts with a working copy.
-     *
-     * @param string $directory
-     *   Path to the directory containing the working copy.
-     *
-     * @return AnsibleWorkingCopy
-     */
-    public function workingCopy($directory)
-    {
-        return new AnsibleWorkingCopy($this, $directory);
-    }
+//    /**
+//     * Returns an object that interacts with a working copy.
+//     *
+//     * @param string $directory
+//     *   Path to the directory containing the working copy.
+//     *
+//     * @return AnsibleWorkingCopy
+//     */
+//    public function workingCopy($directory)
+//    {
+//        return new AnsibleWorkingCopy($this, $directory);
+//    }
 
     /**
      * Returns the version of the installed Ansible client.
@@ -391,91 +384,91 @@ class AnsibleWrapper
         return $this->ansible('--version');
     }
 
-    /**
-     * Parses name of the repository from the path.
-     *
-     * For example, passing the "ansible@ansiblehub.com:cpliakas/ansible-wrapper.ansible"
-     * repository would return "ansible-wrapper".
-     *
-     * @param string $repository
-     *   The repository URL.
-     *
-     * @return string
-     */
-    public static function parseRepositoryName($repository)
-    {
-        $scheme = parse_url($repository, PHP_URL_SCHEME);
+//    /**
+//     * Parses name of the repository from the path.
+//     *
+//     * For example, passing the "ansible@ansiblehub.com:cpliakas/ansible-wrapper.ansible"
+//     * repository would return "ansible-wrapper".
+//     *
+//     * @param string $repository
+//     *   The repository URL.
+//     *
+//     * @return string
+//     */
+//    public static function parseRepositoryName($repository)
+//    {
+//        $scheme = parse_url($repository, PHP_URL_SCHEME);
+//
+//        if (null === $scheme) {
+//            $parts = explode('/', $repository);
+//            $path = end($parts);
+//        } else {
+//            $strpos = strpos($repository, ':');
+//            $path = substr($repository, $strpos + 1);
+//        }
+//
+//        return basename($path, '.ansible');
+//    }
 
-        if (null === $scheme) {
-            $parts = explode('/', $repository);
-            $path = end($parts);
-        } else {
-            $strpos = strpos($repository, ':');
-            $path = substr($repository, $strpos + 1);
-        }
+//    /**
+//     * Executes a `ansible init` command.
+//     *
+//     * Create an empty ansible repository or reinitialize an existing one.
+//     *
+//     * @param string $directory
+//     *   The directory being initialized.
+//     * @param array $options
+//     *   (optional) An associative array of command line options.
+//     *
+//     * @return \AnsibleWrapper\AnsibleWorkingCopy
+//     *
+//     * @throws \AnsibleWrapper\AnsibleException
+//     *
+//     * @see AnsibleWorkingCopy::cloneRepository()
+//     *
+//     * @ingroup commands
+//     */
+//    public function init($directory, array $options = array())
+//    {
+//        $ansible = $this->workingCopy($directory);
+//        $ansible->init($options);
+//        $ansible->setCloned(true);
+//        return $ansible;
+//    }
 
-        return basename($path, '.ansible');
-    }
-
-    /**
-     * Executes a `ansible init` command.
-     *
-     * Create an empty ansible repository or reinitialize an existing one.
-     *
-     * @param string $directory
-     *   The directory being initialized.
-     * @param array $options
-     *   (optional) An associative array of command line options.
-     *
-     * @return \AnsibleWrapper\AnsibleWorkingCopy
-     *
-     * @throws \AnsibleWrapper\AnsibleException
-     *
-     * @see AnsibleWorkingCopy::cloneRepository()
-     *
-     * @ingroup commands
-     */
-    public function init($directory, array $options = array())
-    {
-        $ansible = $this->workingCopy($directory);
-        $ansible->init($options);
-        $ansible->setCloned(true);
-        return $ansible;
-    }
-
-    /**
-     * Executes a `ansible clone` command and returns a working copy object.
-     *
-     * Clone a repository into a new directory. Use AnsibleWorkingCopy::clone()
-     * instead for more readable code.
-     *
-     * @param string $repository
-     *   The Ansible URL of the repository being cloned.
-     * @param string $directory
-     *   The directory that the repository will be cloned into. If null is
-     *   passed, the directory will automatically be generated from the URL via
-     *   the AnsibleWrapper::parseRepositoryName() method.
-     * @param array $options
-     *   (optional) An associative array of command line options.
-     *
-     * @return \AnsibleWrapper\AnsibleWorkingCopy
-     *
-     * @throws \AnsibleWrapper\AnsibleException
-     *
-     * @see AnsibleWorkingCopy::cloneRepository()
-     *
-     * @ingroup commands
-     */
-    public function cloneRepository($repository, $directory = null, array $options = array())
-    {
-        if (null === $directory) {
-            $directory = self::parseRepositoryName($repository);
-        }
-        $ansible = $this->workingCopy($directory);
-        $ansible->clone($repository, $options);
-        $ansible->setCloned(true);
-        return $ansible;
-    }
+//    /**
+//     * Executes a `ansible clone` command and returns a working copy object.
+//     *
+//     * Clone a repository into a new directory. Use AnsibleWorkingCopy::clone()
+//     * instead for more readable code.
+//     *
+//     * @param string $repository
+//     *   The Ansible URL of the repository being cloned.
+//     * @param string $directory
+//     *   The directory that the repository will be cloned into. If null is
+//     *   passed, the directory will automatically be generated from the URL via
+//     *   the AnsibleWrapper::parseRepositoryName() method.
+//     * @param array $options
+//     *   (optional) An associative array of command line options.
+//     *
+//     * @return \AnsibleWrapper\AnsibleWorkingCopy
+//     *
+//     * @throws \AnsibleWrapper\AnsibleException
+//     *
+//     * @see AnsibleWorkingCopy::cloneRepository()
+//     *
+//     * @ingroup commands
+//     */
+//    public function cloneRepository($repository, $directory = null, array $options = array())
+//    {
+//        if (null === $directory) {
+//            $directory = self::parseRepositoryName($repository);
+//        }
+//        $ansible = $this->workingCopy($directory);
+//        $ansible->clone($repository, $options);
+//        $ansible->setCloned(true);
+//        return $ansible;
+//    }
 
     /**
      * Runs an arbitrary Ansible command.
@@ -536,20 +529,20 @@ class AnsibleWrapper
         return $command->notBypassed() ? $process->getOutput() : '';
     }
 
-    /**
-     * Hackish, allows us to use "clone" as a method name.
-     *
-     * $throws \BadMethodCallException
-     * @throws \AnsibleWrapper\AnsibleException
-     */
-    public function __call($method, $args)
-    {
-        if ('clone' == $method) {
-            return call_user_func_array(array($this, 'cloneRepository'), $args);
-        } else {
-            $class = get_called_class();
-            $message = "Call to undefined method $class::$method()";
-            throw new \BadMethodCallException($message);
-        }
-    }
+//    /**
+//     * Hackish, allows us to use "clone" as a method name.
+//     *
+//     * $throws \BadMethodCallException
+//     * @throws \AnsibleWrapper\AnsibleException
+//     */
+//    public function __call($method, $args)
+//    {
+//        if ('clone' == $method) {
+//            return call_user_func_array(array($this, 'cloneRepository'), $args);
+//        } else {
+//            $class = get_called_class();
+//            $message = "Call to undefined method $class::$method()";
+//            throw new \BadMethodCallException($message);
+//        }
+//    }
 }
