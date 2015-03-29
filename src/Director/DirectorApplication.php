@@ -166,8 +166,7 @@ class DirectorApplication extends BaseApplication
         $playbook_file[] = "    - " . $this->config['services'][$group_name]['galaxy_role'];
       }
       if (isset($this->config['services'][$group_name]['playbook_file'])) {
-        $playbook_file[] = "  tasks:";
-        $playbook_file[] = "    - include: " . $this->config['services'][$group_name]['playbook_file'];
+        $playbook_file[] = "- include: " . $this->config['services'][$group_name]['playbook_file'];
       }
 
     }
