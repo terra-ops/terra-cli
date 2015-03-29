@@ -99,7 +99,8 @@ class DirectorApplication extends BaseApplication
     // Load each available Server
     if (is_array($this->config['services'])){
       foreach ($this->config['services'] as $name => $data) {
-        $this->services[$name] = new Service($name, $data['galaxy_role'], $data['description']);
+        $role = isset($data['galaxy_role'])? $data['galaxy_role']: '';
+        $this->services[$name] = new Service($name, $role, $data['description']);
       }
     }
   }
@@ -163,6 +164,10 @@ class DirectorApplication extends BaseApplication
       if (isset($this->config['services'][$group_name]['galaxy_role'])) {
         $playbook_file[] = "  roles:";
         $playbook_file[] = "    - " . $this->config['services'][$group_name]['galaxy_role'];
+      }
+      if (isset($this->config['services'][$group_name]['playbook_file'])) {
+        $playbook_file[] = "  tasks:";
+        $playbook_file[] = "    - include: " . $this->config['services'][$group_name]['playbook_file'];
       }
 
     }
