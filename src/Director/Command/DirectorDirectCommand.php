@@ -42,6 +42,7 @@ class DirectorDirectCommand extends Command {
     if (count($this->director->servers) == 1 && isset($this->director->servers['localhost'])) {
       $cmd .= ' --connection=local --sudo --ask-sudo-pass';
     }
+    echo "RUNNING ansible-playbook $cmd  \n";
 
     // Get wrapper and run command.
     $wrapper = new AnsibleWrapper();
