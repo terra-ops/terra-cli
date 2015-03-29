@@ -1,6 +1,6 @@
 <?php
 
-namespace GitWrapper;
+namespace AnsibleWrapper;
 
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ExecutableFinder;
@@ -8,14 +8,14 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * A wrapper class around the Git binary.
+ * A wrapper class around the Ansible binary.
  *
- * A GitWrapper object contains the necessary context to run Git commands such
- * as the path to the Git binary and environment variables. It also provides
- * helper methods to run Git commands as set up the connection to the GIT_SSH
+ * A AnsibleWrapper object contains the necessary context to run Ansible commands such
+ * as the path to the Ansible binary and environment variables. It also provides
+ * helper methods to run Ansible commands as set up the connection to the GIT_SSH
  * wrapper script.
  */
-class GitWrapper
+class AnsibleWrapper
 {
     /**
      * Symfony event dispatcher object used by this library to dispatch events.
@@ -25,21 +25,21 @@ class GitWrapper
     private $dispatcher;
 
     /**
-     * Path to the Git binary.
+     * Path to the Ansible binary.
      *
      * @var string
      */
-    protected $gitBinary;
+    protected $ansibleBinary;
 
     /**
-     * Environment variables defined in the scope of the Git command.
+     * Environment variables defined in the scope of the Ansible command.
      *
      * @var array
      */
     protected $env = array();
 
     /**
-     * The timeout of the Git command in seconds, defaults to 60.
+     * The timeout of the Ansible command in seconds, defaults to 60.
      *
      * @var int
      */
@@ -53,34 +53,34 @@ class GitWrapper
     protected $procOptions = array();
 
     /**
-     * @var \GitWrapper\Event\GitOutputListenerInterface
+     * @var \AnsibleWrapper\Event\AnsibleOutputListenerInterface
      */
     protected $streamListener;
 
     /**
-     * Constructs a GitWrapper object.
+     * Constructs a AnsibleWrapper object.
      *
-     * @param string|null $gitBinary
-     *   The path to the Git binary. Defaults to null, which uses Symfony's
+     * @param string|null $ansibleBinary
+     *   The path to the Ansible binary. Defaults to null, which uses Symfony's
      *   ExecutableFinder to resolve it automatically.
      *
-     * @throws \GitWrapper\GitException
-     *   Throws an exception if the path to the Git binary couldn't be resolved
+     * @throws \AnsibleWrapper\AnsibleException
+     *   Throws an exception if the path to the Ansible binary couldn't be resolved
      *   by the ExecutableFinder class.
      */
-    public function __construct($gitBinary = null)
+    public function __construct($ansibleBinary = null)
     {
-        if (null === $gitBinary) {
+        if (null === $ansibleBinary) {
             // @codeCoverageIgnoreStart
             $finder = new ExecutableFinder();
-            $gitBinary = $finder->find('git');
-            if (!$gitBinary) {
-                throw new GitException('Unable to find the Git executable.');
+            $ansibleBinary = $finder->find('ansible');
+            if (!$ansibleBinary) {
+                throw new AnsibleException('Unable to find the Ansible executable.');
             }
             // @codeCoverageIgnoreEnd
         }
 
-        $this->setGitBinary($gitBinary);
+        $this->setAnsibleBinary($ansibleBinary);
     }
 
     /**
@@ -102,7 +102,7 @@ class GitWrapper
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
      *   The Symfony event dispatcher object.
      *
-     * @return \GitWrapper\GitWrapper
+     * @return \AnsibleWrapper\AnsibleWrapper
      */
     public function setDispatcher(EventDispatcherInterface $dispatcher)
     {
@@ -111,31 +111,31 @@ class GitWrapper
     }
 
     /**
-     * Sets the path to the Git binary.
+     * Sets the path to the Ansible binary.
      *
-     * @param string $gitBinary
-     *   Path to the Git binary.
+     * @param string $ansibleBinary
+     *   Path to the Ansible binary.
      *
-     * @return \GitWrapper\GitWrapper
+     * @return \AnsibleWrapper\AnsibleWrapper
      */
-    public function setGitBinary($gitBinary)
+    public function setAnsibleBinary($ansibleBinary)
     {
-        $this->gitBinary = $gitBinary;
+        $this->ansibleBinary = $ansibleBinary;
         return $this;
     }
 
     /**
-     * Returns the path to the Git binary.
+     * Returns the path to the Ansible binary.
      *
      * @return string
      */
-    public function getGitBinary()
+    public function getAnsibleBinary()
     {
-        return $this->gitBinary;
+        return $this->ansibleBinary;
     }
 
     /**
-     * Sets an environment variable that is defined only in the scope of the Git
+     * Sets an environment variable that is defined only in the scope of the Ansible
      * command.
      *
      * @param string $var
@@ -143,7 +143,7 @@ class GitWrapper
      * @param mixed $default
      *   The value of the environment variable is not set, defaults to null.
      *
-     * @return \GitWrapper\GitWrapper
+     * @return \AnsibleWrapper\AnsibleWrapper
      */
     public function setEnvVar($var, $value)
     {
@@ -153,12 +153,12 @@ class GitWrapper
 
     /**
      * Unsets an environment variable that is defined only in the scope of the
-     * Git command.
+     * Ansible command.
      *
      * @param string $var
      *   The name of the environment variable, e.g. "HOME", "GIT_SSH".
      *
-     * @return \GitWrapper\GitWrapper
+     * @return \AnsibleWrapper\AnsibleWrapper
      */
     public function unsetEnvVar($var)
     {
@@ -168,7 +168,7 @@ class GitWrapper
 
     /**
      * Returns an environment variable that is defined only in the scope of the
-     * Git command.
+     * Ansible command.
      *
      * @param string $var
      *   The name of the environment variable, e.g. "HOME", "GIT_SSH".
@@ -185,7 +185,7 @@ class GitWrapper
 
     /**
      * Returns the associative array of environment variables that are defined
-     * only in the scope of the Git command.
+     * only in the scope of the Ansible command.
      *
      * @return array
      */
@@ -195,12 +195,12 @@ class GitWrapper
     }
 
     /**
-     * Sets the timeout of the Git command.
+     * Sets the timeout of the Ansible command.
      *
      * @param int $timeout
      *   The timeout in seconds.
      *
-     * @return \GitWrapper\GitWrapper
+     * @return \AnsibleWrapper\AnsibleWrapper
      */
     public function setTimeout($timeout)
     {
@@ -209,7 +209,7 @@ class GitWrapper
     }
 
     /**
-     * Gets the timeout of the Git command.
+     * Gets the timeout of the Ansible command.
      *
      * @return int
      *   The timeout in seconds.
@@ -220,12 +220,12 @@ class GitWrapper
     }
 
     /**
-     * Sets the options passed to proc_open() when executing the Git command.
+     * Sets the options passed to proc_open() when executing the Ansible command.
      *
      * @param array $timeout
      *   The options passed to proc_open().
      *
-     * @return \GitWrapper\GitWrapper
+     * @return \AnsibleWrapper\AnsibleWrapper
      */
     public function setProcOptions(array $options)
     {
@@ -234,7 +234,7 @@ class GitWrapper
     }
 
     /**
-     * Gets the options passed to proc_open() when executing the Git command.
+     * Gets the options passed to proc_open() when executing the Ansible command.
      *
      * @return array
      */
@@ -258,21 +258,21 @@ class GitWrapper
      *   Path the the GIT_SSH wrapper script, defaults to null which uses the
      *   script included with this library.
      *
-     * @return \GitWrapper\GitWrapper
+     * @return \AnsibleWrapper\AnsibleWrapper
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      *   Thrown when any of the paths cannot be resolved.
      */
     public function setPrivateKey($privateKey, $port = 22, $wrapper = null)
     {
         if (null === $wrapper) {
-            $wrapper = __DIR__ . '/../../bin/git-ssh-wrapper.sh';
+            $wrapper = __DIR__ . '/../../bin/ansible-ssh-wrapper.sh';
         }
         if (!$wrapperPath = realpath($wrapper)) {
-            throw new GitException('Path to GIT_SSH wrapper script could not be resolved: ' . $wrapper);
+            throw new AnsibleException('Path to GIT_SSH wrapper script could not be resolved: ' . $wrapper);
         }
         if (!$privateKeyPath = realpath($privateKey)) {
-            throw new GitException('Path private key could not be resolved: ' . $privateKey);
+            throw new AnsibleException('Path private key could not be resolved: ' . $privateKey);
         }
 
         return $this
@@ -285,7 +285,7 @@ class GitWrapper
     /**
      * Unsets the private key by removing the appropriate environment variables.
      *
-     * @return \GitWrapper\GitWrapper
+     * @return \AnsibleWrapper\AnsibleWrapper
      */
     public function unsetPrivateKey()
     {
@@ -299,15 +299,15 @@ class GitWrapper
     /**
      * Adds output listener.
      *
-     * @param \GitWrapper\Event\GitOutputListenerInterface $listener
+     * @param \AnsibleWrapper\Event\AnsibleOutputListenerInterface $listener
      *
-     * @return \GitWrapper\GitWrapper
+     * @return \AnsibleWrapper\AnsibleWrapper
      */
-    public function addOutputListener(Event\GitOutputListenerInterface $listener)
+    public function addOutputListener(Event\AnsibleOutputListenerInterface $listener)
     {
         $this
             ->getDispatcher()
-            ->addListener(Event\GitEvents::GIT_OUTPUT, array($listener, 'handleOutput'))
+            ->addListener(Event\AnsibleEvents::GIT_OUTPUT, array($listener, 'handleOutput'))
         ;
         return $this;
     }
@@ -315,11 +315,11 @@ class GitWrapper
     /**
      * Adds logger listener listener.
      *
-     * @param Event\GitLoggerListener $listener
+     * @param Event\AnsibleLoggerListener $listener
      *
-     * @return GitWrapper
+     * @return AnsibleWrapper
      */
-    public function addLoggerListener(Event\GitLoggerListener $listener)
+    public function addLoggerListener(Event\AnsibleLoggerListener $listener)
     {
         $this
             ->getDispatcher()
@@ -331,15 +331,15 @@ class GitWrapper
     /**
      * Removes an output listener.
      *
-     * @param \GitWrapper\Event\GitOutputListenerInterface $listener
+     * @param \AnsibleWrapper\Event\AnsibleOutputListenerInterface $listener
      *
-     * @return \GitWrapper\GitWrapper
+     * @return \AnsibleWrapper\AnsibleWrapper
      */
-    public function removeOutputListener(Event\GitOutputListenerInterface $listener)
+    public function removeOutputListener(Event\AnsibleOutputListenerInterface $listener)
     {
         $this
             ->getDispatcher()
-            ->removeListener(Event\GitEvents::GIT_OUTPUT, array($listener, 'handleOutput'))
+            ->removeListener(Event\AnsibleEvents::GIT_OUTPUT, array($listener, 'handleOutput'))
         ;
         return $this;
     }
@@ -349,12 +349,12 @@ class GitWrapper
      *
      * @param boolean $streamOutput
      *
-     * @return \GitWrapper\GitWrapper
+     * @return \AnsibleWrapper\AnsibleWrapper
      */
     public function streamOutput($streamOutput = true)
     {
         if ($streamOutput && !isset($this->streamListener)) {
-            $this->streamListener = new Event\GitOutputStreamListener();
+            $this->streamListener = new Event\AnsibleOutputStreamListener();
             $this->addOutputListener($this->streamListener);
         }
 
@@ -372,30 +372,30 @@ class GitWrapper
      * @param string $directory
      *   Path to the directory containing the working copy.
      *
-     * @return GitWorkingCopy
+     * @return AnsibleWorkingCopy
      */
     public function workingCopy($directory)
     {
-        return new GitWorkingCopy($this, $directory);
+        return new AnsibleWorkingCopy($this, $directory);
     }
 
     /**
-     * Returns the version of the installed Git client.
+     * Returns the version of the installed Ansible client.
      *
      * @return string
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function version()
     {
-        return $this->git('--version');
+        return $this->ansible('--version');
     }
 
     /**
      * Parses name of the repository from the path.
      *
-     * For example, passing the "git@github.com:cpliakas/git-wrapper.git"
-     * repository would return "git-wrapper".
+     * For example, passing the "ansible@ansiblehub.com:cpliakas/ansible-wrapper.ansible"
+     * repository would return "ansible-wrapper".
      *
      * @param string $repository
      *   The repository URL.
@@ -414,55 +414,55 @@ class GitWrapper
             $path = substr($repository, $strpos + 1);
         }
 
-        return basename($path, '.git');
+        return basename($path, '.ansible');
     }
 
     /**
-     * Executes a `git init` command.
+     * Executes a `ansible init` command.
      *
-     * Create an empty git repository or reinitialize an existing one.
+     * Create an empty ansible repository or reinitialize an existing one.
      *
      * @param string $directory
      *   The directory being initialized.
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      *
-     * @see GitWorkingCopy::cloneRepository()
+     * @see AnsibleWorkingCopy::cloneRepository()
      *
      * @ingroup commands
      */
     public function init($directory, array $options = array())
     {
-        $git = $this->workingCopy($directory);
-        $git->init($options);
-        $git->setCloned(true);
-        return $git;
+        $ansible = $this->workingCopy($directory);
+        $ansible->init($options);
+        $ansible->setCloned(true);
+        return $ansible;
     }
 
     /**
-     * Executes a `git clone` command and returns a working copy object.
+     * Executes a `ansible clone` command and returns a working copy object.
      *
-     * Clone a repository into a new directory. Use GitWorkingCopy::clone()
+     * Clone a repository into a new directory. Use AnsibleWorkingCopy::clone()
      * instead for more readable code.
      *
      * @param string $repository
-     *   The Git URL of the repository being cloned.
+     *   The Ansible URL of the repository being cloned.
      * @param string $directory
      *   The directory that the repository will be cloned into. If null is
      *   passed, the directory will automatically be generated from the URL via
-     *   the GitWrapper::parseRepositoryName() method.
+     *   the AnsibleWrapper::parseRepositoryName() method.
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      *
-     * @see GitWorkingCopy::cloneRepository()
+     * @see AnsibleWorkingCopy::cloneRepository()
      *
      * @ingroup commands
      */
@@ -471,67 +471,67 @@ class GitWrapper
         if (null === $directory) {
             $directory = self::parseRepositoryName($repository);
         }
-        $git = $this->workingCopy($directory);
-        $git->clone($repository, $options);
-        $git->setCloned(true);
-        return $git;
+        $ansible = $this->workingCopy($directory);
+        $ansible->clone($repository, $options);
+        $ansible->setCloned(true);
+        return $ansible;
     }
 
     /**
-     * Runs an arbitrary Git command.
+     * Runs an arbitrary Ansible command.
      *
      * The command is simply a raw command line entry for everything after the
-     * Git binary. For example, a `git config -l` command would be passed as
+     * Ansible binary. For example, a `ansible config -l` command would be passed as
      * `config -l` via the first argument of this method.
      *
      * Note that no events are thrown by this method.
      *
      * @param string $commandLine
-     *   The raw command containing the Git options and arguments. The Git
-     *   binary should not be in the command, for example `git config -l` would
+     *   The raw command containing the Ansible options and arguments. The Ansible
+     *   binary should not be in the command, for example `ansible config -l` would
      *   translate to "config -l".
      * @param string|null $cwd
-     *   The working directory of the Git process. Defaults to null which uses
+     *   The working directory of the Ansible process. Defaults to null which uses
      *   the current working directory of the PHP process.
      *
      * @return string
-     *   The STDOUT returned by the Git command.
+     *   The STDOUT returned by the Ansible command.
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      *
-     * @see GitWrapper::run()
+     * @see AnsibleWrapper::run()
      */
-    public function git($commandLine, $cwd = null)
+    public function ansible($commandLine, $cwd = null)
     {
-        $command = GitCommand::getInstance($commandLine);
+        $command = AnsibleCommand::getInstance($commandLine);
         $command->setDirectory($cwd);
         return $this->run($command);
     }
 
     /**
-     * Runs a Git command.
+     * Runs a Ansible command.
      *
-     * @param \GitWrapper\GitCommand $command
-     *   The Git command being executed.
+     * @param \AnsibleWrapper\AnsibleCommand $command
+     *   The Ansible command being executed.
      * @param string|null $cwd
-     *   Explicitly specify the working directory of the Git process. Defaults
+     *   Explicitly specify the working directory of the Ansible process. Defaults
      *   to null which automatically sets the working directory based on the
      *   command being executed relative to the working copy.
      *
      * @return string
-     *   The STDOUT returned by the Git command.
+     *   The STDOUT returned by the Ansible command.
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      *
      * @see Process
      */
-    public function run(GitCommand $command, $cwd = null)
+    public function run(AnsibleCommand $command, $cwd = null)
     {
         $wrapper = $this;
-        $process = new GitProcess($this, $command, $cwd);
+        $process = new AnsibleProcess($this, $command, $cwd);
         $process->run(function ($type, $buffer) use ($wrapper, $process, $command) {
-            $event = new Event\GitOutputEvent($wrapper, $process, $command, $type, $buffer);
-            $wrapper->getDispatcher()->dispatch(Event\GitEvents::GIT_OUTPUT, $event);
+            $event = new Event\AnsibleOutputEvent($wrapper, $process, $command, $type, $buffer);
+            $wrapper->getDispatcher()->dispatch(Event\AnsibleEvents::GIT_OUTPUT, $event);
         });
         return $command->notBypassed() ? $process->getOutput() : '';
     }
@@ -540,7 +540,7 @@ class GitWrapper
      * Hackish, allows us to use "clone" as a method name.
      *
      * $throws \BadMethodCallException
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function __call($method, $args)
     {

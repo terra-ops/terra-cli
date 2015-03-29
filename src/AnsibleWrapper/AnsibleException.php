@@ -1,8 +1,8 @@
 <?php
 
-namespace GitWrapper;
+namespace AnsibleWrapper;
 
 /**
- * Base class for exceptions thrown by the Git library.
+ * Base class for exceptions thrown by the Ansible library.
  */
-class GitException extends \RuntimeException { }
+class AnsibleException extends \RuntimeException { }

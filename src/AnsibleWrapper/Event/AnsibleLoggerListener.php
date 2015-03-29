@@ -1,13 +1,13 @@
 <?php
 
-namespace GitWrapper\Event;
+namespace AnsibleWrapper\Event;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class GitLoggerListener implements EventSubscriberInterface, LoggerAwareInterface
+class AnsibleLoggerListener implements EventSubscriberInterface, LoggerAwareInterface
 {
     /**
      * @var \Psr\Log\LoggerInterface
@@ -20,11 +20,11 @@ class GitLoggerListener implements EventSubscriberInterface, LoggerAwareInterfac
      * @var array
      */
     protected $logLevelMappings = array(
-        GitEvents::GIT_PREPARE => LogLevel::INFO,
-        GitEvents::GIT_OUTPUT  => LogLevel::DEBUG,
-        GitEvents::GIT_SUCCESS => LogLevel::INFO,
-        GitEvents::GIT_ERROR   => LogLevel::ERROR,
-        GitEvents::GIT_BYPASS  => LogLevel::INFO,
+        AnsibleEvents::GIT_PREPARE => LogLevel::INFO,
+        AnsibleEvents::GIT_OUTPUT  => LogLevel::DEBUG,
+        AnsibleEvents::GIT_SUCCESS => LogLevel::INFO,
+        AnsibleEvents::GIT_ERROR   => LogLevel::ERROR,
+        AnsibleEvents::GIT_BYPASS  => LogLevel::INFO,
     );
 
     /**
@@ -57,7 +57,7 @@ class GitLoggerListener implements EventSubscriberInterface, LoggerAwareInterfac
      * @param string $eventName
      * @param string|false $logLevel
      *
-     * @return \GitWrapper\Event\GitLoggerListener
+     * @return \AnsibleWrapper\Event\AnsibleLoggerListener
      */
     public function setLogLevelMapping($eventName, $logLevel)
     {
@@ -89,24 +89,24 @@ class GitLoggerListener implements EventSubscriberInterface, LoggerAwareInterfac
     public static function getSubscribedEvents()
     {
         return array(
-            GitEvents::GIT_PREPARE => array('onPrepare', 0),
-            GitEvents::GIT_OUTPUT  => array('handleOutput', 0),
-            GitEvents::GIT_SUCCESS => array('onSuccess', 0),
-            GitEvents::GIT_ERROR   => array('onError', 0),
-            GitEvents::GIT_BYPASS  => array('onBypass', 0),
+            AnsibleEvents::GIT_PREPARE => array('onPrepare', 0),
+            AnsibleEvents::GIT_OUTPUT  => array('handleOutput', 0),
+            AnsibleEvents::GIT_SUCCESS => array('onSuccess', 0),
+            AnsibleEvents::GIT_ERROR   => array('onError', 0),
+            AnsibleEvents::GIT_BYPASS  => array('onBypass', 0),
         );
     }
 
     /**
      * Adds a logg message using the level defined in the mappings.
      *
-     * @param \GitWrapper\Event\GitEvent $event
+     * @param \AnsibleWrapper\Event\AnsibleEvent $event
      * @param string $message
      * @param array $context
      *
      * @throws \DomainException
      */
-    public function log(GitEvent $event, $message, array $context = array())
+    public function log(AnsibleEvent $event, $message, array $context = array())
     {
         $method = $this->getLogLevelMapping($event->getName());
         if ($method !== false) {
@@ -115,29 +115,29 @@ class GitLoggerListener implements EventSubscriberInterface, LoggerAwareInterfac
         }
     }
 
-    public function onPrepare(GitEvent $event)
+    public function onPrepare(AnsibleEvent $event)
     {
-        $this->log($event, 'Git command preparing to run');
+        $this->log($event, 'Ansible command preparing to run');
     }
 
-    public function handleOutput(GitOutputEvent $event)
+    public function handleOutput(AnsibleOutputEvent $event)
     {
         $context = array('error' => $event->isError() ? true : false);
         $this->log($event, $event->getBuffer(), $context);
     }
 
-    public function onSuccess(GitEvent $event)
+    public function onSuccess(AnsibleEvent $event)
     {
-        $this->log($event, 'Git command successfully run');
+        $this->log($event, 'Ansible command successfully run');
     }
 
-    public function onError(GitEvent $event)
+    public function onError(AnsibleEvent $event)
     {
-        $this->log($event, 'Error running Git command');
+        $this->log($event, 'Error running Ansible command');
     }
 
-    public function onBypass(GitEvent $event)
+    public function onBypass(AnsibleEvent $event)
     {
-        $this->log($event, 'Git command bypassed');
+        $this->log($event, 'Ansible command bypassed');
     }
 }

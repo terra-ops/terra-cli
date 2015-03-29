@@ -1,11 +1,11 @@
 <?php
 
-namespace GitWrapper\Event;
+namespace AnsibleWrapper\Event;
 
 /**
  * Interface implemented by output listeners.
  */
-interface GitOutputListenerInterface
+interface AnsibleOutputListenerInterface
 {
-    public function handleOutput(GitOutputEvent $event);
+    public function handleOutput(AnsibleOutputEvent $event);
 }

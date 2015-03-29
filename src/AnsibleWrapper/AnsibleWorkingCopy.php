@@ -1,6 +1,6 @@
 <?php
 
-namespace GitWrapper;
+namespace AnsibleWrapper;
 
 use Symfony\Component\Process\ProcessUtils;
 
@@ -10,12 +10,12 @@ use Symfony\Component\Process\ProcessUtils;
  * All commands executed via an instance of this class act on the working copy
  * that is set through the constructor.
  */
-class GitWorkingCopy
+class AnsibleWorkingCopy
 {
     /**
-     * The GitWrapper object that likely instantiated this class.
+     * The AnsibleWrapper object that likely instantiated this class.
      *
-     * @var \GitWrapper\GitWrapper
+     * @var \AnsibleWrapper\AnsibleWrapper
      */
     protected $wrapper;
 
@@ -27,7 +27,7 @@ class GitWorkingCopy
     protected $directory;
 
     /**
-     * The output captured by the last run Git commnd(s).
+     * The output captured by the last run Ansible commnd(s).
      *
      * @var string
      */
@@ -44,23 +44,23 @@ class GitWorkingCopy
     protected $cloned;
 
     /**
-     * Constructs a GitWorkingCopy object.
+     * Constructs a AnsibleWorkingCopy object.
      *
-     * @param \GitWrapper\GitWrapper $wrapper
-     *   The GitWrapper object that likely instantiated this class.
+     * @param \AnsibleWrapper\AnsibleWrapper $wrapper
+     *   The AnsibleWrapper object that likely instantiated this class.
      * @param string $directory
      *   Path to the directory containing the working copy.
      */
-    public function __construct(GitWrapper $wrapper, $directory)
+    public function __construct(AnsibleWrapper $wrapper, $directory)
     {
         $this->wrapper = $wrapper;
         $this->directory = $directory;
     }
 
     /**
-     * Returns the GitWrapper object that likely instantiated this class.
+     * Returns the AnsibleWrapper object that likely instantiated this class.
      *
-     * @return \GitWrapper\GitWrapper
+     * @return \AnsibleWrapper\AnsibleWrapper
      */
     public function getWrapper()
     {
@@ -78,7 +78,7 @@ class GitWorkingCopy
     }
 
     /**
-     * Gets the output captured by the last run Git commnd(s).
+     * Gets the output captured by the last run Ansible commnd(s).
      *
      * @return string
      */
@@ -90,9 +90,9 @@ class GitWorkingCopy
     }
 
     /**
-     * Clears the stored output captured by the last run Git command(s).
+     * Clears the stored output captured by the last run Ansible command(s).
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      */
     public function clearOutput()
     {
@@ -106,7 +106,7 @@ class GitWorkingCopy
      * @param boolean $cloned
      *   Whether the repository is cloned into the directory or not.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      */
     public function setCloned($cloned)
     {
@@ -117,39 +117,39 @@ class GitWorkingCopy
     /**
      * Checks whether a repository has already been cloned to this directory.
      *
-     * If the flag is not set, test if it looks like we're at a git directory.
+     * If the flag is not set, test if it looks like we're at a ansible directory.
      *
      * @return boolean
      */
     public function isCloned()
     {
         if (!isset($this->cloned)) {
-            $gitDir = $this->directory;
-            if (is_dir($gitDir . '/.git')) {
-                $gitDir .= '/.git';
+            $ansibleDir = $this->directory;
+            if (is_dir($ansibleDir . '/.ansible')) {
+                $ansibleDir .= '/.ansible';
             };
-            $this->cloned = (is_dir($gitDir . '/objects') && is_dir($gitDir . '/refs') && is_file($gitDir . '/HEAD'));
+            $this->cloned = (is_dir($ansibleDir . '/objects') && is_dir($ansibleDir . '/refs') && is_file($ansibleDir . '/HEAD'));
         }
         return $this->cloned;
     }
 
     /**
-     * Runs a Git command and captures the output.
+     * Runs a Ansible command and captures the output.
      *
      * @param array $args
      *   The arguments passed to the command method.
      * @param boolean $setDirectory
      *   Set the working directory, defaults to true.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      *
-     * @see GitWrapper::run()
+     * @see AnsibleWrapper::run()
      */
     public function run($args, $setDirectory = true)
     {
-        $command = call_user_func_array(array('GitWrapper\GitCommand', 'getInstance'), $args);
+        $command = call_user_func_array(array('AnsibleWrapper\AnsibleCommand', 'getInstance'), $args);
         if ($setDirectory) {
             $command->setDirectory($this->directory);
         }
@@ -158,23 +158,23 @@ class GitWorkingCopy
     }
 
     /**
-     * @defgroup command_helpers Git Command Helpers
+     * @defgroup command_helpers Ansible Command Helpers
      *
-     * Helper methods that wrap common Git commands.
+     * Helper methods that wrap common Ansible commands.
      *
      * @{
      */
 
     /**
-     * Returns the output of a `git status -s` command.
+     * Returns the output of a `ansible status -s` command.
      *
      * @return string
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function getStatus()
     {
-        return $this->wrapper->git('status -s', $this->directory);
+        return $this->wrapper->ansible('status -s', $this->directory);
     }
 
     /**
@@ -182,7 +182,7 @@ class GitWorkingCopy
      *
      * @return bool
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function hasChanges()
     {
@@ -191,20 +191,20 @@ class GitWorkingCopy
     }
 
     /**
-     * Returns a GitBranches object containing information on the repository's
+     * Returns a AnsibleBranches object containing information on the repository's
      * branches.
      *
-     * @return GitBranches
+     * @return AnsibleBranches
      */
     public function getBranches()
     {
-        return new GitBranches($this);
+        return new AnsibleBranches($this);
     }
 
     /**
      * Helper method that pushes a tag to a repository.
      *
-     * This is synonymous with `git push origin tag v1.2.3`.
+     * This is synonymous with `ansible push origin tag v1.2.3`.
      *
      * @param string $tag
      *   The tag being pushed.
@@ -214,7 +214,7 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @see GitWorkingCopy::push()
+     * @see AnsibleWorkingCopy::push()
      */
     public function pushTag($tag, $repository = 'origin', array $options = array())
     {
@@ -224,7 +224,7 @@ class GitWorkingCopy
     /**
      * Helper method that pushes all tags to a repository.
      *
-     * This is synonymous with `git push --tags origin`.
+     * This is synonymous with `ansible push --tags origin`.
      *
      * @param string $repository
      *   The destination of the push operation, which is either a URL or name of
@@ -232,7 +232,7 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @see GitWorkingCopy::push()
+     * @see AnsibleWorkingCopy::push()
      */
     public function pushTags($repository = 'origin', array $options = array())
     {
@@ -243,12 +243,12 @@ class GitWorkingCopy
     /**
      * Fetches all remotes.
      *
-     * This is synonymous with `git fetch --all`.
+     * This is synonymous with `ansible fetch --all`.
      *
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @see GitWorkingCopy::fetch()
+     * @see AnsibleWorkingCopy::fetch()
      */
     public function fetchAll(array $options = array())
     {
@@ -259,12 +259,12 @@ class GitWorkingCopy
     /**
      * Create a new branch and check it out.
      *
-     * This is synonymous with `git checkout -b`.
+     * This is synonymous with `ansible checkout -b`.
      *
      * @param string $branch
      *   The new branch being created.
      *
-     * @see GitWorkingCopy::checkout()
+     * @see AnsibleWorkingCopy::checkout()
      */
     public function checkoutNewBranch($branch, array $options = array())
     {
@@ -277,21 +277,21 @@ class GitWorkingCopy
      */
 
     /**
-     * @defgroup commands Git Commands
+     * @defgroup commands Ansible Commands
      *
-     * All methods in this group correspond with Git commands, for example
-     * "git add", "git commit", "git push", etc.
+     * All methods in this group correspond with Ansible commands, for example
+     * "ansible add", "ansible commit", "ansible push", etc.
      *
      * @{
      */
 
     /**
-     * Executes a `git add` command.
+     * Executes a `ansible add` command.
      *
      * Add file contents to the index.
      *
      * @code
-     * $git->add('some/file.txt');
+     * $ansible->add('some/file.txt');
      * @endcode
      *
      * @param string $filepattern
@@ -302,9 +302,9 @@ class GitWorkingCopy
      * @param array $options
      *   An optional array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function add($filepattern, array $options = array())
     {
@@ -317,12 +317,12 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git apply` command.
+     * Executes a `ansible apply` command.
      *
      * Apply a patch to files and/or to the index
      *
      * @code
-     * $git->apply('the/file/to/read/the/patch/from');
+     * $ansible->apply('the/file/to/read/the/patch/from');
      * @endcode
      *
      * @param string ...
@@ -330,9 +330,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return GitWorkingCopy
+     * @return AnsibleWorkingCopy
      *
-     * @throws GitException
+     * @throws AnsibleException
      */
     public function apply()
     {
@@ -342,25 +342,25 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git bisect` command.
+     * Executes a `ansible bisect` command.
      *
      * Find by binary search the change that introduced a bug.
      *
      * @code
-     * $git->bisect('good', '2.6.13-rc2');
-     * $git->bisect('view', array('stat' => true));
+     * $ansible->bisect('good', '2.6.13-rc2');
+     * $ansible->bisect('view', array('stat' => true));
      * @endcode
      *
      * @param string $sub_command
-     *   The subcommand passed to `git bisect`.
+     *   The subcommand passed to `ansible bisect`.
      * @param string ...
      *   (optional) Additional command line arguments.
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function bisect($sub_command)
     {
@@ -370,13 +370,13 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git branch` command.
+     * Executes a `ansible branch` command.
      *
      * List, create, or delete branches.
      *
      * @code
-     * $git->branch('my2.6.14', 'v2.6.14');
-     * $git->branch('origin/html', 'origin/man', array('d' => true, 'r' => 'origin/todo'));
+     * $ansible->branch('my2.6.14', 'v2.6.14');
+     * $ansible->branch('origin/html', 'origin/man', array('d' => true, 'r' => 'origin/todo'));
      * @endcode
      *
      * @param string ...
@@ -384,9 +384,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function branch()
     {
@@ -396,12 +396,12 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git checkout` command.
+     * Executes a `ansible checkout` command.
      *
      * Checkout a branch or paths to the working tree.
      *
      * @code
-     * $git->checkout('new-branch', array('b' => true));
+     * $ansible->checkout('new-branch', array('b' => true));
      * @endcode
      *
      * @param string ...
@@ -409,9 +409,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function checkout()
     {
@@ -421,26 +421,26 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git clone` command.
+     * Executes a `ansible clone` command.
      *
-     * Clone a repository into a new directory. Use GitWorkingCopy::clone()
+     * Clone a repository into a new directory. Use AnsibleWorkingCopy::clone()
      * instead for more readable code.
      *
      * @code
-     * $git->clone('git://github.com/cpliakas/git-wrapper.git');
+     * $ansible->clone('ansible://ansiblehub.com/cpliakas/ansible-wrapper.ansible');
      * @endcode
      *
      * @param string $repository
-     *   The Git URL of the repository being cloned.
+     *   The Ansible URL of the repository being cloned.
      * @param array $options
      *   (optional) An associative array of command line options.
      *
      * @param string $repository
      *   The URL of the repository being cloned.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function cloneRepository($repository, $options = array())
     {
@@ -454,15 +454,15 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git commit` command.
+     * Executes a `ansible commit` command.
      *
      * Record changes to the repository. If only one argument is passed, it is
-     * assumed to be the commit message. Therefore `$git->commit('Message');`
-     * yields a `git commit -am "Message"` command.
+     * assumed to be the commit message. Therefore `$ansible->commit('Message');`
+     * yields a `ansible commit -am "Message"` command.
      *
      * @code
-     * $git->commit('My commit message');
-     * $git->commit('Makefile', array('m' => 'My commit message'));
+     * $ansible->commit('My commit message');
+     * $ansible->commit('Makefile', array('m' => 'My commit message'));
      * @endcode
      *
      * @param string ...
@@ -470,9 +470,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function commit()
     {
@@ -488,13 +488,13 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git config` command.
+     * Executes a `ansible config` command.
      *
      * Get and set repository options.
      *
      * @code
-     * $git->config('user.email', 'opensource@chrispliakas.com');
-     * $git->config('user.name', 'Chris Pliakas');
+     * $ansible->config('user.email', 'opensource@chrispliakas.com');
+     * $ansible->config('user.name', 'Chris Pliakas');
      * @endcode
      *
      * @param string ...
@@ -502,9 +502,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function config()
     {
@@ -514,13 +514,13 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git diff` command.
+     * Executes a `ansible diff` command.
      *
      * Show changes between commits, commit and working tree, etc.
      *
      * @code
-     * $git->diff();
-     * $git->diff('topic', 'master');
+     * $ansible->diff();
+     * $ansible->diff('topic', 'master');
      * @endcode
      *
      * @param string ...
@@ -528,9 +528,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function diff()
     {
@@ -540,13 +540,13 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git fetch` command.
+     * Executes a `ansible fetch` command.
      *
      * Download objects and refs from another repository.
      *
      * @code
-     * $git->fetch('origin');
-     * $git->fetch(array('all' => true));
+     * $ansible->fetch('origin');
+     * $ansible->fetch(array('all' => true));
      * @endcode
      *
      * @param string ...
@@ -554,9 +554,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function fetch()
     {
@@ -566,12 +566,12 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git grep` command.
+     * Executes a `ansible grep` command.
      *
      * Print lines matching a pattern.
      *
      * @code
-     * $git->grep('time_t', '--', '*.[ch]');
+     * $ansible->grep('time_t', '--', '*.[ch]');
      * @endcode
      *
      * @param string ...
@@ -579,9 +579,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function grep()
     {
@@ -591,20 +591,20 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git init` command.
+     * Executes a `ansible init` command.
      *
-     * Create an empty git repository or reinitialize an existing one.
+     * Create an empty ansible repository or reinitialize an existing one.
      *
      * @code
-     * $git->init(array('bare' => true));
+     * $ansible->init(array('bare' => true));
      * @endcode
      *
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function init(array $options = array())
     {
@@ -617,13 +617,13 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git log` command.
+     * Executes a `ansible log` command.
      *
      * Show commit logs.
      *
      * @code
-     * $git->log(array('no-merges' => true));
-     * $git->log('v2.6.12..', 'include/scsi', 'drivers/scsi');
+     * $ansible->log(array('no-merges' => true));
+     * $ansible->log('v2.6.12..', 'include/scsi', 'drivers/scsi');
      * @endcode
      *
      * @param string ...
@@ -631,9 +631,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function log()
     {
@@ -643,12 +643,12 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git merge` command.
+     * Executes a `ansible merge` command.
      *
      * Join two or more development histories together.
      *
      * @code
-     * $git->merge('fixes', 'enhancements');
+     * $ansible->merge('fixes', 'enhancements');
      * @endcode
      *
      * @param string ...
@@ -656,9 +656,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function merge()
     {
@@ -668,12 +668,12 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git mv` command.
+     * Executes a `ansible mv` command.
      *
      * Move or rename a file, a directory, or a symlink.
      *
      * @code
-     * $git->mv('orig.txt', 'dest.txt');
+     * $ansible->mv('orig.txt', 'dest.txt');
      * @endcode
      *
      * @param string $source
@@ -683,9 +683,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function mv($source, $destination, array $options = array())
     {
@@ -699,12 +699,12 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git pull` command.
+     * Executes a `ansible pull` command.
      *
      * Fetch from and merge with another repository or a local branch.
      *
      * @code
-     * $git->pull('upstream', 'master');
+     * $ansible->pull('upstream', 'master');
      * @endcode
      *
      * @param string ...
@@ -712,9 +712,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function pull()
     {
@@ -724,12 +724,12 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git push` command.
+     * Executes a `ansible push` command.
      *
      * Update remote refs along with associated objects.
      *
      * @code
-     * $git->push('upstream', 'master');
+     * $ansible->push('upstream', 'master');
      * @endcode
      *
      * @param string ...
@@ -737,9 +737,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function push()
     {
@@ -749,12 +749,12 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git rebase` command.
+     * Executes a `ansible rebase` command.
      *
      * Forward-port local commits to the updated upstream head.
      *
      * @code
-     * $git->rebase('subsystem@{1}', array('onto' => 'subsystem'));
+     * $ansible->rebase('subsystem@{1}', array('onto' => 'subsystem'));
      * @endcode
      *
      * @param string ...
@@ -762,9 +762,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function rebase()
     {
@@ -774,12 +774,12 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git remote` command.
+     * Executes a `ansible remote` command.
      *
      * Manage the set of repositories ("remotes") whose branches you track.
      *
      * @code
-     * $git->remote('add', 'upstream', 'git://github.com/cpliakas/git-wrapper.git');
+     * $ansible->remote('add', 'upstream', 'ansible://ansiblehub.com/cpliakas/ansible-wrapper.ansible');
      * @endcode
      *
      * @param string ...
@@ -787,9 +787,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function remote()
     {
@@ -799,12 +799,12 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git reset` command.
+     * Executes a `ansible reset` command.
      *
      * Reset current HEAD to the specified state.
      *
      * @code
-     * $git->reset(array('hard' => true));
+     * $ansible->reset(array('hard' => true));
      * @endcode
      *
      * @param string ...
@@ -812,9 +812,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function reset()
     {
@@ -824,12 +824,12 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git rm` command.
+     * Executes a `ansible rm` command.
      *
      * Remove files from the working tree and from the index.
      *
      * @code
-     * $git->rm('oldfile.txt');
+     * $ansible->rm('oldfile.txt');
      * @endcode
      *
      * @param string $filepattern
@@ -840,9 +840,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function rm($filepattern, array $options = array())
     {
@@ -855,23 +855,23 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git show` command.
+     * Executes a `ansible show` command.
      *
      * Show various types of objects.
      *
      * @code
-     * $git->show('v1.0.0');
+     * $ansible->show('v1.0.0');
      * @endcode
      *
      * @param string $object
      *   The names of objects to show. For a more complete list of ways to spell
-     *   object names, see "SPECIFYING REVISIONS" section in gitrevisions(7).
+     *   object names, see "SPECIFYING REVISIONS" section in ansiblerevisions(7).
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function show($object, array $options = array())
     {
@@ -880,12 +880,12 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git status` command.
+     * Executes a `ansible status` command.
      *
      * Show the working tree status.
      *
      * @code
-     * $git->status(array('s' => true));
+     * $ansible->status(array('s' => true));
      * @endcode
      *
      * @param string ...
@@ -893,9 +893,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function status()
     {
@@ -905,12 +905,12 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git tag` command.
+     * Executes a `ansible tag` command.
      *
      * Create, list, delete or verify a tag object signed with GPG.
 
      * @code
-     * $git->tag('v1.0.0');
+     * $ansible->tag('v1.0.0');
      * @endcode
      *
      * @param string ...
@@ -918,9 +918,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function tag()
     {
@@ -930,12 +930,12 @@ class GitWorkingCopy
     }
 
     /**
-     * Executes a `git clean` command.
+     * Executes a `ansible clean` command.
      *
      * Remove untracked files from the working tree
      *
      * @code
-     * $git->clean('-d', '-f');
+     * $ansible->clean('-d', '-f');
      * @endcode
      *
      * @param string ...
@@ -943,9 +943,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function clean()
     {
@@ -955,12 +955,12 @@ class GitWorkingCopy
     }
 
      /**
-     * Executes a `git archive` command.
+     * Executes a `ansible archive` command.
      *
      * Create an archive of files from a named tree
      *
      * @code
-     * $git->archive('HEAD', array('o' => '/path/to/archive'));
+     * $ansible->archive('HEAD', array('o' => '/path/to/archive'));
      * @endcode
      *
      * @param string ...
@@ -968,9 +968,9 @@ class GitWorkingCopy
      * @param array $options
      *   (optional) An associative array of command line options.
      *
-     * @return \GitWrapper\GitWorkingCopy
+     * @return \AnsibleWrapper\AnsibleWorkingCopy
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function archive()
     {
@@ -987,7 +987,7 @@ class GitWorkingCopy
      * Hackish, allows us to use "clone" as a method name.
      *
      * $throws \BadMethodCallException
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
     public function __call($method, $args)
     {
@@ -1001,11 +1001,11 @@ class GitWorkingCopy
     }
 
     /**
-     * Gets the output captured by the last run Git commnd(s).
+     * Gets the output captured by the last run Ansible commnd(s).
      *
      * @return string
      *
-     * @see GitWorkingCopy::getOutput()
+     * @see AnsibleWorkingCopy::getOutput()
      */
     public function __toString()
     {

@@ -1,39 +1,39 @@
 <?php
 
 /**
- * A PHP wrapper around the Git command line utility.
+ * A PHP wrapper around the Ansible command line utility.
  */
 
-namespace GitWrapper;
+namespace AnsibleWrapper;
 
 /**
  * Class that parses and returnes an array of branches.
  */
-class GitBranches implements \IteratorAggregate
+class AnsibleBranches implements \IteratorAggregate
 {
     /**
      * The working copy that branches are being collected from.
      *
-     * @var \GitWrapper\GitWorkingCopy
+     * @var \AnsibleWrapper\AnsibleWorkingCopy
      */
-    protected $git;
+    protected $ansible;
 
     /**
-     * Constructs a GitBranches object.
+     * Constructs a AnsibleBranches object.
      *
-     * @param \GitWrapper\GitWorkingCopy $git
+     * @param \AnsibleWrapper\AnsibleWorkingCopy $ansible
      *   The working copy that branches are being collected from.
      *
-     * @throws \GitWrapper\GitException
+     * @throws \AnsibleWrapper\AnsibleException
      */
-    public function __construct(GitWorkingCopy $git)
+    public function __construct(AnsibleWorkingCopy $ansible)
     {
-        $this->git = clone $git;
-        $output = (string) $git->branch(array('a' => true));
+        $this->ansible = clone $ansible;
+        $output = (string) $ansible->branch(array('a' => true));
     }
 
     /**
-     * Fetches the branches via the `git branch` command.
+     * Fetches the branches via the `ansible branch` command.
      *
      * @param boolean $onlyRemote
      *   Whether to fetch only remote branches, defaults to false which returns
@@ -43,9 +43,9 @@ class GitBranches implements \IteratorAggregate
      */
     public function fetchBranches($onlyRemote = false)
     {
-        $this->git->clearOutput();
+        $this->ansible->clearOutput();
         $options = ($onlyRemote) ? array('r' => true) : array('a' => true);
-        $output = (string) $this->git->branch($options);
+        $output = (string) $this->ansible->branch($options);
         $branches = preg_split("/\r\n|\n|\r/", rtrim($output));
         return array_map(array($this, 'trimBranch'), $branches);
     }
@@ -54,7 +54,7 @@ class GitBranches implements \IteratorAggregate
      * Strips unwanted characters from the branch.
      *
      * @param string $branch
-     *   The raw branch returned in the output of the Git command.
+     *   The raw branch returned in the output of the Ansible command.
      *
      * @return string
      *   The processed branch name.
@@ -100,6 +100,6 @@ class GitBranches implements \IteratorAggregate
      */
     public function head()
     {
-        return (string) $this->git->run(array('rev-parse --abbrev-ref HEAD'));
+        return (string) $this->ansible->run(array('rev-parse --abbrev-ref HEAD'));
     }
 }

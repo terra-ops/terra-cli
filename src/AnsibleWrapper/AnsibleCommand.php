@@ -1,17 +1,17 @@
 <?php
 
-namespace GitWrapper;
+namespace AnsibleWrapper;
 
 use Symfony\Component\Process\ProcessUtils;
 
 /**
- * Base class extended by all Git command classes.
+ * Base class extended by all Ansible command classes.
  */
-class GitCommand
+class AnsibleCommand
 {
     /**
      * Path to the directory containing the working copy. If this variable is
-     * set, then the process will change into this directory while the Git
+     * set, then the process will change into this directory while the Ansible
      * command is being run.
      *
      * @var string|null
@@ -33,7 +33,7 @@ class GitCommand
     protected $options = array();
 
     /**
-     * Command line arguments passed to the Git command.
+     * Command line arguments passed to the Ansible command.
      *
      * @var array
      */
@@ -47,12 +47,12 @@ class GitCommand
     protected $bypass = false;
 
     /**
-     * Constructs a GitCommand object.
+     * Constructs a AnsibleCommand object.
      *
-     * Use GitCommand::getInstance() as the factory method for this class.
+     * Use AnsibleCommand::getInstance() as the factory method for this class.
      *
      * @param array $args
-     *   The arguments passed to GitCommand::getInstance().
+     *   The arguments passed to AnsibleCommand::getInstance().
      */
     protected function __construct($args)
     {
@@ -68,7 +68,7 @@ class GitCommand
                 array_pop($args);
             }
 
-            // Pass all other method arguments as the Git command arguments.
+            // Pass all other method arguments as the Ansible command arguments.
             foreach ($args as $arg) {
                 $this->addArgument($arg);
             }
@@ -76,20 +76,20 @@ class GitCommand
     }
 
     /**
-     * Constructs a GitCommand object.
+     * Constructs a AnsibleCommand object.
      *
      * Accepts a variable number of arguments to model the arguments passed to
-     * the Git command line utility. If the last argument is an array, it is
+     * the Ansible command line utility. If the last argument is an array, it is
      * passed as the command options.
      *
      * @param string $command
-     *   The Git command being run, e.g. "clone", "commit", etc.
+     *   The Ansible command being run, e.g. "clone", "commit", etc.
      * @param string ...
-     *   Zero or more arguments passed to the Git command.
+     *   Zero or more arguments passed to the Ansible command.
      * @param array $options
      *   An optional array of arguments to pass to the command.
      *
-     * @return \GitWrapper\GitCommand
+     * @return \AnsibleWrapper\AnsibleCommand
      */
     public static function getInstance()
     {
@@ -98,7 +98,7 @@ class GitCommand
     }
 
     /**
-     * Returns Git command being run, e.g. "clone", "commit", etc.
+     * Returns Ansible command being run, e.g. "clone", "commit", etc.
      *
      * @return string
      */
@@ -113,7 +113,7 @@ class GitCommand
      * @param string $directory
      *   The path to the directory containing the working copy.
      *
-     * @return \GitWrapper\GitCommand
+     * @return \AnsibleWrapper\AnsibleCommand
      */
     public function setDirectory($directory)
     {
@@ -140,7 +140,7 @@ class GitCommand
      *   true for code readability, however the default behavior of this class
      *   is to run the command.
      *
-     * @return \GitWrapper\GitCommand
+     * @return \AnsibleWrapper\AnsibleCommand
      */
     public function bypass($bypass = true)
     {
@@ -149,7 +149,7 @@ class GitCommand
     }
 
     /**
-     * Returns true if the Git command should be run.
+     * Returns true if the Ansible command should be run.
      *
      * The return value is the boolean opposite $this->bypass. Although this
      * seems complex, it makes the code more readable when checking whether the
@@ -164,7 +164,7 @@ class GitCommand
     }
 
     /**
-     * Builds the command line options for use in the Git command.
+     * Builds the command line options for use in the Ansible command.
      *
      * @return string
      */
@@ -196,7 +196,7 @@ class GitCommand
      * @param string|true $value
      *   The option's value, pass true if the options is a flag.
      *
-     * @reutrn \GitWrapper\GitCommand
+     * @reutrn \AnsibleWrapper\AnsibleCommand
      */
     public function setOption($option, $value)
     {
@@ -210,7 +210,7 @@ class GitCommand
      * @param array $options
      *   An associative array of command line options.
      *
-     * @reutrn \GitWrapper\GitCommand
+     * @reutrn \AnsibleWrapper\AnsibleCommand
      */
     public function setOptions(array $options)
     {
@@ -226,9 +226,9 @@ class GitCommand
      * @param string $flag
      *   The flag name, e.g. "q", "a".
      *
-     * @reutrn \GitWrapper\GitCommand
+     * @reutrn \AnsibleWrapper\AnsibleCommand
      *
-     * @see \GitWrapper\GitCommand::setOption()
+     * @see \AnsibleWrapper\AnsibleCommand::setOption()
      */
     public function setFlag($option)
     {
@@ -256,7 +256,7 @@ class GitCommand
      * @param string $option
      *   The option name, e.g. "branch", "q".
      *
-     * @return \GitWrapper\GitCommand
+     * @return \AnsibleWrapper\AnsibleCommand
      */
     public function unsetOption($option)
     {
@@ -265,12 +265,12 @@ class GitCommand
     }
 
     /**
-     * Adds a command line argument passed to the Git command.
+     * Adds a command line argument passed to the Ansible command.
      *
      * @param string $arg
      *   The argument, e.g. the repo URL, directory, etc.
      *
-     * @return \GitWrapper\GitCommand
+     * @return \AnsibleWrapper\AnsibleCommand
      */
     public function addArgument($arg)
     {
@@ -279,12 +279,12 @@ class GitCommand
     }
 
     /**
-     * Renders the arguments and options for the Git command.
+     * Renders the arguments and options for the Ansible command.
      *
      * @return string
      *
-     * @see GitCommand::getCommand()
-     * @see GitCommand::buildOptions()
+     * @see AnsibleCommand::getCommand()
+     * @see AnsibleCommand::buildOptions()
      */
     public function getCommandLine()
     {

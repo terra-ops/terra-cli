@@ -1,15 +1,15 @@
 <?php
 
-namespace GitWrapper\Event;
+namespace AnsibleWrapper\Event;
 
-use GitWrapper\GitCommand;
-use GitWrapper\GitWrapper;
+use AnsibleWrapper\AnsibleCommand;
+use AnsibleWrapper\AnsibleWrapper;
 use Symfony\Component\Process\Process;
 
 /**
- * Event instance passed when output is returned from Git commands.
+ * Event instance passed when output is returned from Ansible commands.
  */
-class GitOutputEvent extends GitEvent
+class AnsibleOutputEvent extends AnsibleEvent
 {
     /**
      * @var string
@@ -22,16 +22,16 @@ class GitOutputEvent extends GitEvent
     protected $buffer;
 
     /**
-     * Constructs a GitEvent object.
+     * Constructs a AnsibleEvent object.
      *
-     * @param \GitWrapper\GitWrapper $wrapper
-     *   The GitWrapper object that likely instantiated this class.
+     * @param \AnsibleWrapper\AnsibleWrapper $wrapper
+     *   The AnsibleWrapper object that likely instantiated this class.
      * @param \Symfony\Component\Process\Process $process
      *   The Process object being run.
-     * @param \GitWrapper\GitCommand $command
-     *   The GitCommand object being executed.
+     * @param \AnsibleWrapper\AnsibleCommand $command
+     *   The AnsibleCommand object being executed.
      */
-    public function __construct(GitWrapper $wrapper, Process $process, GitCommand $command, $type, $buffer)
+    public function __construct(AnsibleWrapper $wrapper, Process $process, AnsibleCommand $command, $type, $buffer)
     {
         parent::__construct($wrapper, $process, $command);
         $this->type = $type;

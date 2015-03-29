@@ -1,21 +1,21 @@
 <?php
 
-namespace GitWrapper\Event;
+namespace AnsibleWrapper\Event;
 
-use GitWrapper\GitCommand;
-use GitWrapper\GitWrapper;
+use AnsibleWrapper\AnsibleCommand;
+use AnsibleWrapper\AnsibleWrapper;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Process\Process;
 
 /**
- * Event instance passed as a result of git.* commands.
+ * Event instance passed as a result of ansible.* commands.
  */
-class GitEvent extends Event
+class AnsibleEvent extends Event
 {
     /**
-     * The GitWrapper object that likely instantiated this class.
+     * The AnsibleWrapper object that likely instantiated this class.
      *
-     * @var \GitWrapper\GitWrapper
+     * @var \AnsibleWrapper\AnsibleWrapper
      */
     protected $wrapper;
 
@@ -27,23 +27,23 @@ class GitEvent extends Event
     protected $process;
 
     /**
-     * The GitCommand object being executed.
+     * The AnsibleCommand object being executed.
      *
-     * @var \GitWrapper\GitCommand
+     * @var \AnsibleWrapper\AnsibleCommand
      */
     protected $command;
 
     /**
-     * Constructs a GitEvent object.
+     * Constructs a AnsibleEvent object.
      *
-     * @param \GitWrapper\GitWrapper $wrapper
-     *   The GitWrapper object that likely instantiated this class.
+     * @param \AnsibleWrapper\AnsibleWrapper $wrapper
+     *   The AnsibleWrapper object that likely instantiated this class.
      * @param \Symfony\Component\Process\Process $process
      *   The Process object being run.
-     * @param \GitWrapper\GitCommand $command
-     *   The GitCommand object being executed.
+     * @param \AnsibleWrapper\AnsibleCommand $command
+     *   The AnsibleCommand object being executed.
      */
-    public function __construct(GitWrapper $wrapper, Process $process, GitCommand $command)
+    public function __construct(AnsibleWrapper $wrapper, Process $process, AnsibleCommand $command)
     {
         $this->wrapper = $wrapper;
         $this->process = $process;
@@ -51,9 +51,9 @@ class GitEvent extends Event
     }
 
     /**
-     * Gets the GitWrapper object that likely instantiated this class.
+     * Gets the AnsibleWrapper object that likely instantiated this class.
      *
-     * @return \GitWrapper\GitWrapper
+     * @return \AnsibleWrapper\AnsibleWrapper
      */
     public function getWrapper()
     {
@@ -71,9 +71,9 @@ class GitEvent extends Event
     }
 
     /**
-     * Gets the GitCommand object being executed.
+     * Gets the AnsibleCommand object being executed.
      *
-     * @return \GitWrapper\GitCommand
+     * @return \AnsibleWrapper\AnsibleCommand
      */
     public function getCommand()
     {
