@@ -42,7 +42,7 @@ class StatusCommand extends Command
 
     // SERVERS table.
     $table = $this->getHelper('table');
-    $table->setHeaders(array('SERVERS', 'Provider', 'IP'));
+    $table->setHeaders(array('SERVERS', 'Provider', 'IP', 'Services'));
 
     $rows = array();
     foreach ($this->director->config['servers'] as $name => $server) {
@@ -50,10 +50,14 @@ class StatusCommand extends Command
       $ips = !empty($server->ip_addresses)?
         implode(', ', $server->ip_addresses):
         '';
+      $services_list = !empty($server->services)?
+        implode(', ', $server->services):
+        '';
       $row = array(
         $server->hostname,
         $server->provider,
         $ips,
+        $services_list,
       );
       $rows[] = $row;
     }
