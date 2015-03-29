@@ -14,6 +14,8 @@ use Symfony\Component\Console\Question\Question;
 
 use Symfony\Component\Process\Process;
 
+use AnsibleWrapper\AnsibleWrapper;
+
 class DirectorDirectCommand extends Command {
   public $director;
 
@@ -25,8 +27,7 @@ class DirectorDirectCommand extends Command {
   protected function configure() {
     $this
       ->setName('direct')
-      ->setDescription('Runs ansible on our entire inventory.')
-    ;
+      ->setDescription('Runs ansible on our entire inventory.');
   }
 
   protected function execute(InputInterface $input, OutputInterface $output) {
@@ -34,18 +35,18 @@ class DirectorDirectCommand extends Command {
     $playbook = $this->director->configPath . '/playbook.yml';
     $inventory = $this->director->configPath . '/inventory';
 
-    chdir($this->director->configPath);
-    $cmd = " ANSIBLE_FORCE_COLOR=true ansible-playbook $playbook -i $inventory";
+    // Build command string
+    $cmd = "$playbook -i $inventory";
 
-    // If localhost is our only server, run locally.
+    // If only dealing with localhost, run with sudo
     if (count($this->director->servers) == 1 && $this->director->servers['localhost']) {
       $cmd .= ' --connection=local --sudo --ask-sudo-pass';
     }
-    echo "\n RUNNING $cmd \n";
-    $process = new Process($cmd);
-    $process->start();
-    while ($process->isRunning()) {
-      echo $process->getIncrementalOutput();
-    }
+
+    // Get wrapper and run command.
+    $wrapper = new AnsibleWrapper();
+    $wrapper->setEnvVar('ANSIBLE_FORCE_COLOR', TRUE);
+    $wrapper->streamOutput();
+    $wrapper->ansible($cmd);
   }
 }
