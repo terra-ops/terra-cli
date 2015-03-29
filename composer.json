@@ -19,7 +19,8 @@
       "symfony/yaml": "2.6.4",
       "symfony/http-kernel": "*",
       "symfony/config": "*",
-      "symfony/process": "2.4.*",
+      "symfony/process": ">=2.3",
+      "symfony/event-dispatcher": ">=2.3",
       "cpliakas/git-wrapper": "dev-master",
       "opendevshop/ansible-role-drupal": "dev-master"
     },
