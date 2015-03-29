@@ -39,7 +39,7 @@ class DirectorDirectCommand extends Command {
     $cmd = "$playbook -i $inventory";
 
     // If only dealing with localhost, run with sudo
-    if (count($this->director->servers) == 1 && $this->director->servers['localhost']) {
+    if (count($this->director->servers) == 1 && isset($this->director->servers['localhost'])) {
       $cmd .= ' --connection=local --sudo --ask-sudo-pass';
     }
 
