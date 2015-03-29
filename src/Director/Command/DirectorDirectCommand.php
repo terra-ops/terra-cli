@@ -35,7 +35,7 @@ class DirectorDirectCommand extends Command {
     $inventory = $this->director->configPath . '/inventory';
 
     chdir($this->director->configPath);
-    $cmd = "ansible-playbook $playbook -i $inventory";
+    $cmd = " ANSIBLE_FORCE_COLOR=true ansible-playbook $playbook -i $inventory";
 
     // If localhost is our only server, run locally.
     if (count($this->director->servers) == 1 && $this->director->servers['localhost']) {
