@@ -44,8 +44,10 @@ class DirectorDirectCommand extends Command {
     }
 
     // Confirmation
+    $output->writeln("Run this command?");
+    $output->writeln("ansible-playbook {$cmd}");
     $helper = $this->getHelper('question');
-    $question = new ConfirmationQuestion("Run the command \"ansible-playbook {$cmd}\"? ", false);
+    $question = new ConfirmationQuestion("(y/n)", false);
     if (!$helper->ask($input, $output, $question)) {
       return;
     }
