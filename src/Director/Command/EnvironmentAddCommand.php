@@ -34,13 +34,11 @@ class EnvironmentAddCommand extends Command
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    $helper = $this->getHelper('question');
-
     // App
     $helper = $this->getHelper('question');
     $question = new ChoiceQuestion(
       'For which app? ',
-        array_keys($this->app->config['apps']),
+        array_keys($this->director->config['apps']),
       0
     );
     $app = $helper->ask($input, $output, $question);
@@ -53,15 +51,15 @@ class EnvironmentAddCommand extends Command
     $helper = $this->getHelper('question');
     $question = new ChoiceQuestion(
       'Server? ',
-      array_keys($this->app->config['servers']),
+      array_keys($this->director->config['servers']),
       0
     );
     $server = $helper->ask($input, $output, $question);
 
     $environment = new Environment($app, $name, $server);
-    $this->app->config['apps'][$app]['environments'][$name] = (array) $environment;
+    $this->director->config['apps'][$app]['environments'][$name] = (array) $environment;
 
     $output->writeln("OK Saving environment $name");
-    $this->app->saveData();
+    $this->director->saveData();
   }
 }
