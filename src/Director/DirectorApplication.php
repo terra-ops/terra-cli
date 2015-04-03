@@ -180,7 +180,7 @@ class DirectorApplication extends BaseApplication
    * Get an App
    */
   public function getApp($name){
-    return  isset($this->apps['apps'][$name])?
+    return  isset($this->config['apps'][$name])?
       $this->config['apps'][$name]:
       NULL;
   }
