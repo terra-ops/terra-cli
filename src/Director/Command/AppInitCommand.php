@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 
 
 class AppInitCommand extends Command
@@ -35,7 +36,7 @@ class AppInitCommand extends Command
       ->setDescription('Initiate an instance of your app.')
       ->addArgument(
         'name',
-        InputArgument::REQUIRED,
+        InputArgument::OPTIONAL,
         'The app you would like to initiate.'
       )
       ->addArgument(
@@ -48,22 +49,30 @@ class AppInitCommand extends Command
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
+    $helper = $this->getHelper('question');
+
     // Get our App
-    $app = $this->director->apps[$input->getArgument('name')];
+    $app_name = $input->getArgument('name');
+    if (empty($app_name)) {
+      $question = new ChoiceQuestion(
+        'Which app would you like to clone? ',
+        array_keys($this->director->config['apps']),
+        0
+      );
+      $app_name = $helper->ask($input, $output, $question);
+    }
+    $app = $this->director->getApp($app_name);
 
     // Determine what path to init in.
     // This command acts like git clone.  $path defaults to $name.
-    $path = $input->getArgument('path');
+    $full_path = $input->getArgument('path');
     if (empty($path)) {
-      $path = $input->getArgument('name');
+      $full_path = $this->director->configPath . '/apps/' . $app_name;
     }
-
-    $full_path = getcwd() . '/' . $path;
 
     // Confirmation
     $helper = $this->getHelper('question');
-
-    $question = new ConfirmationQuestion("Clone {$app->app->source_url} to {$full_path}? ", false);
+    $question = new ConfirmationQuestion("Clone {$app->source_url} to {$full_path}? ", false);
     if (!$helper->ask($input, $output, $question)) {
       return;
     }
