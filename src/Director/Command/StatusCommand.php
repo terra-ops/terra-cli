@@ -74,10 +74,18 @@ class StatusCommand extends Command
       $environments_list = !empty($app->environments)?
         implode(', ', array_keys($app->environments)):
         '';
+
+      if ($app->app->source_path) {
+        $source = $app->source_url . "\n" . $app->app->source_path;
+      }
+      else {
+        $source = $app->source_url;
+      }
+
       $row = array(
         $app->name,
         $app->description,
-        $app->source_url,
+        $source,
         $environments_list,
       );
       $rows[] = $row;

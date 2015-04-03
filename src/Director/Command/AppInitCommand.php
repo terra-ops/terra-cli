@@ -80,5 +80,8 @@ class AppInitCommand extends Command
     // Initiate the app.
     $app->init($full_path);
 
+    $this->director->config['apps'][$app_name]['source_path'] = $full_path;
+    $this->director->saveData();
+
   }
 }
