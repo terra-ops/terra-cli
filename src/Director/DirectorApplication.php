@@ -8,7 +8,7 @@ use Director\Command\AppUpdateCommand;
 use Director\Command\DirectorDirectCommand;
 use Director\Command\ServerAddCommand;
 use Director\Command\ServerRemoveCommand;
-use Director\Command\ServerRoleCommand;
+use Director\Command\ServerStackCommand;
 use Director\Command\StatusCommand;
 use Director\Command\AppAddCommand;
 use Director\Command\AppRemoveCommand;
@@ -59,7 +59,7 @@ class DirectorApplication extends BaseApplication
     $this->add(new AppInitCommand($this));
     $this->add(new AppUpdateCommand($this));
     $this->add(new ServerAddCommand($this));
-    $this->add(new ServerRoleCommand($this));
+    $this->add(new ServerStackCommand($this));
     $this->add(new ServerRemoveCommand($this));
     $this->add(new EnvironmentAddCommand($this));
     $this->add(new ServiceAddCommand($this));
