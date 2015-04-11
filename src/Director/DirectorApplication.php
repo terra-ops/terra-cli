@@ -14,6 +14,7 @@ use Director\Command\AppAddCommand;
 use Director\Command\AppRemoveCommand;
 use Director\Command\AppInitCommand;
 use Director\Command\EnvironmentAddCommand;
+use Director\Command\EnvironmentStatusCommand;
 use Director\Command\ServiceAddCommand;
 
 use Director\Model\App;
@@ -62,6 +63,7 @@ class DirectorApplication extends BaseApplication
     $this->add(new ServerStackCommand($this));
     $this->add(new ServerRemoveCommand($this));
     $this->add(new EnvironmentAddCommand($this));
+    $this->add(new EnvironmentStatusCommand($this));
     $this->add(new ServiceAddCommand($this));
 
     // Load Data
@@ -179,7 +181,7 @@ class DirectorApplication extends BaseApplication
   /**
    * Get an App object by name.
    * @param $name
-   * @return App
+   * @return AppFactory
    */
   public function getApp($name){
     return isset($this->apps[$name])?
