@@ -8,9 +8,17 @@ class Service {
 
   /**
    * @var string
-   * The role's machine name.  Must be unique.
+   * The service name.  Must be unique.
    */
   public $name;
+
+  /**
+   * @var string
+   * The service type.
+   *
+   * Must be an existing ServiceType class.
+   */
+  public $type;
 
   /**
    * @var string
@@ -27,8 +35,9 @@ class Service {
   /**
    * Initiate the Role object.
    */
-  public function __construct($name, $galaxy_role, $description = NULL) {
+  public function __construct($name, $type, $galaxy_role, $description = NULL) {
     $this->name = $name;
+    $this->type = $type;
     $this->galaxy_role = $galaxy_role;
     $this->description = $description;
   }
