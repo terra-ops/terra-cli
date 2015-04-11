@@ -4,7 +4,7 @@ namespace Director\Command;
 
 use Director\DirectorApplication;
 use Director\Model\App;
-use Director\Service\AppService;
+use Director\Service\AppFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -67,7 +67,7 @@ class AppInitCommand extends Command
     // This command acts like git clone.  $path defaults to $name.
     $full_path = $input->getArgument('path');
     if (empty($path)) {
-      $full_path = $this->director->configPath . '/apps/' . $app_name;
+      $full_path = $this->director->configPath . '/apps/' . $app_name . '.git';
     }
 
     // Confirmation

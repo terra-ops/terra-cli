@@ -6,7 +6,7 @@ use GitWrapper\GitWrapper;
 /**
  * Service for an App.
  */
-class AppService {
+class AppFactory {
 
   public $name;
   public $app;
@@ -29,9 +29,8 @@ class AppService {
 
     $wrapper = new GitWrapper();
     $wrapper->streamOutput();
-    $working_copy = $wrapper->clone($this->app->source_url, $path);
-
+    $wrapper->clone($this->app->source_url, $path, array('bare' => TRUE));
     chdir($path);
-    $wrapper->git('status');
+    $wrapper->git('branch');
   }
 }

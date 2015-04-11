@@ -19,7 +19,7 @@ use Director\Command\ServiceAddCommand;
 use Director\Model\App;
 use Director\Model\Server;
 use Director\Model\Service;
-use Director\Service\AppService;
+use Director\Service\AppFactory;
 
 use Director\Config\DirectorConfigLoader;
 
@@ -87,7 +87,7 @@ class DirectorApplication extends BaseApplication
 
     // Load each available App
     foreach ($this->config['apps'] as $name => $data) {
-      $this->apps[$name] = new AppService($name, $data, $this);
+      $this->apps[$name] = new AppFactory($name, $data, $this);
     }
 
     // Load each available Server
