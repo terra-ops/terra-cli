@@ -55,6 +55,13 @@ class EnvironmentFactory {
   }
 
   /**
+   * Reloads config from .director.yml file.
+   */
+  public function reloadConfig() {
+    $this->loadConfig();
+  }
+
+  /**
    * Returns the environments config.
    */
   public function getConfig() {
