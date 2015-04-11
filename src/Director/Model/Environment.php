@@ -8,17 +8,18 @@ class Environment {
    * Must be unique within an app.
    */
   public $name;
+
   /**
    * @var string
-   * Project this environment belongs to.
+   * The app this environment belongs to.
    */
   public $app;
 
   /**
    * @var string
-   * Server the server this environment should live on.
+   * Path to the source code of this environment.
    */
-  public $server;
+  public $source_path;
 
   /**
    * @var string
@@ -31,6 +32,7 @@ class Environment {
    * The current branch or tag deployed to the environment
    */
   public $git_ref;
+
   /**
    * Initiate the project
    */
