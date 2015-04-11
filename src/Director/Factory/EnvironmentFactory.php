@@ -14,6 +14,7 @@ class EnvironmentFactory {
 
   public $environment;
   public $repo;
+  public $config;
 
   /**
    * @var string
@@ -46,6 +47,9 @@ class EnvironmentFactory {
     $fs = new FileSystem;
     if ($fs->exists($this->getSourcePath() . '/.director.yml')){
       $this->config = Yaml::parse(file_get_contents($this->getSourcePath() . '/.director.yml'));
+    }
+    else {
+      $this->config = NULL;
     }
   }
 

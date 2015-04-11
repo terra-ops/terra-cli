@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use TQ\Git\Repository\Repository;
+use GitWrapper\GitWrapper;
 
 class EnvironmentStatusCommand extends Command
 {
@@ -43,6 +44,25 @@ class EnvironmentStatusCommand extends Command
 
     $environment = $app->getEnvironment($input->getArgument('environment'));
 
-    $output->writeln($environment->getRepo()->getCurrentBranch());
+    $output->writeln('<info>PATH:</info> ' . $environment->getSourcePath());
+    $output->writeln('<info>BRANCH:</info> ' . $environment->getRepo()->getCurrentBranch());
+
+    // Look for .director.yml
+    $config = $environment->getConfig();
+    if (empty($config)) {
+      $output->writeln('<error>CONFIG:</error> .director.yml not found at ' . $environment->getSourcePath());
+    }
+    else {
+      $output->writeln('<info>CONFIG:</info> Loaded .director.yml');
+    }
+
+    // Show git status
+    $status = $environment->getRepo()->getStatus();
+    if (!empty($status)){
+      $wrapper = new GitWrapper();
+      $wrapper->streamOutput();
+      chdir($environment->getSourcePath());
+      $wrapper->git('status');
+    }
   }
 }
