@@ -37,6 +37,7 @@ class EnvironmentFactory {
     $wrapper->clone($this->environment->source_url, $path);
     chdir($path);
     $wrapper->git('branch');
+    $this->loadConfig();
   }
 
   /**

@@ -77,8 +77,9 @@ class EnvironmentAddCommand extends Command
     $environmentFactory = new EnvironmentFactory($environment, $this->director);
     $environmentFactory->init($path);
 
-
-    // Look for .director.yml
-
+    // Look for .director.yml and save to environment.
+    $this->director->config['apps'][$app_name]['environments'][$name]['config'] = $environmentFactory->getConfig();
+    $this->director->saveData();
+    $output->writeln("OK Saving environment $name");
   }
 }

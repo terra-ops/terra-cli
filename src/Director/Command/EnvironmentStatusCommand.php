@@ -64,5 +64,14 @@ class EnvironmentStatusCommand extends Command
       chdir($environment->getSourcePath());
       $wrapper->git('status');
     }
+
+    // Save to yml
+    $this->director->config['apps'][$input->getArgument('app')]['environments'][$input->getArgument('environment')]['config'] = $environment->getConfig();
+
+    $this->director->config['apps'][$input->getArgument('app')]['environments'][$input->getArgument('environment')]['git_ref'] =
+      $environment->getRepo()->getCurrentBranch();
+    $this->director->saveData();
+
+    $output->writeln("Saved environment details.");
   }
 }

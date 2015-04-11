@@ -114,7 +114,7 @@ class DirectorApplication extends BaseApplication
     $dumper = new Dumper();
 
     // Save Apps
-    file_put_contents($this->configPath . '/apps.yml', $dumper->dump($this->config['apps'], 4));
+    file_put_contents($this->configPath . '/apps.yml', $dumper->dump($this->config['apps'], 10));
 
     // Save Servers
     file_put_contents($this->configPath . '/servers.yml', $dumper->dump($this->config['servers'], 4));
