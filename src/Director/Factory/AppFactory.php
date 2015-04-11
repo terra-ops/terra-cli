@@ -25,7 +25,7 @@ class AppFactory {
     if (is_array($this->app->environments)){
       foreach ($this->app->environments as $name => $data) {
         $environment = (object) $data;
-        $this->servers[$name] = new EnvironmentFactory($environment, $this->director);
+        $this->environments[$name] = new EnvironmentFactory($environment, $this->director);
       }
     }
 
@@ -48,7 +48,14 @@ class AppFactory {
    * @return EnvironmentFactory
    */
   public function getEnvironment($name) {
-    print_r($this->app);
     return new EnvironmentFactory($this->app->environments[$name], $this->director);
+  }
+
+  /**
+   * Get the git repo source URL.
+   * @return string
+   */
+  public function getSourceUrl() {
+    return $this->source_url;
   }
 }

@@ -12,12 +12,10 @@ use TQ\Git\Repository\Repository;
 class EnvironmentFactory {
 
   public $environment;
-  public $app;
   public $repo;
 
   public function __construct($environment, DirectorApplication $director) {
     $this->environment = (object) $environment;
-    $this->app = $director->getApp($environment->app);
   }
 
   /**
@@ -26,8 +24,16 @@ class EnvironmentFactory {
   public function init($path){
     $wrapper = new GitWrapper();
     $wrapper->streamOutput();
-    $wrapper->clone($this->app->source_url, $path);
+    $wrapper->clone($this->environment->source_url, $path);
     chdir($path);
     $wrapper->git('branch');
+  }
+
+  /**
+   * Get the path to this environments source code.
+   * @return string
+   */
+  public function getSourcePath() {
+    return $this->environment->source_path;
   }
 }

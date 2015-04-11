@@ -11,21 +11,15 @@ class Environment {
 
   /**
    * @var string
-   * The app this environment belongs to.
-   */
-  public $app;
-
-  /**
-   * @var string
    * Path to the source code of this environment.
    */
   public $source_path;
 
   /**
    * @var string
-   * The system URL of the environment.
+   * URL of the source code repo. Inherited from the App.
    */
-  public $url;
+  public $source_url;
 
   /**
    * @var string
@@ -36,10 +30,10 @@ class Environment {
   /**
    * Initiate the project
    */
-  public function __construct($name, $app, $source_path, $git_ref = '') {
+  public function __construct($name, $source_path, $source_url, $git_ref = '') {
     $this->name = $name;
-    $this->app = $app;
     $this->source_path = $source_path;
+    $this->source_url = $source_url;
     $this->git_ref = $git_ref;
   }
 }

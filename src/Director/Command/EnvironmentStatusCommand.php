@@ -9,6 +9,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use TQ\Git\Repository\Repository;
+
 class EnvironmentStatusCommand extends Command
 {
   public $director;
@@ -42,6 +44,7 @@ class EnvironmentStatusCommand extends Command
 
     $environment = $app->getEnvironment($input->getArgument('environment'));
 
-    print_r($environment);
+    $git = Repository::open($environment->getSourcePath());
+    $output->writeln($git->getCurrentBranch());
   }
 }

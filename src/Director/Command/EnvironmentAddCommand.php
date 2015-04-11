@@ -10,6 +10,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Config\Loader\FileLoader;
+use Symfony\Component\Yaml\Yaml;
 
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
@@ -53,7 +55,7 @@ class EnvironmentAddCommand extends Command
     $question = new Question('Path: ', '');
     $path = $helper->ask($input, $output, $question);
 
-    $environment = new Environment($name, $app_name, $path);
+    $environment = new Environment($name, $path, $app->getSourceUrl());
     $this->director->config['apps'][$app_name]['environments'][$name] = (array) $environment;
 
     $this->director->saveData();
@@ -64,8 +66,11 @@ class EnvironmentAddCommand extends Command
       return;
     }
 
+    // Clone the apps source code to the desired path.
     $environmentFactory = new EnvironmentFactory($environment, $this->director);
     $environmentFactory->init($path);
+
+    // Look for .director.yml
 
   }
 }
