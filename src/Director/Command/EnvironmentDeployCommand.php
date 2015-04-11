@@ -59,18 +59,14 @@ class EnvironmentDeployCommand extends Command
 
     // Run the deploy hooks
     chdir($environment->getSourcePath());
-print_r($environment->config);
-//    foreach ($environment->config['hooks']['deploy'] as $cmd) {
-//      $process = new Process($cmd);
-      $process = new Process($environment->config['hooks']['deploy']);
-      $process->run(function ($type, $buffer) {
-        if (Process::ERR === $type) {
-          echo 'ERR > '.$buffer;
-        } else {
-          echo 'OK  > '.$buffer;
-        }
-      });
-//    }
+    $process = new Process($environment->config['hooks']['deploy']);
+    $process->run(function ($type, $buffer) {
+      if (Process::ERR === $type) {
+        echo 'ERR > '.$buffer;
+      } else {
+        echo 'OK  > '.$buffer;
+      }
+    });
 
     // Save new branch to yml
     $this->director->config['apps'][$input->getArgument('app')]['environments'][$input->getArgument('environment')]['git_ref'] =

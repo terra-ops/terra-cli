@@ -35,9 +35,8 @@ class Service {
   /**
    * Initiate the Role object.
    */
-  public function __construct($name, $type, $galaxy_role, $description = NULL) {
+  public function __construct($name, $galaxy_role, $description = NULL) {
     $this->name = $name;
-    $this->type = $type;
     $this->galaxy_role = $galaxy_role;
     $this->description = $description;
   }
