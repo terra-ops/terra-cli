@@ -95,12 +95,13 @@ class StatusCommand extends Command
 
     // SERVICES table.
     $table = $this->getHelper('table');
-    $table->setHeaders(array('SERVICES', 'Galaxy Role', 'Description'));
+    $table->setHeaders(array('SERVICES', 'type', 'Galaxy Role', 'Description'));
 
     $rows = array();
     foreach ($this->director->services as $service) {
       $row = array(
         $service->name,
+        $service->type,
         $service->galaxy_role,
         $service->description,
       );
