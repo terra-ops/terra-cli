@@ -34,6 +34,11 @@ class EnvironmentAddCommand extends Command
     $this
       ->setName('environment:add')
       ->setDescription('Adds a new environment.')
+      ->addArgument(
+        'app',
+        InputArgument::OPTIONAL,
+        'The app you would like to add an environment for.'
+      )
     ;
   }
 
@@ -41,12 +46,16 @@ class EnvironmentAddCommand extends Command
   {
     // App
     $helper = $this->getHelper('question');
-    $question = new ChoiceQuestion(
-      'For which app? ',
+    $app_name = $input->getArgument('app');
+
+    if (empty($app_name)) {
+      $question = new ChoiceQuestion(
+        'For which app? ',
         array_keys($this->director->config['apps']),
-      0
-    );
-    $app_name = $helper->ask($input, $output, $question);
+        0
+      );
+      $app_name = $helper->ask($input, $output, $question);
+    }
     $app = $this->director->getApp($app_name);
 
     // Environment Name

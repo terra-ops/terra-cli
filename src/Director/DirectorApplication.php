@@ -178,6 +178,8 @@ class DirectorApplication extends BaseApplication
     file_put_contents($this->configPath . '/inventory', implode("\n", $inventory_file));
     file_put_contents($this->configPath . '/playbook.yml', implode("\n", $playbook_file));
 
+    // Reload data from files
+    $this->loadData();
   }
 
   /**
