@@ -1,8 +1,11 @@
 <?php
 namespace Director\Factory;
 use Director\DirectorApplication;
+use Drupal\Core\Render\Element\File;
 use GitWrapper\GitWrapper;
 use TQ\Git\Repository\Repository;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Service for an App.
@@ -20,6 +23,8 @@ class EnvironmentFactory {
   public function __construct($environment, DirectorApplication $director) {
     $this->environment = (object) $environment;
     $this->director = $director;
+
+    $this->loadConfig();
   }
 
   /**
@@ -34,11 +39,34 @@ class EnvironmentFactory {
   }
 
   /**
+   * Loads app config from environment source code into $this->config
+   */
+  private function loadConfig() {
+    // Look for .director.yml
+    $fs = new FileSystem;
+    if ($fs->exists($this->getSourcePath() . '/.director.yml')){
+      $this->config = Yaml::parse(file_get_contents($this->getSourcePath() . '/.director.yml'));
+    }
+  }
+
+  /**
+   * Returns the environments config.
+   */
+  public function getConfig() {
+    if (empty($this->config)) {
+      $this->loadConfig();
+    }
+    return $this->config;
+  }
+
+  /**
    * Get the path to this environments source code.
    * @return string
    */
   public function getSourcePath() {
-    return $this->environment->source_path;
+    if (isset($this->environment->source_path)) {
+      return $this->environment->source_path;
+    }
   }
 
   /**
