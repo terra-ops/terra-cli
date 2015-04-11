@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Filesystem\Filesystem;
 
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
@@ -54,6 +55,12 @@ class EnvironmentAddCommand extends Command
     // Path
     $question = new Question('Path: ', '');
     $path = $helper->ask($input, $output, $question);
+
+    // Check for path
+    $fs = new Filesystem();
+    if (!$fs->isAbsolutePath($path)) {
+      $path = getcwd() . '/' . $path;
+    }
 
     $environment = new Environment($name, $path, $app->getSourceUrl());
     $this->director->config['apps'][$app_name]['environments'][$name] = (array) $environment;
