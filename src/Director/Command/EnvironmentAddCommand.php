@@ -81,5 +81,16 @@ class EnvironmentAddCommand extends Command
     $this->director->config['apps'][$app_name]['environments'][$name]['config'] = $environmentFactory->getConfig();
     $this->director->saveData();
     $output->writeln("OK Saving environment $name");
+
+    // Assign Servers!
+    // for each environment->config->services,
+    //    lookup all servers that have the required service available.
+    //    ask user which server to use for each service.
+    //    save the environment's service stack.
+
+    // Save data
+
+    // Prompt user to run director direct to deploy the services.
+
   }
 }
