@@ -55,7 +55,10 @@ class EnvironmentDeployCommand extends Command
     $wrapper = new GitWrapper();
     $git = new GitWorkingCopy($wrapper, $environment->getSourcePath());
     $git->checkout($git_ref);
+    $git->pull();
 
+    // Reload config so any changes get picked up.
+    $environment->reloadConfig();
 
     // Run the deploy hooks
     chdir($environment->getSourcePath());
