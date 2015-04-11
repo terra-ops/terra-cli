@@ -177,16 +177,20 @@ class DirectorApplication extends BaseApplication
   }
 
   /**
-   * Get an App
+   * Get an App object by name.
+   * @param $name
+   * @return App
    */
   public function getApp($name){
-    return  isset($this->apps[$name])?
+    return isset($this->apps[$name])?
       $this->apps[$name]:
       NULL;
   }
 
   /**
-   * Get a Server.
+   * Get a Server object by name.
+   * @param $name
+   * @return Server
    */
   public function getServer($name){
     return isset($this->servers[$name])?
@@ -195,7 +199,9 @@ class DirectorApplication extends BaseApplication
   }
 
   /**
-   * Get a Service.
+   * Get a Service object by name.
+   * @param $name
+   * @return Service
    */
   public function getService($name){
     return isset($this->services[$name])?
