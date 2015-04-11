@@ -92,12 +92,19 @@ class EnvironmentStatusCommand extends Command
     }
 
     // Save to yml
-    $this->director->config['apps'][$input->getArgument('app')]['environments'][$input->getArgument('environment')]['config'] = $environment->getConfig();
+    $this->director->config['apps'][$app_name]['environments'][$env_name]['config'] = $environment->getConfig();
 
-    $this->director->config['apps'][$input->getArgument('app')]['environments'][$input->getArgument('environment')]['git_ref'] =
+    $this->director->config['apps'][$app_name]['environments'][$env_name]['git_ref'] =
       $environment->getRepo()->getCurrentBranch();
     $this->director->saveData();
 
     $output->writeln("Saved environment details.");
+
+    // Look for services
+    foreach ($environment->config['services'] as $service => $type) {
+      $output->writeln("Looking for available $service $type");
+      $service = $this->director->getService($service);
+      print_r($service);
+    }
   }
 }
