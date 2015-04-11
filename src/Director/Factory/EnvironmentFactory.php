@@ -1,9 +1,7 @@
 <?php
 namespace Director\Factory;
 use Director\DirectorApplication;
-use Director\Model\Environment;
 use GitWrapper\GitWrapper;
-use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 use TQ\Git\Repository\Repository;
 
 /**
@@ -14,8 +12,14 @@ class EnvironmentFactory {
   public $environment;
   public $repo;
 
+  /**
+   * @var string
+   */
+  public $name;
+
   public function __construct($environment, DirectorApplication $director) {
     $this->environment = (object) $environment;
+    $this->director = $director;
   }
 
   /**
@@ -35,5 +39,13 @@ class EnvironmentFactory {
    */
   public function getSourcePath() {
     return $this->environment->source_path;
+  }
+
+  /**
+   * Get a Repository class for this environment.
+   * @return \TQ\Git\Repository\Repository
+   */
+  public function getRepo() {
+    return Repository::open($this->getSourcePath());
   }
 }

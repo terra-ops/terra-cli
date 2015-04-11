@@ -38,13 +38,11 @@ class EnvironmentStatusCommand extends Command
     ;
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output)
-  {
+  protected function execute(InputInterface $input, OutputInterface $output) {
     $app = $this->director->getApp($input->getArgument('app'));
 
     $environment = $app->getEnvironment($input->getArgument('environment'));
 
-    $git = Repository::open($environment->getSourcePath());
-    $output->writeln($git->getCurrentBranch());
+    $output->writeln($environment->getRepo()->getCurrentBranch());
   }
 }

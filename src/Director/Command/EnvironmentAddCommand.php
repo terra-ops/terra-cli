@@ -77,6 +77,7 @@ class EnvironmentAddCommand extends Command
     $environmentFactory = new EnvironmentFactory($environment, $this->director);
     $environmentFactory->init($path);
 
+
     // Look for .director.yml
 
   }
