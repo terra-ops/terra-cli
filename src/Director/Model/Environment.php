@@ -36,11 +36,10 @@ class Environment {
   /**
    * Initiate the project
    */
-  public function __construct($name, $project_name, $server, $git_ref = '') {
+  public function __construct($name, $app, $source_path, $git_ref = '') {
     $this->name = $name;
-    $this->project = $project_name;
-    $this->server = $server;
+    $this->app = $app;
+    $this->source_path = $source_path;
     $this->git_ref = $git_ref;
-    $this->url = 'http://' . $name . '.' . $project_name . '.' . $this->server;
   }
 }

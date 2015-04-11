@@ -3,6 +3,7 @@
 namespace Director\Command;
 
 use Director\DirectorApplication;
+use Director\Factory\EnvironmentFactory;
 use Director\Model\Environment;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -41,25 +42,30 @@ class EnvironmentAddCommand extends Command
         array_keys($this->director->config['apps']),
       0
     );
-    $app = $helper->ask($input, $output, $question);
+    $app_name = $helper->ask($input, $output, $question);
+    $app = $this->director->getApp($app_name);
 
     // Environment Name
     $question = new Question('Environment Name: ', '');
     $name = $helper->ask($input, $output, $question);
 
-    // Server
-    $helper = $this->getHelper('question');
-    $question = new ChoiceQuestion(
-      'Server? ',
-      array_keys($this->director->config['servers']),
-      0
-    );
-    $server = $helper->ask($input, $output, $question);
+    // Path
+    $question = new Question('Path: ', '');
+    $path = $helper->ask($input, $output, $question);
 
-    $environment = new Environment($app, $name, $server);
-    $this->director->config['apps'][$app]['environments'][$name] = (array) $environment;
+    $environment = new Environment($name, $app_name, $path);
+    $this->director->config['apps'][$app_name]['environments'][$name] = (array) $environment;
 
-    $output->writeln("OK Saving environment $name");
     $this->director->saveData();
+    $output->writeln("OK Saving environment $name");
+
+    $question = new ConfirmationQuestion("Clone {$app->source_url} to {$path}? ", false);
+    if (!$helper->ask($input, $output, $question)) {
+      return;
+    }
+
+    $environmentFactory = new EnvironmentFactory($environment, $this->director);
+    $environmentFactory->init($path);
+
   }
 }
