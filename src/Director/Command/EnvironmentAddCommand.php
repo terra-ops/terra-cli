@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
 
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
@@ -81,6 +82,17 @@ class EnvironmentAddCommand extends Command
     $this->director->config['apps'][$app_name]['environments'][$name]['config'] = $environmentFactory->getConfig();
     $this->director->saveData();
     $output->writeln("OK Saving environment $name");
+
+    // Run the build hooks
+    chdir($environmentFactory->getSourcePath());
+    $process = new Process($environmentFactory->config['hooks']['build']);
+    $process->run(function ($type, $buffer) {
+      if (Process::ERR === $type) {
+        echo $buffer;
+      } else {
+        echo $buffer;
+      }
+    });
 
     // Assign Servers!
     // for each environment->config->services,
