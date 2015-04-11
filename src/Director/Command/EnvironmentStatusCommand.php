@@ -9,6 +9,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Symfony\Component\Console\Question\ChoiceQuestion;
+
 use TQ\Git\Repository\Repository;
 use GitWrapper\GitWrapper;
 
@@ -28,21 +30,45 @@ class EnvironmentStatusCommand extends Command
       ->setDescription('Display the current status of an environment.')
       ->addArgument(
         'app',
-        InputArgument::REQUIRED,
+        InputArgument::OPTIONAL,
         'The app to lookup.'
       )
       ->addArgument(
         'environment',
-        InputArgument::REQUIRED,
+        InputArgument::OPTIONAL,
         'The environment to lookup.'
       )
     ;
   }
 
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $app = $this->director->getApp($input->getArgument('app'));
 
-    $environment = $app->getEnvironment($input->getArgument('environment'));
+    // App
+    $app_name = $input->getArgument('app');
+    if (empty($app_name)){
+      $helper = $this->getHelper('question');
+      $question = new ChoiceQuestion(
+        'Which app? ',
+        array_keys($this->director->config['apps']),
+        0
+      );
+      $app_name = $helper->ask($input, $output, $question);
+    }
+    $app = $this->director->getApp($app_name);
+
+
+    // Environment
+    $env_name = $input->getArgument('environment');
+    if (empty($env_name)){
+      $helper = $this->getHelper('question');
+      $question = new ChoiceQuestion(
+        'Which environment? ',
+        array_keys($app->environments),
+        0
+      );
+      $env_name = $helper->ask($input, $output, $question);
+    }
+    $environment = $app->getEnvironment($env_name);
 
     $output->writeln('<info>PATH:</info> ' . $environment->getSourcePath());
     $output->writeln('<info>BRANCH:</info> ' . $environment->getRepo()->getCurrentBranch());
