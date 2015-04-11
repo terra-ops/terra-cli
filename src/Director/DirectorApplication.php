@@ -19,7 +19,7 @@ use Director\Command\ServiceAddCommand;
 use Director\Model\App;
 use Director\Model\Server;
 use Director\Model\Service;
-use Director\Service\AppFactory;
+use Director\Factory\AppFactory;
 
 use Director\Config\DirectorConfigLoader;
 
