@@ -1,0 +1,10 @@
+# An example .director.yml file, would work for a symfony app.
+web:
+    document_root: "/www"
+
+hooks:
+    build: |
+      drush make drupal.make www -y
+    deploy: |
+      drush updb -y
+      drush cc all
