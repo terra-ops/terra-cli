@@ -17,6 +17,7 @@
       "drush/drush": "7.0.*@dev",
       "symfony/console": "2.6.4",
       "symfony/yaml": "2.6.4",
+      "symfony/filesystem": "dev-master",
       "symfony/http-kernel": "*",
       "symfony/config": "*",
       "symfony/process": ">=2.3",
