@@ -22,7 +22,7 @@ class AppFactory {
     $this->source_url = $this->app->source_url;
 
     // Load each available Environment
-    if (is_array($this->app->environments)){
+    if (isset($this->app->environments) && is_array($this->app->environments)){
       foreach ($this->app->environments as $name => $data) {
         $environment = (object) $data;
         $this->environments[$name] = new EnvironmentFactory($environment, $this->director);
