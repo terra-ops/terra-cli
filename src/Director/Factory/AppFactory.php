@@ -1,5 +1,5 @@
 <?php
-namespace Director\Service;
+namespace Director\Factory;
 use Director\DirectorApplication;
 use GitWrapper\GitWrapper;
 
