@@ -54,6 +54,24 @@ class EnvironmentFactory {
     chdir($path);
     $wrapper->git('branch');
     $this->loadConfig();
+
+    // Save config to director apps registry.
+    // @TODO: Improve config saving system.
+    $this->director->config['apps'][$this->app]['environments'][$this->name]['config'] = $this->getConfig();
+    $this->director->saveData();
+
+    // Run the build hooks
+    if (!empty($this->config['hooks']['build'])) {
+      chdir($this->getSourcePath());
+      $process = new Process($this->config['hooks']['build']);
+      $process->run(function ($type, $buffer) {
+        if (Process::ERR === $type) {
+          echo $buffer;
+        } else {
+          echo $buffer;
+        }
+      });
+    }
   }
 
   /**

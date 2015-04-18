@@ -63,8 +63,12 @@ class EnvironmentAddCommand extends Command
     $name = $helper->ask($input, $output, $question);
 
     // Path
-    $question = new Question('Path: ', '');
+    $default_path = realpath('.') . '/' . $name;
+    $question = new Question("Path: ($default_path)", '');
     $path = $helper->ask($input, $output, $question);
+    if (empty($path)) {
+      $path = $default_path;
+    }
 
     // Check for path
     $fs = new Filesystem();
@@ -75,6 +79,7 @@ class EnvironmentAddCommand extends Command
     $environment = new Environment($name, $path, $app->getSourceUrl());
     $this->director->config['apps'][$app_name]['environments'][$name] = (array) $environment;
 
+    // Save config
     $this->director->saveData();
     $output->writeln("OK Saving environment $name");
 
@@ -86,22 +91,6 @@ class EnvironmentAddCommand extends Command
     // Clone the apps source code to the desired path.
     $environmentFactory = new EnvironmentFactory($environment, $app_name, $this->director);
     $environmentFactory->init($path);
-
-    // Look for .director.yml and save to environment.
-    $this->director->config['apps'][$app_name]['environments'][$name]['config'] = $environmentFactory->getConfig();
-    $this->director->saveData();
-    $output->writeln("OK Saving environment $name");
-
-    // Run the build hooks
-    chdir($environmentFactory->getSourcePath());
-    $process = new Process($environmentFactory->config['hooks']['build']);
-    $process->run(function ($type, $buffer) {
-      if (Process::ERR === $type) {
-        echo $buffer;
-      } else {
-        echo $buffer;
-      }
-    });
 
     // Assign Servers!
     // for each environment->config->services,
