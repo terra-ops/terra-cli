@@ -101,7 +101,7 @@ class EnvironmentStatusCommand extends Command
     $output->writeln("Saved environment details.");
 
     // Look for services
-    if (is_array($environment->config['services'])) {
+    if (isset($environment->config['services']) && is_array($environment->config['services'])) {
       foreach ($environment->config['services'] as $service => $type) {
         $serviceFactory = $this->director->getService($service);
         if ($serviceFactory) {
