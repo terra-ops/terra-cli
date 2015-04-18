@@ -25,7 +25,9 @@ class AppFactory {
     if (isset($this->app->environments) && is_array($this->app->environments)){
       foreach ($this->app->environments as $name => $data) {
         $environment = (object) $data;
-        $this->environments[$name] = new EnvironmentFactory($environment, $this->director);
+        if (!empty($name)){
+          $this->environments[$name] = $environment;
+        }
       }
     }
 

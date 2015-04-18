@@ -51,31 +51,7 @@ class EnvironmentDeployCommand extends Command
     $environment = $app->getEnvironment($input->getArgument('environment'));
     $git_ref = $input->getArgument('git_ref');
 
-    // Checkout the branch
-    $wrapper = new GitWrapper();
-    $git = new GitWorkingCopy($wrapper, $environment->getSourcePath());
-    $git->checkout($git_ref);
-    $git->pull();
-
-    // Reload config so any changes get picked up.
-    $environment->reloadConfig();
-
-    // Run the deploy hooks
-    chdir($environment->getSourcePath());
-    $process = new Process($environment->config['hooks']['deploy']);
-    $process->run(function ($type, $buffer) {
-      if (Process::ERR === $type) {
-        echo 'ERR > '.$buffer;
-      } else {
-        echo 'OK  > '.$buffer;
-      }
-    });
-
-    // Save new branch to yml
-    $this->director->config['apps'][$input->getArgument('app')]['environments'][$input->getArgument('environment')]['git_ref'] =
-      $environment->getRepo()->getCurrentBranch();
-    $this->director->saveData();
-
+    $environment->deploy($git_ref);
     $output->writeln("Saved environment details.");
   }
 }

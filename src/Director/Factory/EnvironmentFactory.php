@@ -1,11 +1,13 @@
 <?php
 namespace Director\Factory;
 use Director\DirectorApplication;
-use Drupal\Core\Render\Element\File;
+//use Drupal\Core\Render\Element\File;
 use GitWrapper\GitWrapper;
+use GitWrapper\GitWorkingCopy;
 use TQ\Git\Repository\Repository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Process\Process;
 
 /**
  * Service for an App.
@@ -17,6 +19,13 @@ class EnvironmentFactory {
   public $config;
 
   /**
+   * The name of the app for this environment.
+   * @var string
+   */
+  public $app;
+
+  /**
+   * The name of this environment.
    * @var string
    */
   public $name;
@@ -87,5 +96,44 @@ class EnvironmentFactory {
    */
   public function getRepo() {
     return Repository::open($this->getSourcePath());
+  }
+
+  /**
+   * Deploy a version to an environment.
+   *
+   * @param $version
+   *   A git branch, tag, or sha.
+   */
+  public function deploy($version) {
+
+    // Checkout the branch
+    $wrapper = new GitWrapper();
+    $wrapper->streamOutput();
+    $git = new GitWorkingCopy($wrapper, $this->getSourcePath());
+    $git->checkout($version);
+    $git->pull();
+
+    // Reload config so any changes get picked up.
+    $this->reloadConfig();
+
+    // Run the deploy hooks
+    chdir($this->getSourcePath());
+    $process = new Process($this->config['hooks']['deploy']);
+    $process->run(function ($type, $buffer) {
+      if (Process::ERR === $type) {
+        // Error
+        echo $buffer;
+      } else {
+        // OK
+        echo $buffer;
+      }
+    });
+
+    // Save new branch to yml
+    $this->director->config['apps'][$this->app]['environments'][$this->name]['git_ref'] =
+      $this->getRepo()->getCurrentBranch();
+    $this->director->saveData();
+
+
   }
 }
