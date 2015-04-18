@@ -84,7 +84,7 @@ class EnvironmentAddCommand extends Command
     }
 
     // Clone the apps source code to the desired path.
-    $environmentFactory = new EnvironmentFactory($environment, $this->director);
+    $environmentFactory = new EnvironmentFactory($environment, $app_name, $this->director);
     $environmentFactory->init($path);
 
     // Look for .director.yml and save to environment.

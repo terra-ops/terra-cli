@@ -50,7 +50,7 @@ class AppFactory {
    * @return EnvironmentFactory
    */
   public function getEnvironment($name) {
-    return new EnvironmentFactory($this->app->environments[$name], $this->director);
+    return new EnvironmentFactory($this->app->environments[$name], $this->name, $this->director);
   }
 
   /**

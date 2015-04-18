@@ -30,8 +30,15 @@ class EnvironmentFactory {
    */
   public $name;
 
-  public function __construct($environment, DirectorApplication $director) {
+  /**
+   * @param $environment
+   * @param $app
+   * @param \Director\DirectorApplication $director
+   */
+  public function __construct($environment, $app, DirectorApplication $director) {
     $this->environment = (object) $environment;
+    $this->app = $app;
+    $this->name = $this->environment->name;
     $this->director = $director;
 
     $this->loadConfig();

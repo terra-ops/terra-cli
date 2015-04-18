@@ -49,6 +49,10 @@ class EnvironmentDeployCommand extends Command
   protected function execute(InputInterface $input, OutputInterface $output) {
     $app = $this->director->getApp($input->getArgument('app'));
     $environment = $app->getEnvironment($input->getArgument('environment'));
+
+    if (empty($environment)) {
+      throw new \Exception('Environment not found: ' . $input->getArgument('environment'));
+    }
     $git_ref = $input->getArgument('git_ref');
 
     $environment->deploy($git_ref);
