@@ -101,15 +101,17 @@ class EnvironmentStatusCommand extends Command
     $output->writeln("Saved environment details.");
 
     // Look for services
-    foreach ($environment->config['services'] as $service => $type) {
-      $serviceFactory = $this->director->getService($service);
-      if ($serviceFactory) {
-        $output->writeln("<info>SERVICE:</info> $service: {$serviceFactory->galaxy_role}");
-      }
-      else {
-        $output->writeln("<error>SERVICE:</error> $service: not found. Use service:add to fix.");
-        $output->writeln("Looking for available $service $type");
+    if (is_array($environment->config['services'])) {
+      foreach ($environment->config['services'] as $service => $type) {
+        $serviceFactory = $this->director->getService($service);
+        if ($serviceFactory) {
+          $output->writeln("<info>SERVICE:</info> $service: {$serviceFactory->galaxy_role}");
+        }
+        else {
+          $output->writeln("<error>SERVICE:</error> $service: not found. Use service:add to fix.");
+          $output->writeln("Looking for available $service $type");
 
+        }
       }
     }
   }
