@@ -135,45 +135,43 @@ class DirectorApplication extends BaseApplication
       unset($this->config['servers']['localhost']);
     }
 
-    // Go through servers and add them to service groups.
-    $groups = array();
-    foreach($this->config['servers'] as $server_name => $server) {
-      if (isset($server['services'])) {
-        foreach ($server['services'] as $service_name) {
-          $groups[$service_name][] = $server['hostname'];
-        }
-      }
-    }
-
-    // Build inventory file line array.
+    // Build inventory file from servers.
     $inventory_file = array();
     $playbook_file = array(
       '# MANAGED BY DIRECTOR',
       '---',
     );
-    foreach($groups as $group_name => $group_members) {
-      // Add to inventory file.
-      // Lists what servers are in each group.
-      $inventory_file[] = "[{$group_name}]";
-      foreach ($group_members as $hostname) {
-        $inventory_file[] = $hostname;
-      }
-      $inventory_file[] = '';
+    foreach ($this->config['servers'] as $server_name => $server) {
+      // Add server to inventory file.
+      $inventory_file[] = $server_name;
 
       // Add to Playbook file.
       // Lists what roles are for each group.
-      $playbook_file[] = "- hosts: $group_name";
+      $playbook_file[] = "- hosts: $server_name";
       $playbook_file[] = "  user: root";
 
-      if (isset($this->config['services'][$group_name]['galaxy_role'])) {
+      // Add roles to playbook.
+      if (isset($server['services'])){
         $playbook_file[] = "  roles:";
-        $playbook_file[] = "    - " . $this->config['services'][$group_name]['galaxy_role'];
-      }
-      if (isset($this->config['services'][$group_name]['playbook_file'])) {
-        $playbook_file[] = "- include: " . $this->config['services'][$group_name]['playbook_file'];
+        foreach ($server['services'] as $service_name) {
+          if (isset($this->config['services'][$service_name]['galaxy_role'])) {
+            $playbook_file[] = "    - " . $this->config['services'][$service_name]['galaxy_role'];
+          }
+          if (isset($this->config['services'][$service_name]['playbook_file'])) {
+            $playbook_file[] = "- include: " . $this->config['services'][$service_name]['playbook_file'];
+          }
+        }
       }
 
+      // If a server has a vars file, add it to the
+      if (isset($server['vars_files'])) {
+        $playbook_file[] = "  vars_files: ";
+        foreach ($server['vars_files'] as $vars_file) {
+          $playbook_file[] = "    - " . $vars_file;
+        }
+      }
     }
+
     // Write inventory file.
     file_put_contents($this->configPath . '/inventory', implode("\n", $inventory_file));
     file_put_contents($this->configPath . '/playbook.yml', implode("\n", $playbook_file));
