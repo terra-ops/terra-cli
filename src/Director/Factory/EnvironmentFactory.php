@@ -53,6 +53,7 @@ class EnvironmentFactory {
     $wrapper->clone($this->environment->source_url, $path);
     chdir($path);
     $wrapper->git('branch');
+    $wrapper->git('status');
     $this->loadConfig();
 
     // Save config to director apps registry.
