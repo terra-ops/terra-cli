@@ -14,6 +14,7 @@ use Director\Command\AppAddCommand;
 use Director\Command\AppRemoveCommand;
 use Director\Command\AppInitCommand;
 use Director\Command\EnvironmentAddCommand;
+use Director\Command\EnvironmentAssignCommand;
 use Director\Command\EnvironmentStatusCommand;
 use Director\Command\EnvironmentDeployCommand;
 use Director\Command\ServiceAddCommand;
@@ -64,6 +65,7 @@ class DirectorApplication extends BaseApplication
     $this->add(new ServerStackCommand($this));
     $this->add(new ServerRemoveCommand($this));
     $this->add(new EnvironmentAddCommand($this));
+    $this->add(new EnvironmentAssignCommand($this));
     $this->add(new EnvironmentDeployCommand($this));
     $this->add(new EnvironmentStatusCommand($this));
     $this->add(new ServiceAddCommand($this));
