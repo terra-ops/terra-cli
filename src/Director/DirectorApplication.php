@@ -256,11 +256,4 @@ class DirectorApplication extends BaseApplication
     return new DelegatingLoader($loaderResolver);
   }
 
-  /**
-   * PROCESS STUFF
-   */
-
-  function streamOutput() {
-
-  }
 }
