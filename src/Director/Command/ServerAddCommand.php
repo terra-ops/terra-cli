@@ -40,19 +40,7 @@ class ServerAddCommand extends Command
     $question = new Question('Hostname of your server? It should already resolve to your servers IP: ', '');
     $hostname = $helper->ask($input, $output, $question);
 
-    // Provider
-    // @TODO: Make Provider's extensible.
-    $helper = $this->getHelper('question');
-    $question = new ChoiceQuestion(
-      'Server Provider? ',
-      array(
-        'none',
-        'vagrant',
-      ),
-      0
-    );
-
-    $provider = $helper->ask($input, $output, $question);
+    $provider = 'none';
 
     $server = new Server($hostname,  $provider);
     $this->director->config['servers'][$hostname] = (array) $server;
