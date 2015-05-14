@@ -61,7 +61,7 @@ We are still working on getting director to work out of the box.
  
  These environment variables are needed after you clone this repo and run `composer install`:
  
- PATH=$PATH:/vagrant/director/vendor/bin
+ PATH=$PATH:/vagrant/director/vendor/bin:/vagrant/director
  
  export PYTHONPATH=/vagrant/director/vendor/jonpugh/ansible/lib:
  export ANSIBLE_LIBRARY=/vagrant/director/vendor/jonpugh/ansible/library
