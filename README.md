@@ -53,3 +53,17 @@ Next Steps
 
   Runs ansible-playbook using current .playbook.yml and .inventory.
   Updates all of the servers.
+
+Installation
+------------
+
+We are still working on getting director to work out of the box.
+ 
+ These environment variables are needed after you clone this repo and run `composer install`:
+ 
+ PATH=$PATH:/vagrant/director/vendor/bin
+ 
+ export PYTHONPATH=/vagrant/director/vendor/jonpugh/ansible/lib:
+ export ANSIBLE_LIBRARY=/vagrant/director/vendor/jonpugh/ansible/library
+ export MANPATH=/vagrant/director/vendor/jonpugh/ansible/docs/man:
+ export ANSIBLE_HOSTS=/vagrant/director/inventory
