@@ -82,7 +82,7 @@ class EnvironmentAddCommand extends Command
     }
 
     // Path
-    $path = $input->getArgument('name');
+    $path = $input->getArgument('path');
     if (empty($path)) {
       $default_path = realpath('.') . '/' . $app_name . '/' . $environment_name;
       $question = new Question("Path: ($default_path)", '');
