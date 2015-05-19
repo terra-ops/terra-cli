@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5fadf23243f8544f3401d1cac494fa1b",
+    "hash": "e1f5d9bc7d9dc1caca037dcb536a0fb7",
     "packages": [
         {
             "name": "cpliakas/git-wrapper",
-            "version": "dev-master",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cpliakas/git-wrapper.git",
-                "reference": "e20edffaceec2f3ef8701b1fe08597fb469a81ab"
+                "reference": "2fc1d45c0a62ba251d4c0155030c6dc83e607a38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cpliakas/git-wrapper/zipball/e20edffaceec2f3ef8701b1fe08597fb469a81ab",
-                "reference": "e20edffaceec2f3ef8701b1fe08597fb469a81ab",
+                "url": "https://api.github.com/repos/cpliakas/git-wrapper/zipball/2fc1d45c0a62ba251d4c0155030c6dc83e607a38",
+                "reference": "2fc1d45c0a62ba251d4c0155030c6dc83e607a38",
                 "shasum": ""
             },
             "require": {
@@ -59,57 +59,7 @@
             "keywords": [
                 "git"
             ],
-            "time": "2015-04-10 14:30:27"
-        },
-        {
-            "name": "monofone/ansible-installer",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/monofone/ansible-installer.git",
-                "reference": "ef3200b8a550c4f7d96b0c0d81873143331b5fca"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/monofone/ansible-installer/zipball/ef3200b8a550c4f7d96b0c0d81873143331b5fca",
-                "reference": "ef3200b8a550c4f7d96b0c0d81873143331b5fca",
-                "shasum": ""
-            },
-            "require-dev": {
-                "composer/composer": "1.0.*@dev",
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "composer-installer",
-            "extra": {
-                "class": "Composer\\Installers\\Installer",
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Composer\\Installers\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kyle Robinson Young",
-                    "email": "kyle@dontkry.com",
-                    "homepage": "https://github.com/shama",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Installer for ansible roles",
-            "homepage": "http://github.com/monofone/ansible-installer/",
-            "keywords": [
-                "ansible",
-                "installer"
-            ],
-            "time": "2014-05-05 19:52:34"
+            "time": "2014-12-09 15:53:03"
         },
         {
             "name": "psr/log",
@@ -709,9 +659,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "symfony/filesystem": 20,
-        "cpliakas/git-wrapper": 20,
-        "teqneers/php-stream-wrapper-for-git": 20,
-        "opendevshop/ansible-role-drupal": 20
+        "teqneers/php-stream-wrapper-for-git": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

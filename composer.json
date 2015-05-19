@@ -22,7 +22,7 @@
       "symfony/process": ">=2.3",
       "symfony/event-dispatcher": ">=2.3",
       "cpliakas/git-wrapper": "1.4.1",
-      "teqneers/php-stream-wrapper-for-git": "dev-master",
+      "teqneers/php-stream-wrapper-for-git": "dev-master"
     },
     "suggest": {
       "opendevshop/devmaster": "Provides the web control panel for DevShop."
