@@ -67,11 +67,11 @@ class EnvironmentAddCommand extends Command
     $environment_name = $input->getArgument('name');
     if (empty($environment_name)) {
       $question = new Question('Environment Name: ', '');
-      $name = $helper->ask($input, $output, $question);
+      $environment_name = $helper->ask($input, $output, $question);
     }
 
     // Path
-    $default_path = realpath('.') . '/' . $name;
+    $default_path = realpath('.') . '/' . $app_name . '/' . $environment_name;
     $question = new Question("Path: ($default_path)", '');
     $path = $helper->ask($input, $output, $question);
     if (empty($path)) {
@@ -84,12 +84,12 @@ class EnvironmentAddCommand extends Command
       $path = getcwd() . '/' . $path;
     }
 
-    $environment = new Environment($name, $path, $app->getSourceUrl());
-    $this->director->config['apps'][$app_name]['environments'][$name] = (array) $environment;
+    $environment = new Environment($environment_name, $path, $app->getSourceUrl());
+    $this->director->config['apps'][$app_name]['environments'][$environment_name] = (array) $environment;
 
     // Save config
     $this->director->saveData();
-    $output->writeln("OK Saving environment $name");
+    $output->writeln("OK Saving environment $environment_name");
 
     $question = new ConfirmationQuestion("Clone {$app->source_url} to {$path}? ", false);
     if (!$helper->ask($input, $output, $question)) {
