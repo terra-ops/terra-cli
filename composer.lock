@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "800471fe8c32b1b9cc38f48929228d8d",
+    "hash": "f155f545e458155510bb8703294b29e9",
     "packages": [
         {
             "name": "cpliakas/git-wrapper",
@@ -60,30 +60,6 @@
                 "git"
             ],
             "time": "2015-04-10 14:30:27"
-        },
-        {
-            "name": "jonpugh/ansible",
-            "version": "dev-devel",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jonpugh/ansible.git",
-                "reference": "8e2eb6bcd6c85e88cc6e3fa4cef76da28fef2f29"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jonpugh/ansible/zipball/8e2eb6bcd6c85e88cc6e3fa4cef76da28fef2f29",
-                "reference": "8e2eb6bcd6c85e88cc6e3fa4cef76da28fef2f29",
-                "shasum": ""
-            },
-            "bin": [
-                "bin/ansible",
-                "bin/ansible-playbook"
-            ],
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "description": "Attemping to add ansible to packagist.",
-            "homepage": "http://www.ansible.com",
-            "time": "2015-05-13 23:19:09"
         },
         {
             "name": "monofone/ansible-installer",
@@ -405,12 +381,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Filesystem.git",
-                "reference": "7355d569958a8534eabdf66d6e6f5b2555c5f7f3"
+                "reference": "80a0bc4be4c2b037909e9e1a3abefd293a17a1a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/7355d569958a8534eabdf66d6e6f5b2555c5f7f3",
-                "reference": "7355d569958a8534eabdf66d6e6f5b2555c5f7f3",
+                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/80a0bc4be4c2b037909e9e1a3abefd293a17a1a2",
+                "reference": "80a0bc4be4c2b037909e9e1a3abefd293a17a1a2",
                 "shasum": ""
             },
             "require": {
@@ -446,7 +422,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2015-05-12 15:48:43"
+            "time": "2015-05-16 13:09:29"
         },
         {
             "name": "symfony/http-foundation",
@@ -732,7 +708,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "jonpugh/ansible": 20,
         "symfony/filesystem": 20,
         "cpliakas/git-wrapper": 20,
         "teqneers/php-stream-wrapper-for-git": 20,
