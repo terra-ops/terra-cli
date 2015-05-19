@@ -27,7 +27,13 @@ class DirectorDirectCommand extends Command {
   protected function configure() {
     $this
       ->setName('direct')
-      ->setDescription('Runs ansible on our entire inventory.');
+      ->setDescription('Runs ansible on our entire inventory.')
+      ->addOption(
+        'force',
+        '',
+        InputArgument::OPTIONAL,
+        'If you wish to skip confirmation and just run the playbooks.'
+      );
   }
 
   protected function execute(InputInterface $input, OutputInterface $output) {
@@ -44,12 +50,14 @@ class DirectorDirectCommand extends Command {
     }
 
     // Confirmation
-    $output->writeln("Run this command?");
-    $output->writeln("ansible-playbook {$cmd}");
-    $helper = $this->getHelper('question');
-    $question = new ConfirmationQuestion("(y/n)", false);
-    if (!$helper->ask($input, $output, $question)) {
-      return;
+    if (!$input->getOption('force')) {
+      $output->writeln("Run this command?");
+      $output->writeln("ansible-playbook {$cmd}");
+      $helper = $this->getHelper('question');
+      $question = new ConfirmationQuestion("(y/n)", false);
+      if (!$helper->ask($input, $output, $question)) {
+        return;
+      }
     }
 
     // Get wrapper and run command.
