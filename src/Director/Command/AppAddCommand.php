@@ -29,6 +29,28 @@ class AppAddCommand extends Command
     $this
       ->setName('app:add')
       ->setDescription('Adds a new app.')
+      ->addArgument(
+        'name',
+        InputArgument::OPTIONAL,
+        'The name of your app.'
+      )
+      ->addArgument(
+        'repo',
+        InputArgument::OPTIONAL,
+        'The URL of your git repo for your app.'
+      )
+      ->addOption(
+        'description',
+        '',
+        InputArgument::OPTIONAL,
+        'The name of your app.'
+      )
+      ->addOption(
+        'create-environment',
+        '',
+        InputArgument::OPTIONAL,
+        'Whether or not to create an environment.'
+      )
     ;
   }
 
@@ -37,16 +59,25 @@ class AppAddCommand extends Command
     $helper = $this->getHelper('question');
 
     // App Name
-    $question = new Question('System name of your project? ', '');
-    $name = $helper->ask($input, $output, $question);
+    $name = $input->getArgument('name');
+    if (empty($name)) {
+      $question = new Question('System name of your project? ', '');
+      $name = $helper->ask($input, $output, $question);
+    }
 
     // App Description
-    $question = new Question('Description? ', '');
-    $description = $helper->ask($input, $output, $question);
+    $description = $input->getOption('description');
+    if (empty($description)) {
+      $question = new Question('Description? ', '');
+      $description = $helper->ask($input, $output, $question);
+    }
 
     // App Source
-    $question = new Question('Source code repository URL? ', '');
-    $repo = $helper->ask($input, $output, $question);
+    $repo = $input->getArgument('repo');
+    if (empty($repo)) {
+      $question = new Question('Source code repository URL? ', '');
+      $repo = $helper->ask($input, $output, $question);
+    }
 
     $app = new App($name, $repo, $description);
     $this->director->config['apps'][$name] = (array) $app;
@@ -57,20 +88,16 @@ class AppAddCommand extends Command
 
     // Confirmation
     $question = new ConfirmationQuestion("Create an environment? ", false);
-    if (!$helper->ask($input, $output, $question)) {
-      return;
+    if ( $input->getOption('create-environment') || $helper->ask($input, $output, $question)) {
+      // Run environment:add command.
+      $command = $this->getApplication()->find('environment:add');
+
+      $arguments = array(
+        'app' => $name,
+      );
+
+      $input = new ArrayInput($arguments);
+      $command->run($input, $output);
     }
-
-    // Run environment:add command.
-    $command = $this->getApplication()->find('environment:add');
-
-    $arguments = array(
-//      'command' => 'demo:greet',
-      'app' => $name,
-    );
-
-    $input = new ArrayInput($arguments);
-    $command->run($input, $output);
-
   }
 }
