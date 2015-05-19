@@ -21,18 +21,11 @@
       "symfony/config": "*",
       "symfony/process": ">=2.3",
       "symfony/event-dispatcher": ">=2.3",
-      "cpliakas/git-wrapper": "dev-master",
+      "cpliakas/git-wrapper": "1.4.1",
       "teqneers/php-stream-wrapper-for-git": "dev-master",
-      "opendevshop/ansible-role-drupal": "dev-master"
     },
     "suggest": {
       "opendevshop/devmaster": "Provides the web control panel for DevShop."
-    },
-    "extra": {
-      "installer-paths": {
-        "roles/opendevshop.drupal": ["opendevshop/ansible-role-drupal"],
-        "roles/opendevshop.apache": ["opendevshop/ansible-role-apache"]
-      }
     },
     "autoload": {
       "psr-0": {
