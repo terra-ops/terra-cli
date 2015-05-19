@@ -51,6 +51,12 @@ class AppAddCommand extends Command
         InputArgument::OPTIONAL,
         'Whether or not to create an environment.'
       )
+      ->addOption(
+        'environment-name',
+        '',
+        InputArgument::OPTIONAL,
+        'If creating an environment, you can optionally specify a name.'
+      )
     ;
   }
 
@@ -94,6 +100,7 @@ class AppAddCommand extends Command
 
       $arguments = array(
         'app' => $name,
+        'name' => $input->getOption('environment-name'),
       );
 
       $input = new ArrayInput($arguments);

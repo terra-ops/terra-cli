@@ -39,6 +39,11 @@ class EnvironmentAddCommand extends Command
         InputArgument::OPTIONAL,
         'The app you would like to add an environment for.'
       )
+      ->addArgument(
+        'name',
+        InputArgument::OPTIONAL,
+        'The name of the environment.'
+      )
     ;
   }
 
@@ -59,8 +64,11 @@ class EnvironmentAddCommand extends Command
     $app = $this->director->getApp($app_name);
 
     // Environment Name
-    $question = new Question('Environment Name: ', '');
-    $name = $helper->ask($input, $output, $question);
+    $environment_name = $input->getArgument('name');
+    if (empty($environment_name)) {
+      $question = new Question('Environment Name: ', '');
+      $name = $helper->ask($input, $output, $question);
+    }
 
     // Path
     $default_path = realpath('.') . '/' . $name;
