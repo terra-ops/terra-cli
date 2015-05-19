@@ -44,6 +44,17 @@ class EnvironmentAddCommand extends Command
         InputArgument::OPTIONAL,
         'The name of the environment.'
       )
+      ->addArgument(
+        'path',
+        InputArgument::OPTIONAL,
+        'The path to the environment.'
+      )
+      ->addOption(
+        'init-environment',
+        '',
+        InputArgument::OPTIONAL,
+        'Clone environment?'
+      )
     ;
   }
 
@@ -71,11 +82,14 @@ class EnvironmentAddCommand extends Command
     }
 
     // Path
-    $default_path = realpath('.') . '/' . $app_name . '/' . $environment_name;
-    $question = new Question("Path: ($default_path)", '');
-    $path = $helper->ask($input, $output, $question);
+    $path = $input->getArgument('name');
     if (empty($path)) {
-      $path = $default_path;
+      $default_path = realpath('.') . '/' . $app_name . '/' . $environment_name;
+      $question = new Question("Path: ($default_path)", '');
+      $path = $helper->ask($input, $output, $question);
+      if (empty($path)) {
+        $path = $default_path;
+      }
     }
 
     // Check for path
@@ -90,11 +104,6 @@ class EnvironmentAddCommand extends Command
     // Save config
     $this->director->saveData();
     $output->writeln("OK Saving environment $environment_name");
-
-    $question = new ConfirmationQuestion("Clone {$app->source_url} to {$path}? ", false);
-    if (!$helper->ask($input, $output, $question)) {
-      return;
-    }
 
     // Clone the apps source code to the desired path.
     $environmentFactory = new EnvironmentFactory($environment, $app_name, $this->director);
