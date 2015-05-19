@@ -14,7 +14,6 @@
       "irc": "irc://irc.freenode.org/director"
     },
     "require": {
-      "jonpugh/ansible": "dev-devel",
       "symfony/console": "2.6.4",
       "symfony/yaml": "2.6.4",
       "symfony/filesystem": "dev-master",
