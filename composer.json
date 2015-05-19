@@ -16,7 +16,7 @@
     "require": {
       "symfony/console": "2.6.4",
       "symfony/yaml": "2.6.4",
-      "symfony/filesystem": "dev-master",
+      "symfony/filesystem": "3.0.*@dev",
       "symfony/http-kernel": "*",
       "symfony/config": "*",
       "symfony/process": ">=2.3",
