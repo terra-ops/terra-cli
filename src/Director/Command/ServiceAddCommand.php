@@ -44,6 +44,12 @@ class ServiceAddCommand extends Command
         InputOption::VALUE_OPTIONAL,
         ''
       )
+      ->addOption(
+        'install-role',
+        '',
+        InputOption::VALUE_OPTIONAL,
+        'Force the installation of the ansible role.'
+      )
     ;
   }
 
@@ -81,7 +87,7 @@ class ServiceAddCommand extends Command
     // Confirmation
     $helper = $this->getHelper('question');
     $question = new ConfirmationQuestion("Install this Ansible Galaxy Role? ", false);
-    if ($helper->ask($input, $output, $question)) {
+    if ($input->getOption('install-role') || $helper->ask($input, $output, $question)) {
       system("ansible-galaxy install {$service->galaxy_role} -p {$this->director->configPath}/roles");
     }
   }
