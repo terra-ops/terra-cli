@@ -53,3 +53,13 @@ Next Steps
 
   Runs ansible-playbook using current .playbook.yml and .inventory.
   Updates all of the servers.
+
+
+Notes
+=====
+
+Vars files may be included for a server during it's direct run:
+
+Add "vars_files" to the `config/servers.yml` file
+ 
+ 
