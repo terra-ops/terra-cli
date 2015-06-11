@@ -10,20 +10,20 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Class Factory.
  *
- * @package flo
+ * @package terra
  */
 class Factory {
 
   /**
-   * Creates a Flo instance.
+   * Creates a Terra instance.
    *
-   * @return Flo
+   * @return Terra
    *   A configured Flo instance.
    */
-  private function createFlo() {
-    $flo = new Flo();
+  private function createTerra() {
+    $terra = new Terra();
     // Get config from env variables or files.
-    if ($config_env = getenv('FLO')) {
+    if ($config_env = getenv('TERRA')) {
       $config_env = Yaml::parse($config_env);
       $config = new Config($config_env);
     }
@@ -31,7 +31,7 @@ class Factory {
       $fs = new Filesystem();
 
       $user_config = array();
-      $user_config_file = getenv("HOME") . '/.config/flo';
+      $user_config_file = getenv("HOME") . '/.config/terra';
       if ($fs->exists($user_config_file)) {
         $user_config = Yaml::parse($user_config_file);
       }
@@ -40,7 +40,7 @@ class Factory {
       $process = new Process('git rev-parse --show-toplevel');
       $process->run();
       if ($process->isSuccessful()) {
-        $project_config_file = trim($process->getOutput()) . '/flo.yml';
+        $project_config_file = trim($process->getOutput()) . '/terra.yml';
         if ($fs->exists($project_config_file)) {
           $project_config = Yaml::parse($project_config_file);
         }
@@ -48,20 +48,19 @@ class Factory {
 
       $config = new Config($user_config, $project_config);
     }
-    $flo->setConfig($config);
+    $terra->setConfig($config);
 
-    return $flo;
+    return $terra;
   }
 
   /**
-   * Creates a Flo instance.
+   * Creates a Terra instance.
    *
-   * @return Flo
-   *   A configured Flo instance.
+   * @return Terra
+   *   A configured Terra instance.
    */
   public static function create() {
     $factory = new static();
-    return $factory->createFlo();
+    return $factory->createTerra();
   }
-
 }
