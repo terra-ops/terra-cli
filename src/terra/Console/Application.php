@@ -40,11 +40,11 @@ class Application extends BaseApplication {
    * {@inheritdoc}
    */
   public function doRun(InputInterface $input, OutputInterface $output) {
-    // Check if hub exists if not throw an error.
-    $process = $this->getProcess('hub --version');
+    // Check if docker exists if not throw an error.
+    $process = $this->getProcess('docker --version');
     $process->run();
     if (!$process->isSuccessful()) {
-      // If you do not have hub we do nothing.
+      // If you do not have docker we do nothing.
       throw new \RuntimeException($process->getErrorOutput());
     }
     return parent::doRun($input, $output);
