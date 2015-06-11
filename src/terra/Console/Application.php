@@ -6,7 +6,7 @@ use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
-//use terra\Command;
+use terra\Command;
 use terra\Factory;
 use terra\Terra;
 
