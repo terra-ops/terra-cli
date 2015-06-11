@@ -51,41 +51,22 @@ class AppAdd extends Command
   }
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    $helper = $this->getHelper('question');
 
-    // App Name
-    $name = $input->getArgument('name');
-    if (empty($name)) {
-      $question = new Question('System name of your project? ', '');
-      $name = $helper->ask($input, $output, $question);
-    }
-    // App Description
-    $description = $input->getOption('description');
-    if (empty($description)) {
-      $question = new Question('Description? ', '');
-      $description = $helper->ask($input, $output, $question);
-    }
-    // App Source
-    $repo = $input->getArgument('repo');
-    if (empty($repo)) {
-      $question = new Question('Source code repository URL? ', '');
-      $repo = $helper->ask($input, $output, $question);
-    }
-    $app = new App($name, $repo, $description);
-    $this->director->config['apps'][$name] = (array) $app;
-    $output->writeln("OK Saving app $name");
-    $this->director->saveData();
+    // Questions.
+    $name_question = new Question('System name of your project? ', '');
+    $description_question = new Question('Description? ', '');
+    $repo_question = new Question('Source code repository URL? ', '');
+
+    // Prompts.
+    $name = $this->getAnswer($input, $output, $name_question, 'name');
+    $description = $this->getAnswer($input, $output, $description_question, 'description', 'option');
+    $repo = $this->getAnswer($input, $output, $repo_question, 'repo');
+
     // Confirmation
-    $question = new ConfirmationQuestion("Create an environment? ", false);
-    if ( $input->getOption('create-environment') || $helper->ask($input, $output, $question)) {
-      // Run environment:add command.
-      $command = $this->getApplication()->find('environment:add');
-      $arguments = array(
-        'app' => $name,
-        'name' => $input->getOption('environment-name'),
-      );
-      $input = new ArrayInput($arguments);
-      $command->run($input, $output);
-    }
+    $output->writeln("Name: $name");
+    $output->writeln("Description: $description");
+    $output->writeln("Repo: $repo");
+
+    $app = $this->getApplication()->getTerra();
   }
 }
