@@ -5,7 +5,7 @@ namespace terra;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
-
+use Symfony\Component\Yaml\Dumper;
 
 /**
  * Class Config.
@@ -43,9 +43,23 @@ class Config implements ConfigurationInterface {
     $root_node = $tree_builder->root('project');
     $root_node
       ->children()
-      ->scalarNode('git')
-      ->defaultValue('/usr/bin/git')
-      ->end();
+        ->scalarNode('git')
+          ->defaultValue('/usr/bin/git')
+        ->end()
+        ->arrayNode('apps')
+          ->requiresAtLeastOneElement()
+          ->prototype('array')
+          ->children()
+            ->scalarNode('name')
+            ->isRequired(true)
+            ->end()
+            ->scalarNode('description')
+            ->isRequired(false)
+            ->end()
+            ->scalarNode('repo')
+            ->isRequired(false)
+            ->end()
+    ;
     return $tree_builder;
   }
 
@@ -71,8 +85,13 @@ class Config implements ConfigurationInterface {
    * @return mixed|null
    *   Value of the config param, or NULL if not present.
    */
-  public function get($key) {
-    return $this->has($key) ? $this->config[$key] : NULL;
+  public function get($key, $name = NULL) {
+    if ($name) {
+      return array_key_exists($name, $this->config[$key]) ? $this->config[$key][$name] : NULL;
+    }
+    else {
+      return $this->has($key) ? $this->config[$key] : NULL;
+    }
   }
 
   /**
@@ -100,4 +119,26 @@ class Config implements ConfigurationInterface {
     return $this->config;
   }
 
+  /**
+   * Add a config param value to a config array.
+   *
+   * @param string $key
+   *   Key of the group to set to.
+   *
+   * @param string $name
+   *   Name of the new object to set.
+   *
+   * @param mixed $val
+   *   Value of the new object to set.
+   *
+   * @return bool
+   */
+  public function add($key, $name, $val) {
+    return $this->config[$key][$name] = $val;
+  }
+
+  public function save() {
+    $dumper = new Dumper();
+    return file_put_contents(getenv("HOME") . '/.config/terra', $dumper->dump($this->config, 10));
+  }
 }
