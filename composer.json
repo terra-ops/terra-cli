@@ -1,0 +1,26 @@
+{
+    "name": "terra/terra",
+    "description": "DevOps for All",
+    "require": {
+        "php": ">=5.5.9",
+        "symfony/config": "2.6.4",
+        "symfony/console": "2.6.4",
+        "symfony/filesystem": "2.6.4",
+        "symfony/finder": "2.6.4",
+        "symfony/form": "2.6.4",
+        "symfony/process": "2.6.4",
+        "symfony/yaml": "2.6.4"
+    },
+    "authors": [
+        {
+            "name": "Jon Pugh",
+            "email": "jon@thinkdrop.net"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "terra": "src/" }
+    },
+    "bin": [
+        "terra"
+    ]
+}

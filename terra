@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+
+// set to run indefinitely
+set_time_limit(0);
+
+// include the composer autoloader
+require_once __DIR__ . '/vendor/autoload.php';
+
+use terra\Console\Application;
+$application = new Application('terra', '@package_version@');
+$application->run();
