@@ -90,6 +90,7 @@ class Application extends BaseApplication {
   protected function getDefaultCommands() {
     $commands = parent::getDefaultCommands();
     $commands[] = new Command\App\AppAdd();
+    $commands[] = new Command\Status();
     return $commands;
   }
 
