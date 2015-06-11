@@ -65,9 +65,9 @@ class AppAdd extends Command
     // Confirmation
     $formatter = $this->getHelper('formatter');
     $lines = array(
-      "Name: $name",
+      "Name:        $name",
       "Description: $description",
-      "Repo: $repo",
+      "Repo:        $repo",
     );
     $formattedBlock = $formatter->formatBlock($lines, 'fg=black;bg=green');
     $output->writeln($formattedBlock);
