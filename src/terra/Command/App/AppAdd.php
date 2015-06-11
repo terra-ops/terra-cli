@@ -63,9 +63,14 @@ class AppAdd extends Command
     $repo = $this->getAnswer($input, $output, $repo_question, 'repo');
 
     // Confirmation
-    $output->writeln("Name: $name");
-    $output->writeln("Description: $description");
-    $output->writeln("Repo: $repo");
+    $formatter = $this->getHelper('formatter');
+    $lines = array(
+      "Name: $name",
+      "Description: $description",
+      "Repo: $repo",
+    );
+    $formattedBlock = $formatter->formatBlock($lines, 'fg=black;bg=green');
+    $output->writeln($formattedBlock);
 
     $app = array(
       'name' => $name,
