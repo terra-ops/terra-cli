@@ -67,6 +67,18 @@ class AppAdd extends Command
     $output->writeln("Description: $description");
     $output->writeln("Repo: $repo");
 
-    $app = $this->getApplication()->getTerra();
+    $app = array(
+      'name' => $name,
+      'description' => $description,
+      'repo' => $repo,
+    );
+    $this->getApplication()->getTerra()->getConfig()->add('apps', $name, $app);
+
+    if ($this->getApplication()->getTerra()->getConfig()->save()) {
+      $output->writeln('<info>App saved</info>');
+    }
+    else {
+      $output->writeln('<error>App not saved!</error>');
+    }
   }
 }
