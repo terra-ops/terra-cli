@@ -89,7 +89,7 @@ class Application extends BaseApplication {
    */
   protected function getDefaultCommands() {
     $commands = parent::getDefaultCommands();
-//    $commands[] = new Command\ProjectSetup();
+    $commands[] = new Command\App\AppAdd();
     return $commands;
   }
 
