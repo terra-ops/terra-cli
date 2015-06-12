@@ -95,6 +95,8 @@ class EnvironmentAdd extends Command
     $environment = array(
       'name' => $environment_name,
       'path' => $path,
+      'url' => '',
+      'version' => '',
     );
 
     // Prepare the environment factory.
