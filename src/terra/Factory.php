@@ -31,7 +31,7 @@ class Factory {
       $fs = new Filesystem();
 
       $user_config = array();
-      $user_config_file = getenv("HOME") . '/.config/terra';
+      $user_config_file = getenv("HOME") . '/.terra/terra';
       if ($fs->exists($user_config_file)) {
         $user_config = Yaml::parse($user_config_file);
       }

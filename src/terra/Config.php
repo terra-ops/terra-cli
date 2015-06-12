@@ -7,6 +7,9 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Yaml\Dumper;
 
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
+
 /**
  * Class Config.
  *
@@ -177,7 +180,25 @@ class Config implements ConfigurationInterface {
   }
 
   public function save() {
+
+    // Create config folder if it does not exist.
+    $fs = new Filesystem();
     $dumper = new Dumper();
-    return file_put_contents(getenv("HOME") . '/.config/terra', $dumper->dump($this->config, 10));
+
+
+    if (!$fs->exists(getenv("HOME") . '/.terra')) {
+      try {
+        $fs->mkdir(getenv("HOME") . '/.terra/apps');
+      } catch (IOExceptionInterface $e) {
+        return FALSE;
+      }
+    }
+
+    try {
+      $fs->dumpFile(getenv("HOME") . '/.terra/terra', $dumper->dump($this->config, 10));
+      return TRUE;
+    } catch (IOExceptionInterface $e) {
+      return FALSE;
+    }
   }
 }
