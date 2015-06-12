@@ -12,6 +12,9 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+
 class EnvironmentRemove extends Command
 {
   protected function configure()
@@ -73,8 +76,10 @@ class EnvironmentRemove extends Command
       $environment_name = $helper->ask($input, $output, $question);
     }
 
+    $environment = $app['environments'][$environment_name];
+
     // Confirm removal of the app.
-    $question = new ConfirmationQuestion("Are you sure you would like to remove the environment <question>$app_name:$environment_name</question>? ", false);
+    $question = new ConfirmationQuestion("Are you sure you would like to remove the environment <question>$app_name:$environment_name</question>?  All files at {$environment['path']} will be deleted. ", false);
     if (!$helper->ask($input, $output, $question)) {
       $output->writeln('<error>Cancelled</error>');
       return;
@@ -83,6 +88,20 @@ class EnvironmentRemove extends Command
 
       // Remove the environment from config registry.
       // @TODO: Move this to EnvironmentFactory class
+
+      // Remove files
+      $fs = new Filesystem();
+
+      try {
+        $fs->remove(array(
+          $environment['path']
+        ));
+        $output->writeln("<info>Files for environment $app_name:$environment_name has been deleted.</info>");
+
+      } catch (IOExceptionInterface $e) {
+        $output->writeln("<error>Unable to remove ".$e->getPath() . "</error>");
+      }
+
       unset($app['environments'][$environment_name]);
       $this->getApplication()->getTerra()->getConfig()->add('apps', $app_name, $app);
       $this->getApplication()->getTerra()->getConfig()->save();
