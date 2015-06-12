@@ -58,6 +58,15 @@ class Config implements ConfigurationInterface {
             ->scalarNode('repo')
             ->isRequired(true)
             ->end()
+            ->arrayNode('environments')
+            ->prototype('array')
+            ->children()
+              ->scalarNode('name')
+              ->isRequired(true)
+              ->end()
+              ->scalarNode('path')
+              ->isRequired(true)
+              ->end()
     ;
     return $tree_builder;
   }
@@ -124,7 +133,7 @@ class Config implements ConfigurationInterface {
    * @param string $key
    *   Key of the group to set to.
    *
-   * @param string $name
+   * @param string|array $names
    *   Name of the new object to set.
    *
    * @param mixed $val
@@ -132,8 +141,18 @@ class Config implements ConfigurationInterface {
    *
    * @return bool
    */
-  public function add($key, $name, $val) {
-    return $this->config[$key][$name] = $val;
+  public function add($key, $names, $val) {
+
+    if (is_array($names)) {
+      $array_piece = &$this->config[$key];
+      foreach ($names as $name_key) {
+        $array_piece = &$array_piece[$name_key];
+      }
+      return $array_piece = $val;
+    }
+    else {
+      return $this->config[$key][$names] = $val;
+    }
   }
 
   /**

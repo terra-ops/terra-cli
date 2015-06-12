@@ -23,7 +23,12 @@ class Status extends Command
 
     // APPS table.
     $table = $this->getHelper('table');
-    $table->setHeaders(array('APPS', 'Description', 'Repo'));
+    $table->setHeaders(array(
+      'APPS',
+      'Description',
+      'Repo',
+      'Environments',
+    ));
 
     $rows = array();
     foreach ($this->getApplication()->getTerra()->getConfig()->get('apps') as $app) {
@@ -32,6 +37,7 @@ class Status extends Command
         $app['name'],
         $app['description'],
         $app['repo'],
+        is_array($app['environments'])? implode(', ', array_keys($app['environments'])): 'None',
       );
       $rows[] = $row;
     }
