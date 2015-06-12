@@ -57,7 +57,7 @@ class EnvironmentRemove extends Command
     $app = $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name);
 
     // If no environments:
-    if (empty(array_keys($app['environments']))) {
+    if (count(($app['environments'])) == 0) {
       $output->writeln("<comment>There are no environments for the app $app_name!</comment>");
       $output->writeln("Use the command <info>terra environment:add</info> to add your first environment.");
       return;
@@ -80,9 +80,12 @@ class EnvironmentRemove extends Command
       return;
     }
     else {
-      // @TODO: add a remove environment function.
-//      $this->getApplication()->getTerra()->getConfig()->remove('apps', $app_name);
-//      $this->getApplication()->getTerra()->getConfig()->save();
+
+      // Remove the environment from config registry.
+      unset($app['environments'][$environment_name]);
+      $this->getApplication()->getTerra()->getConfig()->add('apps', $app_name, $app);
+      $this->getApplication()->getTerra()->getConfig()->save();
+
       $output->writeln("<info>Environment $app_name:$environment_name has been removed.</info>");
 
     }
