@@ -7,6 +7,7 @@ use GitWrapper\GitWorkingCopy;
 use TQ\Git\Repository\Repository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Process\Process;
 
 /**
@@ -78,11 +79,21 @@ class EnvironmentFactory {
     // Create the app/environment folder
     $fs = new FileSystem;
     try {
-      $fs->mkdir(getenv("HOME") . '/.terra/environments/' . $this->app->name . '/' . $this->app->name . '-' . $this->environment->name);
+      $fs->mkdir($this->getDockerComposePath());
     }
     catch (IOExceptionInterface $e) {
       return FALSE;
     }
+
+    // Create the environments docker-compose file.
+    $dumper = new Dumper();
+    try {
+      $fs->dumpFile($this->getDockerComposePath() . '/docker-compose.yml', $dumper->dump($this->getDockerComposeArray(), 10));
+      return TRUE;
+    } catch (IOExceptionInterface $e) {
+      return FALSE;
+    }
+
     return TRUE;
   }
 
@@ -171,6 +182,42 @@ class EnvironmentFactory {
       $this->getRepo()->getCurrentBranch();
     $this->director->saveData();
 
+
+  }
+
+  public function getDockerComposePath() {
+    return getenv("HOME") . '/.terra/environments/' . $this->app->name . '/' . $this->app->name . '-' . $this->environment->name;
+  }
+
+  public function getDockerComposeArray() {
+    $path = $this->environment->path;
+
+    $compose = array();
+    $compose['app'] = array(
+      'image' => 'terra/drupal',
+      'tty' => TRUE,
+      'stdin_open' => TRUE,
+      'links' => 'database',
+      'volumes' => array(
+        "$path:/usr/share/nginx/html"
+      ),
+      'ports' => array(
+        "8080:80/tcp",
+      ),
+    );
+    $compose['database'] = array(
+      'image' => 'mariadb',
+      'tty' => TRUE,
+      'stdin_open' => TRUE,
+      'environment' => array(
+        'MYSQL_ROOT_PASSWORD' => 'RANDOMIZEPLEASE',
+        'MYSQL_DATABASE' => 'drupal',
+        'MYSQL_USER' => 'drupal',
+        'MYSQL_PASSWORD' => 'drupal',
+      ),
+    );
+
+    return $compose;
 
   }
 }
