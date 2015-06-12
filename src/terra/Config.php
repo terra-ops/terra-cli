@@ -56,7 +56,7 @@ class Config implements ConfigurationInterface {
             ->isRequired(false)
             ->end()
             ->scalarNode('repo')
-            ->isRequired(false)
+            ->isRequired(true)
             ->end()
     ;
     return $tree_builder;
