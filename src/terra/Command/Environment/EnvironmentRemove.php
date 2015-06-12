@@ -82,6 +82,7 @@ class EnvironmentRemove extends Command
     else {
 
       // Remove the environment from config registry.
+      // @TODO: Move this to EnvironmentFactory class
       unset($app['environments'][$environment_name]);
       $this->getApplication()->getTerra()->getConfig()->add('apps', $app_name, $app);
       $this->getApplication()->getTerra()->getConfig()->save();
