@@ -197,12 +197,14 @@ class EnvironmentFactory {
       'image' => 'terra/drupal',
       'tty' => TRUE,
       'stdin_open' => TRUE,
-      'links' => 'database',
+      'links' => array(
+        'database',
+      ),
       'volumes' => array(
         "$path:/usr/share/nginx/html"
       ),
       'ports' => array(
-        "8080:80/tcp",
+        ":80/tcp",
       ),
     );
     $compose['database'] = array(
