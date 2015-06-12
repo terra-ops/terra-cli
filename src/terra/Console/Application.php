@@ -37,6 +37,17 @@ class Application extends BaseApplication {
   }
 
   /**
+   * Initializes all the Terra commands.
+   */
+  protected function getDefaultCommands() {
+    $commands = parent::getDefaultCommands();
+    $commands[] = new Command\App\AppAdd();
+    $commands[] = new Command\App\AppRemove();
+    $commands[] = new Command\Status();
+    return $commands;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function doRun(InputInterface $input, OutputInterface $output) {
@@ -82,16 +93,6 @@ class Application extends BaseApplication {
     }
 
     return $this->process;
-  }
-
-  /**
-   * Initializes all the flo commands.
-   */
-  protected function getDefaultCommands() {
-    $commands = parent::getDefaultCommands();
-    $commands[] = new Command\App\AppAdd();
-    $commands[] = new Command\Status();
-    return $commands;
   }
 
   /**

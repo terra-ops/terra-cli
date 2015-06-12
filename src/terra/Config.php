@@ -47,7 +47,6 @@ class Config implements ConfigurationInterface {
           ->defaultValue('/usr/bin/git')
         ->end()
         ->arrayNode('apps')
-          ->requiresAtLeastOneElement()
           ->prototype('array')
           ->children()
             ->scalarNode('name')
@@ -135,6 +134,16 @@ class Config implements ConfigurationInterface {
    */
   public function add($key, $name, $val) {
     return $this->config[$key][$name] = $val;
+  }
+
+  public function remove($key, $name) {
+    if (isset($this->config[$key][$name])) {
+      unset($this->config[$key][$name]);
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
   }
 
   public function save() {
