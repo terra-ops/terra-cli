@@ -37,3 +37,9 @@ Terra's mission is to make web development as easy and streamlined as possible.
   
 #### `terra environment:status`
   Provides status information about an environment, including path and URL.
+
+# History
+
+Some of the R&D for Terra happened in a project called "director": https://github.com/jonpugh/director-drupal
+
+Director is now deprecated.
