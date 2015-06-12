@@ -222,4 +222,28 @@ class EnvironmentFactory {
     return $compose;
 
   }
+
+  public function enable() {
+
+    $process = new Process('docker-compose up -d', $this->getDockerComposePath());
+    $process->run();
+    if (!$process->isSuccessful()) {
+      return FALSE;
+    }
+    else {
+      return $process->getOutput();
+    }
+  }
+
+  public function getPort() {
+
+    $process = new Process('docker-compose port app 80', $this->getDockerComposePath());
+    $process->run();
+    if (!$process->isSuccessful()) {
+      return FALSE;
+    }
+    else {
+      return $process->getOutput();
+    }
+  }
 }
