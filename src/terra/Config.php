@@ -136,6 +136,13 @@ class Config implements ConfigurationInterface {
     return $this->config[$key][$name] = $val;
   }
 
+  /**
+   * Remove a config param from a config array.
+   *
+   * @param $key
+   * @param $name
+   * @return bool
+   */
   public function remove($key, $name) {
     if (isset($this->config[$key][$name])) {
       unset($this->config[$key][$name]);
