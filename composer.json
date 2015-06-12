@@ -9,7 +9,9 @@
         "symfony/finder": "2.6.4",
         "symfony/form": "2.6.4",
         "symfony/process": "2.6.4",
-        "symfony/yaml": "2.6.4"
+        "symfony/yaml": "2.6.4",
+        "cpliakas/git-wrapper": "1.4.1",
+        "teqneers/php-stream-wrapper-for-git": "1.0.0"
     },
     "authors": [
         {
