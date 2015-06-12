@@ -46,6 +46,7 @@ class Application extends BaseApplication {
     $commands[] = new Command\Environment\EnvironmentAdd();
     $commands[] = new Command\Environment\EnvironmentRemove();
     $commands[] = new Command\Environment\EnvironmentEnable();
+    $commands[] = new Command\Environment\EnvironmentStatus();
     $commands[] = new Command\Status();
     return $commands;
   }

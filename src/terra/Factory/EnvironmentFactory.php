@@ -243,7 +243,7 @@ class EnvironmentFactory {
       return FALSE;
     }
     else {
-      return $process->getOutput();
+      return trim($process->getOutput());
     }
   }
 }
