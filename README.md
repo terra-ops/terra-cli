@@ -15,25 +15,25 @@ Terra's mission is to make web development as easy and streamlined as possible.
 
 ## Commands
 
-### `terra status`
+#### `terra status`
   List all apps on this system.
 
-### `terra app:add` 
+#### `terra app:add` 
   Add a new app to the system.
   
   Currently only Drupal sites are supported.
   
-### `terra app:remove`
+#### `terra app:remove`
   Remove an app from the system
   
-### `terra environment:add`
+#### `terra environment:add`
   Add an environment for an app.
   
-### `terra environment:remove`
+#### `terra environment:remove`
   Remove an environment.
 
-### `terra environment:enable`
+#### `terra environment:enable`
   Runs `docker-compose up` to initiate an environment.
   
-### `terra environment:status`
+#### `terra environment:status`
   Provides status information about an environment, including path and URL.
