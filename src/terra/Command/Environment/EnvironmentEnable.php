@@ -86,6 +86,18 @@ class EnvironmentEnable extends Command
 
     $environment_factory = new EnvironmentFactory($environment, $app);
     $output->writeln($environment_factory->enable());
-    $output->writeln($environment_factory->getPort());
+
+    $port = $environment_factory->getPort();
+    $port = array_pop(explode(':', $port));
+
+    $app['environments'][$environment_name]['url'] = "http://localhost:$port";
+    $this->getApplication()->getTerra()->getConfig()->add('apps', $app_name, $app);
+
+    if ($this->getApplication()->getTerra()->getConfig()->save()) {
+      $output->writeln('<info>Environment enabled!</info>  Available at ' . $app['environments'][$environment_name]['url']);
+    }
+    else {
+      $output->writeln('<error>Environment info not saved.</error>');
+    }
   }
 }
