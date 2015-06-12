@@ -97,19 +97,26 @@ class EnvironmentAdd extends Command
       'path' => $path,
     );
 
-    // Save environment to config.
-    $this->getApplication()->getTerra()->getConfig()->add('apps', array($app_name, 'environments', $environment_name), $environment);
-    $this->getApplication()->getTerra()->getConfig()->save();
-
-    $output->writeln('<info>Environment saved to registry.</info>');
-
     // Prepare the environment factory.
-    $environment['app'] = $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name);
-    unset($environment['app']['environments']);
-
     // Clone the apps source code to the desired path.
-    $environmentFactory = new EnvironmentFactory($environment, $app_name);
-    $environmentFactory->init($path);
+    $environmentFactory = new EnvironmentFactory($environment, $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name));
+
+    // Save environment to config.
+    if ($environmentFactory->init($path)) {
+
+      // Save current branch
+      $environment['version'] = $environmentFactory->getRepo()->getCurrentBranch();
+
+      // Save to registry.
+      $this->getApplication()->getTerra()->getConfig()->add('apps', array($app_name, 'environments', $environment_name), $environment);
+      $this->getApplication()->getTerra()->getConfig()->save();
+
+      $output->writeln('<info>Environment saved to registry.</info>');
+    }
+    else {
+      $output->writeln('<error>Unable to clone repository. Check app settings and try again.</error>');
+    }
+
 
   }
 }

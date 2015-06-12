@@ -34,9 +34,9 @@ class EnvironmentFactory {
    * @param $environment
    * @param $app
    */
-  public function __construct($environment) {
+  public function __construct($environment,$app) {
     $this->environment = (object) $environment;
-    $this->app = (object) $this->environment->app;
+    $this->app = (object) $app;
     $this->name = $this->environment->name;
 
 //    $this->loadConfig();
@@ -48,9 +48,15 @@ class EnvironmentFactory {
   public function init($path = NULL){
     $path = is_null($path)? $this->environment->path: $path;
 
-    $wrapper = new GitWrapper();
-    $wrapper->streamOutput();
-    $wrapper->clone($this->app->repo, $path);
+    try {
+      $wrapper = new GitWrapper();
+      $wrapper->streamOutput();
+      $wrapper->clone($this->app->repo, $path);
+    }
+    catch (\GitWrapper\GitException $e) {
+      return FALSE;
+    }
+
     chdir($path);
     $wrapper->git('branch');
     $wrapper->git('status');
@@ -68,6 +74,8 @@ class EnvironmentFactory {
         }
       });
     }
+
+    return TRUE;
   }
 
   /**
@@ -106,8 +114,8 @@ class EnvironmentFactory {
    * @return string
    */
   public function getSourcePath() {
-    if (isset($this->environment->source_path)) {
-      return $this->environment->source_path;
+    if (isset($this->environment->path)) {
+      return $this->environment->path;
     }
   }
 
