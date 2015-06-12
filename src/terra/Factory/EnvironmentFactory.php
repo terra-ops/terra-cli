@@ -75,6 +75,14 @@ class EnvironmentFactory {
       });
     }
 
+    // Create the app/environment folder
+    $fs = new FileSystem;
+    try {
+      $fs->mkdir(getenv("HOME") . '/.terra/environments/' . $this->app->name . '/' . $this->app->name . '-' . $this->environment->name);
+    }
+    catch (IOExceptionInterface $e) {
+      return FALSE;
+    }
     return TRUE;
   }
 
