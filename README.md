@@ -1,5 +1,7 @@
 # Terra
 
+![Terra command line interface](https://pbs.twimg.com/media/CHj2HvyUYAAaivy.png:large)
+
 Terra is the spiritual successor to Aegir & DevShop.
 
 Terra uses Docker and Docker compose to stand up websites.
