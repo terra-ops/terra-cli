@@ -2,7 +2,9 @@
 
 Terra is the spiritual successor to Aegir & DevShop.
 
-It is being designed to work both as a local development solution and as a scalable production hosting platform.
+Terra uses Docker and Docker compose to stand up websites.
+
+Terra is being designed to work both as a local development solution and as a scalable production hosting platform.
 
 Terra is in it's infancy, but we encourage you to try it out.
 
