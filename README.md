@@ -45,3 +45,15 @@ Terra's mission is to make web development as easy and streamlined as possible.
 Some of the R&D for Terra happened in a project called "director": https://github.com/jonpugh/director-drupal
 
 Director is now deprecated.
+
+# Comparisons to Kalabox
+
+There is a striking similarity to this project and Kalabox.   
+
+We love the concept of Kalabox and the Kalamuna team, but there are a fey key differences:
+
+1. Terra is designed for all things: local development, testing, and production.
+2. Terra is written in PHP & Symfony: Kalabox is written in Node JS
+3. Terra is the successor to Aegir & devshop.  We hope to recruit a large community from those tools.
+
+
