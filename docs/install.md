@@ -22,6 +22,21 @@ It's recommended to install Terra globally.
         
   @TODO: Figure out how to remove the need to run composer install.
 
+3. Install Docker and docker-compose
+
+  **Install Docker:**
+   
+  - Install Directions for all OS: https://docs.docker.com/installation/
+  - Mac OSX: https://docs.docker.com/installation/mac/
+  - Ubuntu: https://docs.docker.com/installation/ubuntu
+
+  **Install Docker-Compose**
+  
+  - Detailed instructions at https://docs.docker.com/compose/install/
+  
+        curl -L https://github.com/docker/compose/releases/download/1.2.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+
 3. That should be it!
 
   Try to run `terra` on the command line and you should see the default output.
