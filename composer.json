@@ -19,6 +19,9 @@
             "email": "jon@thinkdrop.net"
         }
     ],
+    "support": {
+      "issues": "https://github.com/terra-ops/terra-app/issues"
+    },
     "autoload": {
         "psr-0": { "terra": "src/" }
     },
