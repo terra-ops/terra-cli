@@ -10,6 +10,10 @@ Terra is in it's infancy, but we encourage you to try it out.
 
 Terra's mission is to make web development as easy and streamlined as possible.
 
+## Planning
+
+See https://huboard.com/terra-ops/terra-app/ for the user story board.
+
 ## Requirements
 
 - **docker** 
