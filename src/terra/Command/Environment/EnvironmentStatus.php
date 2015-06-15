@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
+use terra\Factory\EnvironmentFactory;
 
 class EnvironmentStatus extends Command
 {
@@ -74,12 +75,14 @@ class EnvironmentStatus extends Command
     }
 
     $environment = $app['environments'][$environment_name];
+    $environment_factory = new EnvironmentFactory($environment, $app);
+
     $table = $this->getHelper('table');
     $table->setHeaders(array(
       'Name',
       'Code Path',
-      'Version',
       'URL',
+      'Version',
     ));
 
     $rows = array(
@@ -87,28 +90,7 @@ class EnvironmentStatus extends Command
     );
     $table->setRows($rows);
     $table->render($output);
-//
-//    // APPS table.
-//    $table = $this->getHelper('table');
-//    $table->setHeaders(array(
-//      'APPS',
-//      'Description',
-//      'Repo',
-//      'Environments',
-//    ));
-//
-//    $rows = array();
-//    foreach ($this->getApplication()->getTerra()->getConfig()->get('apps') as $app) {
-//
-//      $row = array(
-//        $app['name'],
-//        $app['description'],
-//        $app['repo'],
-//        is_array($app['environments'])? implode(', ', array_keys($app['environments'])): 'None',
-//      );
-//      $rows[] = $row;
-//    }
-//    $table->setRows($rows);
-//    $table->render($output);
+
+    $output->writeln("Docker Compose Path: " . $environment_factory->getDockerComposePath());
   }
 }
