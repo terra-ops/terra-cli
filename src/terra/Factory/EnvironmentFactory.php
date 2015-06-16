@@ -226,7 +226,7 @@ class EnvironmentFactory {
         'database',
       ),
       'volumes' => array(
-        "$path:/usr/share/nginx/html"
+        "$path:/var/www/html"
       ),
     );
 
