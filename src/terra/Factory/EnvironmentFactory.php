@@ -237,7 +237,13 @@ class EnvironmentFactory {
   public function enable() {
 
     $process = new Process('docker-compose up -d', $this->getDockerComposePath());
-    $process->run();
+    $process->run(function ($type, $buffer) {
+      if (Process::ERR === $type) {
+        echo 'DOCKER > '.$buffer;
+      } else {
+        echo 'DOCKER > '.$buffer;
+      }
+    });
     if (!$process->isSuccessful()) {
       return FALSE;
     }
