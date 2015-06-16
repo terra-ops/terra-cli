@@ -218,6 +218,17 @@ class EnvironmentFactory {
         'MYSQL_PASSWORD' => 'drupal',
       ),
     );
+    $compose['drush'] = array(
+      'image' => 'terra/drush',
+      'tty' => TRUE,
+      'stdin_open' => TRUE,
+      'links' => array(
+        'database',
+      ),
+      'volumes' => array(
+        "$path:/usr/share/nginx/html"
+      ),
+    );
 
     return $compose;
 
