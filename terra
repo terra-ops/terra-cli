@@ -1,12 +1,23 @@
 #!/usr/bin/env php
 <?php
 
-// set to run indefinitely
+// Set to run indefinitely.
 set_time_limit(0);
 
-// include the composer autoloader
-require_once __DIR__ . '/vendor/autoload.php';
+// Include the composer autoloader.
+if (file_exists(__DIR__ . '/vendor')) {
+    // Standalone installation.
+    require_once __DIR__ . '/vendor/autoload.php';
+} elseif (file_exists(dirname(__DIR__) . '/vendor')) {
+    // Composer global installation.
+    require_once dirname(__DIR__) . '/../../vendor/autoload.php';
+} else {
+    echo 'You must set up the project dependencies, run the following commands:' . PHP_EOL .
+        'curl -sS https://getcomposer.org/installer | php' . PHP_EOL .
+        'php composer.phar install' . PHP_EOL;
+}
 
 use terra\Console\Application;
+
 $application = new Application('terra', '@package_version@');
 $application->run();
