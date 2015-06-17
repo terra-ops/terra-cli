@@ -17,10 +17,6 @@ It's recommended to install Terra globally.
 2. Install Terra 0.x:
 
         composer global require terra/terra-app:dev-master
-        cd ~/.composer/vendor/terra/terra-app 
-        composer install
-        
-  @TODO: Figure out how to remove the need to run composer install.
 
 3. Install Docker and docker-compose
 
