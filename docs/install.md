@@ -24,7 +24,7 @@ It's recommended to install Terra globally.
    
   - Install Directions for all OS: https://docs.docker.com/installation/
   - Mac OSX: https://docs.docker.com/installation/mac/
-  - Ubuntu: https://docs.docker.com/installation/ubuntu
+  - Ubuntu: https://docs.docker.com/installation/ubuntulinux/
 
   **Install Docker-Compose**
   
