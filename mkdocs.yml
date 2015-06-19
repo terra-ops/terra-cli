@@ -1,0 +1,9 @@
+site_name: Terra Docs
+pages:
+  - [index.md, 'Home']
+  - [install.md, 'General', 'Install']
+  - [drupal.md, 'General', 'Setting up a Drupal Site']
+theme: readthedocs
+site_author: ""
+repo_url: https://github.com/terra-ops/terra
+include_search: true
