@@ -6,4 +6,3 @@ pages:
 theme: readthedocs
 site_author: ""
 repo_url: https://github.com/terra-ops/terra
-include_search: true
