@@ -77,6 +77,9 @@ class Config implements ConfigurationInterface {
               ->scalarNode('url')
               ->isRequired(false)
               ->end()
+              ->scalarNode('document_root')
+              ->isRequired(true)
+              ->end()
     ;
     return $tree_builder;
   }

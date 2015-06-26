@@ -42,6 +42,12 @@ class EnvironmentAdd extends Command
         InputArgument::OPTIONAL,
         'The path to the environment.'
       )
+      ->addArgument(
+        'document_root',
+        InputArgument::OPTIONAL,
+        'The path to the web document root within the repository.',
+        '/'
+      )
       ->addOption(
         'init-environment',
         '',
@@ -91,10 +97,14 @@ class EnvironmentAdd extends Command
       $path = getcwd() . '/' . $path;
     }
 
+    // Document Root
+    $document_path = $input->getArgument('document_root');
+
     // Environment object
     $environment = array(
       'name' => $environment_name,
       'path' => $path,
+      'document_root' => $document_path,
       'url' => '',
       'version' => '',
     );

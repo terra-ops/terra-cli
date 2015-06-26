@@ -203,7 +203,7 @@ class EnvironmentFactory {
   }
 
   public function getDockerComposeArray() {
-    $path = $this->environment->path;
+    $path = $this->environment->path .  $this->environment->document_root;
 
     $compose = array();
     $compose['app'] = array(
