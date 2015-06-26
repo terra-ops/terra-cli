@@ -49,6 +49,19 @@ class EnvironmentFactory {
   public function init($path = NULL){
     $path = is_null($path)? $this->environment->path: $path;
 
+    // Check if clone already exists at this path. If so we can safely skip.
+    if (file_exists($path)) {
+      $wrapper = new GitWrapper();
+      $working_copy = new GitWorkingCopy($wrapper, $path);
+      $output = $working_copy->remote('-v');
+      if (strpos($output, $this->app->repo) !== FALSE) {
+        return TRUE;
+      }
+      else {
+        return FALSE;
+      }
+    }
+
     try {
       $wrapper = new GitWrapper();
       $wrapper->streamOutput();
