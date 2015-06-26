@@ -33,7 +33,7 @@ class AppStatus extends Command
     if (count($this->getApplication()->getTerra()->getConfig()->get('apps')) == 0) {
       $output->writeln("<comment>There are no apps!</comment>");
       $output->writeln("Use the command <info>terra app:add</info> to add your first app.");
-      return;
+      return 1;
     }
 
     $helper = $this->getHelper('question');
@@ -50,6 +50,11 @@ class AppStatus extends Command
     }
 
     $app = $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name);
+
+    if (empty($app)) {
+      $output->writeln("<error>No app with that name! </error>");
+      return 1;
+    }
 
     // If no environments:
     if (count(($app['environments'])) == 0) {
