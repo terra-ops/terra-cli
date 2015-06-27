@@ -212,22 +212,17 @@ class EnvironmentFactory {
   public function getDockerComposeArray() {
     $path = $this->environment->path .  $this->environment->document_root;
 
-    // Get current scale of app service
-    $process = new Process('docker-compose ps app', $this->getDockerComposePath());
-    if (!$process->isSuccessful()) {
-      throw new \RuntimeException($process->getErrorOutput());
-    }
-    $container_list = $process->getOutput();
-    print_r($container_list);
-
     $compose = array();
     $compose['load'] = array(
       'image' => 'tutum/haproxy',
-      'links' => array(
-        'app_1',
-      ),
       'environment' => array(
         'VIRTUAL_HOST' => $this->getUrl(),
+      ),
+      'links' => array(
+        'app',
+      ),
+      'ports' => array(
+        "80/tcp",
       ),
     );
     $compose['app'] = array(
@@ -266,7 +261,6 @@ class EnvironmentFactory {
         "$path:/var/www/html"
       ),
     );
-
     return $compose;
 
   }
@@ -294,7 +288,7 @@ class EnvironmentFactory {
 
   public function getPort() {
 
-    $process = new Process('docker-compose port app 80', $this->getDockerComposePath());
+    $process = new Process('docker-compose port load 80', $this->getDockerComposePath());
     $process->run();
     if (!$process->isSuccessful()) {
       return FALSE;
@@ -310,5 +304,28 @@ class EnvironmentFactory {
    */
   public function getUrl() {
     return $this->app->name . '.' . $this->name;
+  }
+
+  /**
+   * Get the current scale of the app container.
+   * @return bool
+   */
+  public function getScale() {
+
+    // Get current scale of app service
+    $process = new Process('docker-compose ps app', $this->getDockerComposePath());
+    $process->run();
+    if (!$process->isSuccessful()) {
+      return FALSE;
+    }
+    $container_list = $process->getOutput();
+    $lines  = explode(PHP_EOL, $container_list);
+    $app_scale = 0;
+    foreach ($lines as $line) {
+      if (strpos($line, "{$this->app->name}{$this->name}_app") ===0) {
+        $app_scale++;
+      }
+    }
+    return $app_scale;
   }
 }
