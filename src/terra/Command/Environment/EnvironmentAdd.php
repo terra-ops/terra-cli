@@ -98,13 +98,15 @@ class EnvironmentAdd extends Command
     }
 
     // Document Root
-    $document_path = $input->getArgument('document_root');
+    $document_root = $input->getArgument('document_root');
+    $question = new Question("Web Document Root: ($document_root) ", '');
+    $document_root = $helper->ask($input, $output, $question);
 
     // Environment object
     $environment = array(
       'name' => $environment_name,
       'path' => $path,
-      'document_root' => $document_path,
+      'document_root' => $document_root,
       'url' => '',
       'version' => '',
     );
