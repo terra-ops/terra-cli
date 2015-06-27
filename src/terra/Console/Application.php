@@ -6,6 +6,7 @@ use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+
 use terra\Command;
 use terra\Factory;
 use terra\Terra;
@@ -41,6 +42,7 @@ class Application extends BaseApplication {
    */
   protected function getDefaultCommands() {
     $commands = parent::getDefaultCommands();
+
     $commands[] = new Command\App\AppAdd();
     $commands[] = new Command\App\AppRemove();
     $commands[] = new Command\App\AppStatus();
@@ -48,6 +50,7 @@ class Application extends BaseApplication {
     $commands[] = new Command\Environment\EnvironmentRemove();
     $commands[] = new Command\Environment\EnvironmentEnable();
     $commands[] = new Command\Environment\EnvironmentStatus();
+    $commands[] = new Command\Environment\EnvironmentProxyEnable();
     $commands[] = new Command\Status();
     return $commands;
   }
