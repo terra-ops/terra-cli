@@ -92,6 +92,7 @@ class EnvironmentScale extends Command
     $app = $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name);
     $environment = $app['environments'][$environment_name];
     $environment_factory = new EnvironmentFactory($environment, $app);
+    $environment_factory->writeConfig();
     $current_scale = $environment_factory->getScale();
 
     $output->writeln("Scaling Environment <comment>{$app_name} {$environment_name}</comment>...");
