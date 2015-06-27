@@ -286,6 +286,28 @@ class EnvironmentFactory {
     }
   }
 
+  /**
+   * Basically a wrapper for docker-compose scale
+   */
+  public function scale($scale) {
+    $cmd = "docker-compose scale app=$scale && docker-compose up -d --no-deps load";
+    $process = new Process($cmd, $this->getDockerComposePath());
+    $process->setTimeout(null);
+    $process->run(function ($type, $buffer) {
+      if (Process::ERR === $type) {
+        echo 'DOCKER > '.$buffer;
+      } else {
+        echo 'DOCKER > '.$buffer;
+      }
+    });
+    if (!$process->isSuccessful()) {
+      return FALSE;
+    }
+    else {
+      return $process->getOutput();
+    }
+  }
+
   public function getPort() {
 
     $process = new Process('docker-compose port load 80', $this->getDockerComposePath());
@@ -328,4 +350,7 @@ class EnvironmentFactory {
     }
     return $app_scale;
   }
+
+
+  // docker-compose scale app=1 && docker-compose kill load && docker-compose up -d load
 }
