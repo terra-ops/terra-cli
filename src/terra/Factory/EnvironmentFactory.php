@@ -225,7 +225,7 @@ class EnvironmentFactory {
       'expose' => array(
         "80/tcp",
       ),
-      'restart' => TRUE,
+      'restart' => 'always',
     );
     $compose['app'] = array(
       'image' => 'terra/drupal',
@@ -240,7 +240,7 @@ class EnvironmentFactory {
       'expose' => array(
         "80/tcp",
       ),
-      'restart' => TRUE,
+      'restart' => 'always',
     );
     $compose['database'] = array(
       'image' => 'mariadb',
@@ -328,7 +328,7 @@ class EnvironmentFactory {
    * @return string
    */
   public function getUrl() {
-    return $this->app->name . '.' . $this->name;
+    return $this->app->name . '.' . $this->name . '.' . gethostname();
   }
 
   /**
