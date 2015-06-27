@@ -81,21 +81,7 @@ class EnvironmentStatus extends Command
     $environment = $app['environments'][$environment_name];
     $environment_factory = new EnvironmentFactory($environment, $app);
 
-    // Get current scale of app service
-    $process = new Process('docker-compose ps app', $environment_factory->getDockerComposePath());
-    $process->run();
-    if (!$process->isSuccessful()) {
-      return FALSE;
-    }
-    $container_list = $process->getOutput();
-    $lines  = explode(PHP_EOL, $container_list);
-    $app_scale = 0;
-    foreach ($lines as $line) {
-      if (strpos($line, "{$app_name}{$environment_name}_app") ===0) {
-        $app_scale++;
-      }
-    }
-    $environment['scale'] = $app_scale;
+    $environment['scale'] = $environment_factory->getScale();
 
     $table = $this->getHelper('table');
     $table->setHeaders(array(
