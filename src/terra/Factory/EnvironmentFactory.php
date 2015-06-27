@@ -110,6 +110,7 @@ class EnvironmentFactory {
     // Create the environments docker-compose file.
     $dumper = new Dumper();
     try {
+      $fs->remove($this->getDockerComposePath() . '/docker-compose.yml');
       $fs->dumpFile($this->getDockerComposePath() . '/docker-compose.yml', $dumper->dump($this->getDockerComposeArray(), 10));
       return TRUE;
     } catch (IOExceptionInterface $e) {
