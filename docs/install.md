@@ -8,11 +8,11 @@ Global Install
 
 It's recommended to install Terra globally.
 
-0. Install PHP
+0. Install PHP & git
 
   On ubuntu:
   
-        apt-get install php5-cli
+        apt-get install php5-cli git
 
 1. Prepare Composer
 
