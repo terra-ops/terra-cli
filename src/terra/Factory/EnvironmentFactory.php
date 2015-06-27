@@ -273,7 +273,8 @@ class EnvironmentFactory {
       return FALSE;
     }
 
-    $process = new Process('docker-compose up -d', $this->getDockerComposePath(), null, null, null);
+    $process = new Process('docker-compose up -d', $this->getDockerComposePath());
+    $process->setTimeout(NULL);
     $process->run(function ($type, $buffer) {
       if (Process::ERR === $type) {
         echo 'DOCKER > '.$buffer;
