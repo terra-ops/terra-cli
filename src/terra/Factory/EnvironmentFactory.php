@@ -222,9 +222,10 @@ class EnvironmentFactory {
       'links' => array(
         'app',
       ),
-      'ports' => array(
+      'expose' => array(
         "80/tcp",
       ),
+      'restart' => TRUE,
     );
     $compose['app'] = array(
       'image' => 'terra/drupal',
@@ -236,9 +237,10 @@ class EnvironmentFactory {
       'volumes' => array(
         "$path:/usr/share/nginx/html"
       ),
-      'ports' => array(
+      'expose' => array(
         "80/tcp",
       ),
+      'restart' => TRUE,
     );
     $compose['database'] = array(
       'image' => 'mariadb',
