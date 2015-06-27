@@ -8,7 +8,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Process\Process;
 use terra\Factory\EnvironmentFactory;
+
 
 class EnvironmentStatus extends Command
 {
@@ -33,6 +35,8 @@ class EnvironmentStatus extends Command
   protected function execute(InputInterface $input, OutputInterface $output)
   {
     $output->writeln("Hello Terra!");
+
+
 
     // If there are no apps, return
     if (count($this->getApplication()->getTerra()->getConfig()->get('apps')) == 0) {
@@ -77,12 +81,29 @@ class EnvironmentStatus extends Command
     $environment = $app['environments'][$environment_name];
     $environment_factory = new EnvironmentFactory($environment, $app);
 
+    // Get current scale of app service
+    $process = new Process('docker-compose ps app', $environment_factory->getDockerComposePath());
+    $process->run();
+    if (!$process->isSuccessful()) {
+      return FALSE;
+    }
+    $container_list = $process->getOutput();
+    $lines  = explode(PHP_EOL, $container_list);
+    $app_scale = 0;
+    foreach ($lines as $line) {
+      if (strpos($line, "{$app_name}{$environment_name}_app") ===0) {
+        $app_scale++;
+      }
+    }
+    $environment['scale'] = $app_scale;
+
     $table = $this->getHelper('table');
     $table->setHeaders(array(
       'Name',
       'Code Path',
       'URL',
       'Version',
+      'Scale',
     ));
 
     $rows = array(

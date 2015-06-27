@@ -89,6 +89,15 @@ class EnvironmentFactory {
       });
     }
 
+    return $this->writeConfig();
+  }
+
+  /**
+   * Write the docker-compose.yml file.
+   * @return bool
+   */
+  public function writeConfig() {
+
     // Create the app/environment folder
     $fs = new FileSystem;
     try {
@@ -106,18 +115,16 @@ class EnvironmentFactory {
     } catch (IOExceptionInterface $e) {
       return FALSE;
     }
-
-    return TRUE;
   }
 
   /**
    * Loads app config from environment source code into $this->config
    */
   private function loadConfig() {
-    // Look for .director.yml
+    // Look for .terra.yml
     $fs = new FileSystem;
-    if ($fs->exists($this->getSourcePath() . '/.director.yml')){
-      $this->config = Yaml::parse(file_get_contents($this->getSourcePath() . '/.director.yml'));
+    if ($fs->exists($this->getSourcePath() . '/.terra.yml')){
+      $this->config = Yaml::parse(file_get_contents($this->getSourcePath() . '/.terra.yml'));
     }
     else {
       $this->config = NULL;
@@ -205,7 +212,24 @@ class EnvironmentFactory {
   public function getDockerComposeArray() {
     $path = $this->environment->path .  $this->environment->document_root;
 
+    // Get current scale of app service
+    $process = new Process('docker-compose ps app', $this->getDockerComposePath());
+    if (!$process->isSuccessful()) {
+      throw new \RuntimeException($process->getErrorOutput());
+    }
+    $container_list = $process->getOutput();
+    print_r($container_list);
+
     $compose = array();
+    $compose['load'] = array(
+      'image' => 'tutum/haproxy',
+      'links' => array(
+        'app_1',
+      ),
+      'environment' => array(
+        'VIRTUAL_HOST' => $this->getUrl(),
+      ),
+    );
     $compose['app'] = array(
       'image' => 'terra/drupal',
       'tty' => TRUE,
@@ -217,7 +241,7 @@ class EnvironmentFactory {
         "$path:/usr/share/nginx/html"
       ),
       'ports' => array(
-        ":80/tcp",
+        "80/tcp",
       ),
     );
     $compose['database'] = array(
@@ -248,6 +272,9 @@ class EnvironmentFactory {
   }
 
   public function enable() {
+    if ($this->writeConfig() == FALSE) {
+      return FALSE;
+    }
 
     $process = new Process('docker-compose up -d', $this->getDockerComposePath(), null, null, null);
     $process->run(function ($type, $buffer) {
@@ -275,5 +302,13 @@ class EnvironmentFactory {
     else {
       return trim($process->getOutput());
     }
+  }
+
+  /**
+   * Get the system URL of an environment.
+   * @return string
+   */
+  public function getUrl() {
+    return $this->app->name . '.' . $this->name;
   }
 }
