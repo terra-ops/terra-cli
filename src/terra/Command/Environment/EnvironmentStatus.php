@@ -82,6 +82,7 @@ class EnvironmentStatus extends Command
     $environment_factory = new EnvironmentFactory($environment, $app);
 
     $environment['scale'] = $environment_factory->getScale();
+    $environment['url'] .= PHP_EOL .  'http://' . $environment_factory->getUrl();
 
     $table = $this->getHelper('table');
     $table->setHeaders(array(
