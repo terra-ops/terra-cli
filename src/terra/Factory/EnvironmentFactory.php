@@ -241,6 +241,11 @@ class EnvironmentFactory {
         "80/tcp",
       ),
       'restart' => 'always',
+      'environment' => array(
+        'MYSQL_DATABASE' => 'drupal',
+        'MYSQL_USER' => 'drupal',
+        'MYSQL_PASSWORD' => 'drupal',
+      ),
     );
     $compose['database'] = array(
       'image' => 'mariadb',
