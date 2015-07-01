@@ -3,6 +3,7 @@ pages:
   - [index.md, 'Home']
   - [install.md, 'General', 'Install']
   - [drupal.md, 'General', 'Setting up a Drupal Site']
+  - [containers.md, 'Container Overview', 'How terra utilizes containers']
 theme: readthedocs
 site_author: ""
 repo_url: https://github.com/terra-ops/terra-app
