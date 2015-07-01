@@ -35,8 +35,8 @@ Environment containers
 Each environment gets at least one of each of these containers.
 
 ### Load
-container: `tutum/haproxy`
-Docker Hub: https://registry.hub.docker.com/u/tutum/haproxy/
+- container: `tutum/haproxy`
+- Docker Hub: https://registry.hub.docker.com/u/tutum/haproxy/
 
 This container is the endpoint for each environment. 
 
@@ -45,10 +45,25 @@ The tutum/haproxy image is what makes the `terra environment:scale` command poss
 Setting the `VIRTUAL_HOST` environment variable will make it possible to lookup that enviromment by a URL rather than on a random port.
 
 ### App
-Container: `terra/drupal` 
-Docker Hub: https://registry.hub.docker.com/u/terra/drupal/
-Source code: https://github.com/terra-ops/docker-drupal
+
+- Container: `terra/drupal` 
+- Docker Hub: https://registry.hub.docker.com/u/terra/drupal/
+- Source code: https://github.com/terra-ops/docker-drupal
 
 App is the scalable NGINX container.  It is linked to the `load` container, so when you add more, they are automatically added to the `load` container's server list.
 
 Using the command `terra environment:scale project environment 5` command will pass through to `docker-compose scale app=5'.  Currently terra is hard coded to scale the app container, but with help, we can implement many different methods of scaling.
+
+The source code for your environments is cloned to the *docker host* and then mounted as a volume to the container.  This makes scaling and updating easy.
+
+### Database
+- container: `mariadb`
+- Docker Hub: https://registry.hub.docker.com/_/mariadb/
+- Source code: https://github.com/docker-library/mariadb/blob/master/10.0/Dockerfile
+
+### Drush
+- container: `terra/drush`
+- Docker Hub: https://registry.hub.docker.com/u/terra/drush
+- Source code: https://github.com/terra-ops/docker-drush
+
+The drush container was modified version of kalabox/drush, designed to run perpetually. The plan is to add an SSH server to that it can serve as the drush remote endpoint for developers to access.
