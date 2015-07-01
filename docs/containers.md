@@ -9,10 +9,32 @@ The default container arrangement is a proof of concept for a scalable, distribu
 
 However the plan is to allow each project to override parts or the entire docker-compose configuration in the app source code itself.
 
-Default containers
+Host Container
+--------------
+Each container host gets a single URL Proxy container.
+
+This allows the host to route requests to environment urls to the correct environment container. 
+
+You must run the URL proxy container and manually setup DNS (for now) to be able to host multiple domains per host.
+
+### URL Proxy Container
+Container: https://github.com/jwilder/nginx-proxy
+
+This container makes it possible to host multiple environments on a single host. 
+
+You can access the environment by hostname, which is generated as `http://project.environment.hostname`. 
+
+If your project is called `myhomepage` and your enviroment was called `live`, and the name of the host of the containers was called `business.com`, the terra environment will automatically be available at `http://myhomepage.live.business.com`, if the DNS is set to resolve.
+
+The issue to allow production domains is available at https://github.com/terra-ops/terra-app/issues/18.
+
+Environment containers
 ------------------
+Each environment gets at least one of each of these containers.
 
 ### Load
+container: `tutum/haproxy`
+Docker Hub: https://registry.hub.docker.com/u/tutum/haproxy/
 
 This container is the endpoint for each environment. 
 
