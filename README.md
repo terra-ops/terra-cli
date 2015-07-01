@@ -86,6 +86,10 @@ See https://huboard.com/terra-ops/terra-app/ for the user story board.
 #### `terra environment:status`
   Provides status information about an environment, including path and URL.
 
+#### `terra environment:scale`
+  Set the number of "app" containers.  This command is a wrapper for `docker compose app=5`.
+
+
 # History
 
 Some of the R&D for Terra happened in a project called "director": https://github.com/jonpugh/director-drupal
