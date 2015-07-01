@@ -17,6 +17,8 @@ This allows the host to route requests to environment urls to the correct enviro
 
 You must run the URL proxy container and manually setup DNS (for now) to be able to host multiple domains per host.
 
+Run `terra url-proxy:enable` to run the URL proxy container. This is currently required as we don't expose any port at all on the environment containers.  The URL proxy container is the main front-loader for all traffic coming into the host on port 80.
+
 ### URL Proxy Container
 Container: https://github.com/jwilder/nginx-proxy
 
