@@ -5,4 +5,4 @@ pages:
   - [drupal.md, 'General', 'Setting up a Drupal Site']
 theme: readthedocs
 site_author: ""
-repo_url: https://github.com/terra-ops/terra
+repo_url: https://github.com/terra-ops/terra-app
