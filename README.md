@@ -2,15 +2,53 @@
 
 ![Terra command line interface](https://pbs.twimg.com/media/CHj2HvyUYAAaivy.png:large)
 
-Terra is the spiritual successor to Aegir & DevShop.
+## Documentation & Issues
 
-Terra uses Docker and Docker compose to stand up websites.
+[Read the Docs](http://terra.readthedocs.org/) or help [improve the docs](https://github.com/terra/devshop/edit/0.x/README.md).
 
-Terra is being designed to work both as a local development solution and as a scalable production hosting platform.
+[Issues](https://github.com/terra-ops/terra-app/issues) and [Story Boarding](https://huboard.com/terra-ops/terra-app/)
 
-Terra is in it's infancy, but we encourage you to try it out.
+## Origin
 
-Terra's mission is to make web development as easy and streamlined as possible.
+Terra is the spiritual successor to Aegir & DevShop. It came from the idea that we could benefit from starting over. 
+
+The feeling was with modern libraries like symfony, ansible, and docker we would be able to do a lot quickly, and, well I've been able to do a lot, quickly.  
+
+## Purpose
+
+To make having a website as simple as possible throughout it's entire lifetime, through entirely open source software.
+
+Terra is a human interface for working on, deploying, testing, and scaling web software projects. 
+
+Terra makes it quick and painless to manage your projects and environments.  
+
+Push a button to get a testing infrastructure.
+
+## "Apps"
+
+An "App" is your website. It is the source code for your project.  Terra knows the git URL and (will) know the available branches and tags.  Terra will help you update your app from it's upstream repository using git.
+
+## "Environment"
+
+The Environment is all of the systems needed to run the source code.
+
+The "EnvironmentFactory" class will be pluggable.  Out of the box it provides a working docker cluster, but we can extend it to work with a "multiple apache vhost" model or with a different container provider.
+
+Users will be able to use terra to control environments hosted by multiple hosting providers, including localhost all through the same interface.
+
+## Community & Collaboration is Key
+
+We wish to make this tool work for everyone.  We wish to get feedback from all parties interested in solving these problems in order to prioritize what to work on.
+
+Please join us in the Issue Queues on GitHub and the chat rooms on gitter.
+
+## Scalable Out of the Box
+
+We wanted to start from scalable.  Terra's purpose is to make scaling a push button affair.
+
+Currently Terra uses Docker and Docker compose to stand up and scale websites.  
+
+This makes it easy to get environments running quickly on hosted servers or on local computers for development.
 
 ## Planning
 
