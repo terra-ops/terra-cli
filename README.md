@@ -14,6 +14,8 @@ Terra is the spiritual successor to Aegir & DevShop. It came from the idea that 
 
 The feeling was with modern libraries like symfony, ansible, and docker we would be able to do a lot quickly, and, well I've been able to do a lot, quickly.  
 
+Now I am on a mission to call everyone to action to work behind a common tool for us all.
+
 ## Purpose
 
 To make having a website as simple as possible throughout it's entire lifetime, through entirely open source software.
