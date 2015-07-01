@@ -102,10 +102,11 @@ Director is now deprecated.
 
 There is a striking similarity to this project and Kalabox.   
 
-We love the concept of Kalabox and the Kalamuna team, but there are a fey key differences:
+We love Kalabox and the Kalamuna team, but there are a fey key differences:
 
 1. Terra is designed for all things: local development, testing, and production.
 2. Terra is written in PHP & Symfony: Kalabox is written in Node JS
 3. Terra is the successor to Aegir & devshop.  We hope to recruit a large community from those tools.
-
-
+4. Terra currently extends the kalabox/drush container to offer a container to SSH into.  
+ 
+We hope to collaborate with them on as much as possible.
