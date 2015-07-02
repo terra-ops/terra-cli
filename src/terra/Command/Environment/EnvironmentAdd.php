@@ -97,16 +97,11 @@ class EnvironmentAdd extends Command
       $path = getcwd() . '/' . $path;
     }
 
-    // Document Root
-    $document_root = $input->getArgument('document_root');
-    $question = new Question("Web Document Root: ($document_root) ", '');
-    $document_root = $helper->ask($input, $output, $question);
-
     // Environment object
     $environment = array(
       'name' => $environment_name,
       'path' => $path,
-      'document_root' => $document_root,
+      'document_root' => '',
       'url' => '',
       'version' => '',
     );
@@ -117,6 +112,10 @@ class EnvironmentAdd extends Command
 
     // Save environment to config.
     if ($environmentFactory->init($path)) {
+
+      // Load config from file.
+      $environmentFactory->getConfig();
+      $environment['document_root'] = $environmentFactory->config['document_root'];
 
       // Save current branch
       $environment['version'] = $environmentFactory->getRepo()->getCurrentBranch();
