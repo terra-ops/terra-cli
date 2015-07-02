@@ -264,6 +264,15 @@ class EnvironmentFactory {
         "$path:/var/www/html"
       ),
     );
+
+    // Add "app_services": Additional containers linked to the app container.
+    $this->getConfig();
+    if (isset($this->config['docker_compose']['app_services']) && is_array($this->config['docker_compose']['app_services'])) {
+      foreach ($this->config['docker_compose']['app_services'] as $service => $info) {
+        $compose['app']['links'][] = $service;
+        $compose[$service] = $info;
+      }
+    }
     return $compose;
 
   }
