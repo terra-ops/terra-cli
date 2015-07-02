@@ -14,6 +14,7 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use terra\Factory\EnvironmentFactory;
 
 class EnvironmentRemove extends Command
 {
@@ -79,7 +80,7 @@ class EnvironmentRemove extends Command
     $environment = $app['environments'][$environment_name];
 
     // Confirm removal of the app.
-    $question = new ConfirmationQuestion("Are you sure you would like to remove the environment <question>$app_name:$environment_name</question>?  All files at {$environment['path']} will be deleted. ", false);
+    $question = new ConfirmationQuestion("Are you sure you would like to remove the environment <question>$app_name:$environment_name</question>?  All files at {$environment['path']} will be deleted, and all containers will be killed.", false);
     if (!$helper->ask($input, $output, $question)) {
       $output->writeln('<error>Cancelled</error>');
       return;
@@ -97,9 +98,16 @@ class EnvironmentRemove extends Command
           $environment['path']
         ));
         $output->writeln("<info>Files for environment $app_name:$environment_name has been deleted.</info>");
-
       } catch (IOExceptionInterface $e) {
         $output->writeln("<error>Unable to remove ".$e->getPath() . "</error>");
+      }
+
+      // Run docker-compose kill
+      $environmentFactory = new EnvironmentFactory($environment, $app);
+      // @TODO: Remove ~/.terra/environments/* folder.
+
+      if ($environmentFactory->destroy()) {
+        $output->writeln("<info>Killed the docker containers.</info>");
       }
 
       unset($app['environments'][$environment_name]);

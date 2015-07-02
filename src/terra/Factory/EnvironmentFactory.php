@@ -300,6 +300,28 @@ class EnvironmentFactory {
   }
 
   /**
+   * Destroy an environment.
+   * @return bool|string
+   */
+  public function destroy() {
+    $process = new Process('docker-compose kill', $this->getDockerComposePath());
+    $process->setTimeout(NULL);
+    $process->run(function ($type, $buffer) {
+      if (Process::ERR === $type) {
+        echo 'DOCKER > '.$buffer;
+      } else {
+        echo 'DOCKER > '.$buffer;
+      }
+    });
+    if (!$process->isSuccessful()) {
+      return FALSE;
+    }
+    else {
+      return $process->getOutput();
+    }
+  }
+
+  /**
    * Basically a wrapper for docker-compose scale
    */
   public function scale($scale) {
