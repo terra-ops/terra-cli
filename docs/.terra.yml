@@ -1,0 +1,15 @@
+# The relative path to your exposed web files.
+document_root: docroot
+
+
+
+
+# Specific settings for docker compose go here
+docker_compose:
+
+  # App services are docker compose images.
+  # They will be added as-is to the generated docker-compose.yml file,
+  # And attached automatically to the "app" container.
+  app_services:
+    storage:
+      image: mongo
