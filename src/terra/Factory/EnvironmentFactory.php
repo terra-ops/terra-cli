@@ -211,7 +211,8 @@ class EnvironmentFactory {
   }
 
   public function getDockerComposeArray() {
-    $path = $this->environment->path . '/' . $this->environment->document_root;
+    $source_root = $this->environment->path;
+    $document_root = $this->environment->path . '/' . $this->environment->document_root;
 
     $compose = array();
     $compose['load'] = array(
@@ -235,7 +236,7 @@ class EnvironmentFactory {
         'database',
       ),
       'volumes' => array(
-        "$path:/usr/share/nginx/html"
+        "$document_root:/usr/share/nginx/html"
       ),
       'expose' => array(
         "80/tcp",
@@ -261,7 +262,7 @@ class EnvironmentFactory {
         'database',
       ),
       'volumes' => array(
-        "$path:/var/www/html"
+        "$document_root:/var/www/html"
       ),
     );
 
@@ -274,7 +275,7 @@ class EnvironmentFactory {
         // Look for volume paths to change
         foreach ($info['volumes'] as &$volume) {
           $volume = strtr($volume, array(
-            '{APP_PATH}' => $path,
+            '{APP_PATH}' => $source_root,
           ));
         }
 

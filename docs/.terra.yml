@@ -13,3 +13,10 @@ docker_compose:
   app_services:
     storage:
       image: mongo
+
+    # You can map a folder in an app_services container to a folder in your app by using {APP_PATH}
+    solr:
+      image: terra/solr
+      volumes:
+        - '{APP_PATH}/solr-config:/opt/solr/server/solr/core/conf'
+
