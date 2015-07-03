@@ -102,7 +102,7 @@ Director is now deprecated.
 
 There is a striking similarity to this project and Kalabox.   
 
-We love Kalabox and the Kalamuna team, but there are a fey key differences:
+We love Kalabox and the Kalamuna team, but there are a few key differences:
 
 1. Terra is designed for all things: local development, testing, and production.
 2. Terra is written in PHP & Symfony: Kalabox is written in Node JS
