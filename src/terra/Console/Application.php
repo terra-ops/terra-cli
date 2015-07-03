@@ -52,6 +52,7 @@ class Application extends BaseApplication {
     $commands[] = new Command\Environment\EnvironmentScale();
     $commands[] = new Command\Environment\EnvironmentStatus();
     $commands[] = new Command\Environment\EnvironmentProxyEnable();
+    $commands[] = new Command\Environment\EnvironmentTest();
     $commands[] = new Command\Status();
     return $commands;
   }
