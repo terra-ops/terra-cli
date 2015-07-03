@@ -211,8 +211,11 @@ class EnvironmentFactory {
   }
 
   public function getDockerComposeArray() {
+
+    $this->getConfig();
+
     $source_root = $this->environment->path;
-    $document_root = $this->environment->path . '/' . $this->environment->document_root;
+    $document_root = $this->environment->path . '/' . $this->config['document_root'];
 
     $compose = array();
     $compose['load'] = array(
