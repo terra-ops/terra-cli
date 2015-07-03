@@ -282,7 +282,6 @@ class EnvironmentFactory {
       }
     }
 
-print_r($compose);
     return $compose;
 
   }
