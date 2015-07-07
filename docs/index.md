@@ -8,6 +8,14 @@
 
 [Issues](https://github.com/terra-ops/terra-app/issues) and [Story Boarding](https://huboard.com/terra-ops/terra-app/)
 
+## Example Project: 18F Agile BPA Prototype
+
+NuCivic submitted a working prototype for the 18F Agile BPA.
+
+We used Terra as the recommended method for recreating the site on another server.
+
+See the [instructions](example-setup.md) on setting up http://openfda.nucivic.build on another server using Terra. 
+
 ## Origin
 
 Terra is the spiritual successor to [Aegir](http://aegirproject.org) & [DevShop](http://devshop.readthedocs.org), the Drupal site hosting platforms. It came from the idea that we could benefit from starting over. 
