@@ -94,7 +94,7 @@ class EnvironmentEnable extends Command
     $this->getApplication()->getTerra()->getConfig()->add('apps', $app_name, $app);
 
     if ($this->getApplication()->getTerra()->getConfig()->save()) {
-      $output->writeln('<info>Environment enabled!</info>  Available at http://' . $environment_factory->getUrl());
+      $output->writeln('<info>Environment enabled!</info>  Available at http://' . $environment_factory->getUrl() . ' and ' . $app['environments'][$environment_name]['url']);
     }
     else {
       $output->writeln('<error>Environment info not saved.</error>');
