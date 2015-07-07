@@ -217,6 +217,13 @@ class EnvironmentFactory {
     $source_root = $this->environment->path;
     $document_root = $this->environment->path . '/' . $this->config['document_root'];
 
+    // Look for this users SSH public key
+    // @TODO: Move ssh_authorized_keys to terra config.  Ask the user on first run.
+    $ssh_key_path = $_SERVER['HOME'] . "/.ssh/id_rsa.pub";
+    if (file_exists($ssh_key_path)) {
+      $ssh_authorized_keys = file_get_contents($ssh_key_path);
+    }
+
     $compose = array();
     $compose['load'] = array(
       'image' => 'tutum/haproxy',
@@ -228,6 +235,9 @@ class EnvironmentFactory {
       ),
       'expose' => array(
         "80/tcp",
+      ),
+      'ports' => array(
+        ":80",
       ),
       'restart' => 'always',
     );
@@ -264,8 +274,14 @@ class EnvironmentFactory {
       'links' => array(
         'database',
       ),
+      'ports' => array(
+        ":22",
+      ),
       'volumes' => array(
         "$document_root:/var/www/html"
+      ),
+      'environment' => array(
+        'AUTHORIZED_KEYS' => $ssh_authorized_keys,
       ),
     );
 
