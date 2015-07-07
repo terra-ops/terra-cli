@@ -281,7 +281,8 @@ class EnvironmentFactory {
         ":22",
       ),
       'volumes' => array(
-        "$document_root:/var/www/html"
+        "$document_root:/var/www/html",
+        "$source_root:/source",
       ),
       'environment' => array(
         'AUTHORIZED_KEYS' => $ssh_authorized_keys,
