@@ -4,6 +4,7 @@ namespace terra\Factory;
 
 use GitWrapper\GitWrapper;
 use GitWrapper\GitWorkingCopy;
+use Symfony\Component\Filesystem\Exception\IOException;
 use TQ\Git\Repository\Repository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
@@ -374,6 +375,10 @@ class EnvironmentFactory {
     }
   }
 
+  /**
+   * Get's the exposed port of the load balancer container.
+   * @return bool|mixed
+   */
   public function getPort() {
 
     $process = new Process('docker-compose port load 80', $this->getDockerComposePath());
@@ -382,7 +387,23 @@ class EnvironmentFactory {
       return FALSE;
     }
     else {
-      return trim($process->getOutput());
+      return array_pop(explode(':', trim($process->getOutput())));
+    }
+  }
+
+  /**
+   * Get's the exposed port of the drush container.
+   * @return bool|mixed
+   */
+  public function getDrushPort() {
+
+    $process = new Process('docker-compose port drush 22', $this->getDockerComposePath());
+    $process->run();
+    if (!$process->isSuccessful()) {
+      return FALSE;
+    }
+    else {
+      return array_pop(explode(':', trim($process->getOutput())));
     }
   }
 
@@ -418,5 +439,35 @@ class EnvironmentFactory {
   }
 
 
-  // docker-compose scale app=1 && docker-compose kill load && docker-compose up -d load
+  /**
+   * Writes a local drush alias file.
+   */
+  public function writeDrushAlias() {
+    $drush_alias_file_path = "{$_SERVER['HOME']}/.drush/{$this->app->name}.aliases.drushrc.php";
+
+    $drush_alias_file = array();
+    $drush_alias_file[] = "<?php";
+
+    foreach ($this->app->environments as $environment_name => $environment) {
+
+      $factory = new EnvironmentFactory($environment, $this->app);
+      $drush_alias_file[] = "\$aliases['{$environment_name}'] = array(";
+      $drush_alias_file[] = "  'uri' => 'localhost:{$factory->getPort()}',";
+      $drush_alias_file[] = "  'root' => '/var/www/html',";
+      $drush_alias_file[] = "  'remote-host' => 'localhost',";
+      $drush_alias_file[] = "  'remote-user' => 'root',";
+      $drush_alias_file[] = "  'ssh-options' => '-p {$factory->getDrushPort()}',";
+      $drush_alias_file[] = ");";
+    }
+
+    $fs = new FileSystem;
+
+    try {
+      $fs->dumpFile($drush_alias_file_path, implode("\n", $drush_alias_file));
+      return TRUE;
+    }
+    catch (IOException $e) {
+      return FALSE;
+    }
+  }
 }

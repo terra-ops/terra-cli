@@ -88,7 +88,6 @@ class EnvironmentEnable extends Command
     $output->writeln($environment_factory->enable());
 
     $port = $environment_factory->getPort();
-    $port = array_pop(explode(':', $port));
 
     $app['environments'][$environment_name]['url'] = "http://localhost:$port";
     $this->getApplication()->getTerra()->getConfig()->add('apps', $app_name, $app);
@@ -98,6 +97,27 @@ class EnvironmentEnable extends Command
     }
     else {
       $output->writeln('<error>Environment info not saved.</error>');
+    }
+
+    // Offer to write drush alias.
+    $drush_alias_file_path = "{$_SERVER['HOME']}/.drush/{$app_name}.aliases.drushrc.php";
+
+    $helper = $this->getHelper('question');
+    $question = new ConfirmationQuestion("Write a drush alias file to <comment>$drush_alias_file_path</comment> ? ", false);
+    if (!$helper->ask($input, $output, $question)) {
+      return;
+    }
+    else {
+
+      // Attempt to write drush alias file.
+      if ($environment_factory->writeDrushAlias()) {
+        $output->writeln("<info>Drush alias file created at {$drush_alias_file_path}</info>");
+        $output->writeln("Use <info>drush @{$app_name}.{$environment_name}</info> to access the site.");
+      }
+      else {
+        $output->writeln('<error>Unable to save drush alias.</error>');
+      }
+
     }
   }
 }
