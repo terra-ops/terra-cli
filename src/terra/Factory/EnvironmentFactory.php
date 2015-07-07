@@ -54,7 +54,9 @@ class EnvironmentFactory {
       $wrapper = new GitWrapper();
       $working_copy = new GitWorkingCopy($wrapper, $path);
       $output = $working_copy->remote('-v');
-      if (strpos($output, $this->app->repo) !== FALSE) {
+
+      // if repo exists in the remotes already, this working copy is ok.
+      if (strpos(strtolower($output), strtolower($this->app->repo)) !== FALSE) {
         return TRUE;
       }
       else {
