@@ -30,7 +30,7 @@ class EnvironmentProxyEnable extends Command
 
     // Confirm removal of the app.
     $helper = $this->getHelper('question');
-    $question = new ConfirmationQuestion("Run $cmd ?", false);
+    $question = new ConfirmationQuestion("Run $cmd? [y/N] ", false);
     if (!$helper->ask($input, $output, $question)) {
       $output->writeln('<error>Cancelled</error>');
       return;

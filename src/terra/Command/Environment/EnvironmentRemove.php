@@ -80,7 +80,7 @@ class EnvironmentRemove extends Command
     $environment = $app['environments'][$environment_name];
 
     // Confirm removal of the app.
-    $question = new ConfirmationQuestion("Are you sure you would like to remove the environment <question>$app_name:$environment_name</question>?  All files at {$environment['path']} will be deleted, and all containers will be killed.", false);
+    $question = new ConfirmationQuestion("Are you sure you would like to remove the environment <question>$app_name:$environment_name</question>?  All files at {$environment['path']} will be deleted, and all containers will be killed. [y/N] ", false);
     if (!$helper->ask($input, $output, $question)) {
       $output->writeln('<error>Cancelled</error>');
       return;
