@@ -24,6 +24,6 @@
         "psr-4": { "terra\\": "src/terra/" }
     },
     "bin": [
-        "terra"
+        "bin/terra"
     ]
 }
