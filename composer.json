@@ -21,7 +21,7 @@
       "issues": "https://github.com/terra-ops/terra-app/issues"
     },
     "autoload": {
-        "psr-0": { "terra": "src/" }
+        "psr-4": { "terra\\": "src/terra/" }
     },
     "bin": [
         "terra"
