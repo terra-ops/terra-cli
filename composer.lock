@@ -4,26 +4,26 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "22159dda31822f0899eddec73cf26a60",
+    "hash": "f3d7a52674b99e6f3b3606b60fe276dd",
     "packages": [
         {
             "name": "cpliakas/git-wrapper",
-            "version": "1.4.1",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cpliakas/git-wrapper.git",
-                "reference": "2fc1d45c0a62ba251d4c0155030c6dc83e607a38"
+                "reference": "0f8c4a4dcdd6ca5b46330ab12be3a439eea16d46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cpliakas/git-wrapper/zipball/2fc1d45c0a62ba251d4c0155030c6dc83e607a38",
-                "reference": "2fc1d45c0a62ba251d4c0155030c6dc83e607a38",
+                "url": "https://api.github.com/repos/cpliakas/git-wrapper/zipball/0f8c4a4dcdd6ca5b46330ab12be3a439eea16d46",
+                "reference": "0f8c4a4dcdd6ca5b46330ab12be3a439eea16d46",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0",
-                "symfony/event-dispatcher": ">=2.3",
-                "symfony/process": ">=2.3"
+                "symfony/event-dispatcher": "~2.3|~3.0",
+                "symfony/process": "~2.3|~3.0"
             },
             "require-dev": {
                 "pdepend/pdepend": "~1.0",
@@ -59,7 +59,7 @@
             "keywords": [
                 "git"
             ],
-            "time": "2014-12-09 15:53:03"
+            "time": "2015-07-08 14:28:09"
         },
         {
             "name": "symfony/config",
