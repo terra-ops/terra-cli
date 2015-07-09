@@ -12,7 +12,7 @@ apt-get update
 apt-get install php5-cli git -y
 
 # Install Composer
-curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer4
+curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install Docker and Docker Compose
 wget -qO- https://get.docker.com/ | sh
