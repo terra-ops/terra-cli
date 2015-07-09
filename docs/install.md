@@ -1,6 +1,8 @@
 # Installation
 
-Currently there are a few steps to get terra working.  We want installation to be as fast and simple as possible, so we will be working on a single install script that sets up all of the prerequisites. 
+Currently there are a few steps to get terra working.  
+
+We want installation to be as fast and simple as possible, so we will be working on a single install script that sets up all of the prerequisites for any OS. 
 
 ## Prerequisites
 
@@ -15,6 +17,17 @@ Terra depends on the following tools.  The instructions below will guide you thr
 ## Ubuntu 
 
 Terra recommends Ubuntu Trusty (14.04 or higher).
+
+### Automatic Install
+
+We have created a `install.sh` script that runs you through this entire process
+
+To run the automatic installer, run the following commands as root:
+
+        wget https://raw.githubusercontent.com/terra-ops/terra-app/master/install.sh
+        bash install.sh
+
+### Manual Install
 
 Run all of the following commands as root, or with `sudo`.
 
