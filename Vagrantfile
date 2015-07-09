@@ -14,5 +14,9 @@ Vagrant.configure(2) do |config|
     # Add "vagrant" user to the docker group.
     t.vm.provision "shell",
       inline: "usermod -aG docker vagrant"
+
+    # Create an SSH public key for the vagrant user
+    t.vm.provision "shell",
+      inline: "su vagrant -c 'ssh-keygen -t rsa -N \"\" -f ~/.ssh/id_rsa' "
   end
 end

@@ -45,7 +45,7 @@ echo " Now run 'terra' to ensure that it installed correctly."
 echo ""
 echo " To connect to your environments with drush, you will need to generate an SSH key."
 echo " Run the following command as your_user:"
-echo " $ ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa.pub "
+echo " $ ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa"
 echo "==========================================================="
 echo " "
 
