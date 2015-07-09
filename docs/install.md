@@ -49,6 +49,7 @@ Run all of the following commands as root, or with `sudo`.
   
         curl -L https://github.com/docker/compose/releases/download/1.2.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
         chmod +x /usr/local/bin/docker-compose
+
 6. Install Drush:
 
   Drush is used to connect to your running drupal sites.  This step is not required.
@@ -70,6 +71,15 @@ Run all of the following commands as root, or with `sudo`.
         cd /usr/share/terra
         composer install
         ln -s /usr/share/terra/bin/terra /usr/local/bin/terra
+
+7. Generate an SSH key:
+
+  To connect to your drupal sites via drush, your terra user must have an SSH public key.
+  
+  To generate one:
+  
+         ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+  
 
 7. Switch back to your user and run `terra` to see if it works!
         
