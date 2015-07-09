@@ -1,6 +1,7 @@
 {
     "name": "terra/terra-app",
     "description": "DevOps for All",
+    "type": "project",
     "require": {
         "php": ">=5.5.9",
         "symfony/config": "~2.6",
