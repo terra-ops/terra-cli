@@ -85,7 +85,9 @@ class EnvironmentEnable extends Command
     $environment = $app['environments'][$environment_name];
 
     $environment_factory = new EnvironmentFactory($environment, $app);
-    $output->writeln($environment_factory->enable());
+    if(!$environment_factory->enable()) {
+      return; //If this command fails, do not continue
+    }
 
     $port = $environment_factory->getPort();
 
