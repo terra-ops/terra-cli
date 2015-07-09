@@ -17,6 +17,7 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
 # Install Docker and Docker Compose
 wget -qO- https://get.docker.com/ | sh
 curl -L https://github.com/docker/compose/releases/download/1.2.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
 
 # Install Terra Manually
 git clone https://github.com/terra-ops/terra-app.git /usr/share/terra
