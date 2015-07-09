@@ -76,9 +76,15 @@ Run all of the following commands as root, or with `sudo`.
 
 6. Install Terra:
 
-  Currently, the `composer global-install` method is not working. See https://github.com/terra-ops/terra-app/issues/25
+  Terra can be installed with `composer global require` however an extra step is 
+  needed to put composer's `bin` folder into your system path.
   
-  To install terra manually:
+  To install terra automatically, run the following as *your user* (not root):
+    
+        composer global require terra/terra-app:dev-master
+        echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> $HOME/.bashrc
+  
+  To install terra manually, run the following as *root*::
   
         git clone https://github.com/terra-ops/terra-app.git /usr/share/terra
         cd /usr/share/terra
@@ -120,9 +126,15 @@ Running docker in OSx requires a slightly different setup.
 
 6. Install Terra:
 
-  Currently, the `composer global-install` method is not working. See https://github.com/terra-ops/terra-app/issues/25
+  Terra can be installed with `composer global require` however an extra step is 
+  needed to put composer's `bin` folder into your system path.
   
-  To install terra manually:
+  To install terra automatically, run the following as *your user* (not root):
+    
+        composer global require terra/terra-app:dev-master
+        echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> $HOME/.bashrc
+  
+  To install terra manually, run the following as *root*::
   
         git clone https://github.com/terra-ops/terra-app.git /usr/share/terra
         cd /usr/share/terra
