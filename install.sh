@@ -19,6 +19,12 @@ wget -qO- https://get.docker.com/ | sh
 curl -L https://github.com/docker/compose/releases/download/1.2.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
+# Install drush
+git clone https://github.com/drush-ops/drush.git /usr/share/drush --branch=7.x
+cd /usr/share/drush
+composer install
+ln -s /usr/share/drush/drush /usr/local/bin/drush
+
 # Install Terra Manually
 git clone https://github.com/terra-ops/terra-app.git /usr/share/terra
 cd /usr/share/terra

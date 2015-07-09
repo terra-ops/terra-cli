@@ -49,6 +49,16 @@ Run all of the following commands as root, or with `sudo`.
   
         curl -L https://github.com/docker/compose/releases/download/1.2.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
         chmod +x /usr/local/bin/docker-compose
+6. Install Drush:
+
+  Drush is used to connect to your running drupal sites.  This step is not required.
+
+  From http://docs.drush.org/en/master/install/
+  
+        git clone https://github.com/drush-ops/drush.git /usr/share/drush --branch=7.x
+        cd /usr/share/drush
+        composer install
+        ln -s /usr/share/drush/drush /usr/local/bin/drush
 
 6. Install Terra:
 
