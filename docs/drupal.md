@@ -73,3 +73,9 @@ How to get a drupal site running on Terra:
   
   When you hit Submit, the installer should run, and you should get a Drupal site!
    
+Makefile Driven Development
+===========================
+
+Using Terra's build hooks, you can use makefile for your app.
+
+See the repo at https://github.com/jonpugh/drupal-terra for an example.
