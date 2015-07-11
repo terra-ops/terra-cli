@@ -11,6 +11,7 @@ use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Console\Input\ArrayInput;
 
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
@@ -49,10 +50,10 @@ class EnvironmentAdd extends Command
         '/'
       )
       ->addOption(
-        'init-environment',
+        'enable',
         '',
         InputArgument::OPTIONAL,
-        'Clone and initiate this environment.'
+        'Enable this environment immediately.'
       )
     ;
   }
@@ -124,6 +125,20 @@ class EnvironmentAdd extends Command
     }
     else {
       $output->writeln('<error>Unable to clone repository. Check app settings and try again.</error>');
+      return;
+    }
+
+    // Offer to enable the environment
+    $question = new ConfirmationQuestion("Enable this environment? [y\N] ", false);
+    if ( $input->getOption('enable') || $helper->ask($input, $output, $question)) {
+      // Run environment:add command.
+      $command = $this->getApplication()->find('environment:enable');
+      $arguments = array(
+        'app_name' => $this->app->name,
+        'environment_name' => $environment_name,
+      );
+      $input = new ArrayInput($arguments);
+      $command->run($input, $output);
     }
 
 
