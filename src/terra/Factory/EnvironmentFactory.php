@@ -4,6 +4,8 @@ namespace terra\Factory;
 
 use GitWrapper\GitWrapper;
 use GitWrapper\GitWorkingCopy;
+use GitWrapper\GitException;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Filesystem\Exception\IOException;
 use TQ\Git\Repository\Repository;
 use Symfony\Component\Filesystem\Filesystem;
@@ -53,15 +55,21 @@ class EnvironmentFactory {
     // Check if clone already exists at this path. If so we can safely skip.
     if (file_exists($path)) {
       $wrapper = new GitWrapper();
-      $working_copy = new GitWorkingCopy($wrapper, $path);
-      $output = $working_copy->remote('-v');
+
+      try {
+        $working_copy = new GitWorkingCopy($wrapper, $path);
+        $output = $working_copy->remote('-v');
+      }
+      catch (GitException $e) {
+        throw new \Exception('Path already exists.');
+      }
 
       // if repo exists in the remotes already, this working copy is ok.
       if (strpos(strtolower($output), strtolower($this->app->repo)) !== FALSE) {
         return TRUE;
       }
       else {
-        return FALSE;
+        throw new Exception('Git clone already exists at that path, but it is not for this app.');
       }
     }
 
