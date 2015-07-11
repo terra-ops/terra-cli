@@ -91,11 +91,14 @@ class EnvironmentEnable extends Command
       return;
     }
 
+    // Get new port, set new URL to environment object.
     $port = $environment_factory->getPort();
-
     $app['environments'][$environment_name]['url'] = "http://localhost:$port";
-    $this->getApplication()->getTerra()->getConfig()->add('apps', $app_name, $app);
 
+    // Save environment metadata.
+    $this->getApplication()->getTerra()->getConfig()->add('apps', array($app_name, 'environments', $environment_name), $app['environments'][$environment_name]);
+
+    // Save config to files.
     if ($this->getApplication()->getTerra()->getConfig()->save()) {
       $output->writeln('<info>Environment enabled!</info>  Available at http://' . $environment_factory->getUrl() . ' and ' . $app['environments'][$environment_name]['url']);
     }
