@@ -6,6 +6,7 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 
 /**
  * Class Command
@@ -13,7 +14,8 @@ use Symfony\Component\Console\Question\Question;
  */
 class Command extends \Symfony\Component\Console\Command\Command {
 
-  private $app;
+  protected $app;
+  protected $environment;
 
   /**
    * Helper to ask a question only if a default argument is not present.
@@ -48,5 +50,69 @@ class Command extends \Symfony\Component\Console\Command\Command {
     }
 
     return $value;
+  }
+
+  /**
+   * Helper to ask the user what app they want to work with.
+   */
+  public function getApp(InputInterface $input, OutputInterface $output) {
+
+    // If there are no apps, end command.
+    if (count($this->getApplication()->getTerra()->getConfig()->get('apps')) == 0) {
+      $output->writeln("<comment>There are no apps to remove!</comment>");
+      $output->writeln("Use the command <info>terra app:add</info> to add your first app.");
+      exit;
+    }
+
+    $helper = $this->getHelper('question');
+    $app_name = $input->getArgument('app_name');
+
+    // If no name specified provide options
+    if (empty($app_name)) {
+      $question = new ChoiceQuestion(
+        'Which app? ',
+        array_keys($this->getApplication()->getTerra()->getConfig()->get('apps')),
+        NULL
+      );
+      $app_name = $helper->ask($input, $output, $question);
+    }
+
+    // Set the app for this command.
+    $this->app = $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name);
+  }
+
+  /**
+   * Helper to ask the user what app they want to work with.
+   */
+  public function getEnvironment(InputInterface $input, OutputInterface $output) {
+
+    // If no app...
+    if (empty($this->app)) {
+      throw new \Exception('App not defined. Call Command::getApp() first.');
+    }
+
+    // If no environments:
+    if (count(($this->app['environments'])) == 0) {
+      $output->writeln("<comment>There are no environments for the app {$this->app['name']}!</comment>");
+      $output->writeln("Use the command <info>terra environment:add</info> to add your first environment.");
+      return;
+    }
+
+    $helper = $this->getHelper('question');
+    $environment_name = $input->getArgument('environment_name');
+
+    // If no environment name specified provide options
+    if (empty($environment_name)) {
+      $question = new ChoiceQuestion(
+        'Which environment? ',
+        array_keys($this->app['environments']),
+        NULL
+      );
+      $environment_name = $helper->ask($input, $output, $question);
+    }
+
+    // Set the environment for this command.
+    $this->environment = $this->app['environments'][$environment_name];
+
   }
 }
