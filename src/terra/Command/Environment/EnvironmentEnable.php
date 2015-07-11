@@ -103,7 +103,7 @@ class EnvironmentEnable extends Command
     $drush_alias_file_path = "{$_SERVER['HOME']}/.drush/{$app_name}.aliases.drushrc.php";
 
     $helper = $this->getHelper('question');
-    $question = new ConfirmationQuestion("Write a drush alias file to <comment>$drush_alias_file_path</comment> ? ", false);
+    $question = new ConfirmationQuestion("Write a drush alias file to <comment>$drush_alias_file_path</comment>? [y/N] ", false);
     if (!$helper->ask($input, $output, $question)) {
       return;
     }

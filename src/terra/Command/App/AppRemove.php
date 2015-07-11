@@ -49,7 +49,7 @@ class AppRemove extends Command
     }
 
     // Confirm removal of the app.
-    $question = new ConfirmationQuestion("Are you sure you would like to remove the app <question>$name</question>? ", false);
+    $question = new ConfirmationQuestion("Are you sure you would like to remove the app <question>$name</question>? [y/N] ", false);
     if (!$helper->ask($input, $output, $question)) {
       $output->writeln('<error>Cancelled</error>');
       return;
