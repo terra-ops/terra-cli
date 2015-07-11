@@ -116,7 +116,7 @@ class EnvironmentAdd extends Command
 
       // Load config from file.
       $environmentFactory->getConfig();
-      $environment['document_root'] = $environmentFactory->config['document_root'];
+      $environment['document_root'] = isset($environmentFactory->config['document_root'])? $environmentFactory->config['document_root']: '';
 
       // Save current branch
       $environment['version'] = $environmentFactory->getRepo()->getCurrentBranch();
