@@ -15,6 +15,11 @@ NuCivic submitted a working prototype for the 18F Agile BPA.
 We used Terra as the recommended method for recreating the site on another server.
 
 See the [instructions](example-setup.md) on setting up http://openfda.nucivic.build on another server using Terra. 
+## Terra Server
+
+The "Terra Server" project serves as a web based interface for Terra. It is built on Drupal 8.
+
+See the [terra-server](https://github.com/terra-ops/terra-server/blob/master/README.md) GitHub repo for more information.
 
 ## Origin
 
