@@ -286,6 +286,7 @@ class EnvironmentFactory {
         'MYSQL_USER' => 'drupal',
         'MYSQL_PASSWORD' => 'drupal',
       ),
+      'restart' => 'always',
     );
     $compose['drush'] = array(
       'image' => 'terra/drush',
@@ -304,6 +305,7 @@ class EnvironmentFactory {
       'environment' => array(
         'AUTHORIZED_KEYS' => $ssh_authorized_keys,
       ),
+      'restart' => 'always',
     );
 
     // Add "app_services": Additional containers linked to the app container.
