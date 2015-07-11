@@ -45,13 +45,11 @@ class Application extends BaseApplication {
 
     $commands[] = new Command\App\AppAdd();
     $commands[] = new Command\App\AppRemove();
-    $commands[] = new Command\App\AppStatus();
     $commands[] = new Command\Environment\EnvironmentAdd();
     $commands[] = new Command\Environment\EnvironmentRemove();
     $commands[] = new Command\Environment\EnvironmentEnable();
     $commands[] = new Command\Environment\EnvironmentDeploy();
     $commands[] = new Command\Environment\EnvironmentScale();
-    $commands[] = new Command\Environment\EnvironmentStatus();
     $commands[] = new Command\Environment\EnvironmentProxyEnable();
     $commands[] = new Command\Environment\EnvironmentTest();
     $commands[] = new Command\Status();
