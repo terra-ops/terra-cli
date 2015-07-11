@@ -2,7 +2,7 @@
 
 namespace terra\Command\Environment;
 
-use Symfony\Component\Console\Command\Command;
+use terra\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -28,12 +28,12 @@ class EnvironmentAdd extends Command
       ->setName('environment:add')
       ->setDescription('Adds a new environment.')
       ->addArgument(
-        'app',
+        'app_name',
         InputArgument::OPTIONAL,
         'The app you would like to add an environment for.'
       )
       ->addArgument(
-        'name',
+        'environment_name',
         InputArgument::OPTIONAL,
         'The name of the environment.'
       )
@@ -59,33 +59,28 @@ class EnvironmentAdd extends Command
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    // App
+    // Ask for an app.
     $helper = $this->getHelper('question');
-    $app_name = $input->getArgument('app');
+    $this->getApp($input, $output);
 
-    if (empty($app_name)) {
-      $question = new ChoiceQuestion(
-        'For which app? ',
-        array_keys($this->getApplication()->getTerra()->getConfig()->get('apps')),
-        0
-      );
-      $app_name = $helper->ask($input, $output, $question);
-    }
-    $app = $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name);
-
-    // Environment Name
-    $environment_name = $input->getArgument('name');
-    while (empty($environment_name)) {
-      $question = new Question('Environment Name: ', '');
+    // Ask for environment name
+    $environment_name = $input->getArgument('environment_name');
+    while (empty($environment_name) || isset($this->app->environments[$environment_name])) {
+      $question = new Question('Environment name? ');
       $environment_name = $helper->ask($input, $output, $question);
+
+      // Look for environment with this name
+      if (isset($this->app->environments[$environment_name])) {
+        $output->writeln("<error> ERROR </error> Environment <comment>{$environment_name}</comment> already exists in app <comment>{$this->app->name}</comment>");
+      }
     }
 
     // Path
     $path = $input->getArgument('path');
     if (empty($path)) {
       $config_path = $this->getApplication()->getTerra()->getConfig()->get('apps_basepath');
-      $default_path = realpath($config_path) . '/' . $app_name . '/' . $environment_name;
-      $question = new Question("Path: ($default_path) ", '');
+      $default_path = realpath($config_path) . '/' . $this->app->name . '/' . $environment_name;
+      $question = new Question("Path: ($default_path) ", $default_path);
       $path = $helper->ask($input, $output, $question);
       if (empty($path)) {
         $path = $default_path;
@@ -109,7 +104,7 @@ class EnvironmentAdd extends Command
 
     // Prepare the environment factory.
     // Clone the apps source code to the desired path.
-    $environmentFactory = new EnvironmentFactory($environment, $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name));
+    $environmentFactory = new EnvironmentFactory($environment, $this->app);
 
     // Save environment to config.
     if ($environmentFactory->init($path)) {
@@ -122,7 +117,7 @@ class EnvironmentAdd extends Command
       $environment['version'] = $environmentFactory->getRepo()->getCurrentBranch();
 
       // Save to registry.
-      $this->getApplication()->getTerra()->getConfig()->add('apps', array($app_name, 'environments', $environment_name), $environment);
+      $this->getApplication()->getTerra()->getConfig()->add('apps', array($this->app->name, 'environments', $environment_name), $environment);
       $this->getApplication()->getTerra()->getConfig()->save();
 
       $output->writeln('<info>Environment saved to registry.</info>');
