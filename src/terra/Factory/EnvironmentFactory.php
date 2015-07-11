@@ -229,7 +229,13 @@ class EnvironmentFactory {
     $this->getConfig();
 
     $source_root = $this->environment->path;
-    $document_root = $this->environment->path . '/' . $this->config['document_root'];
+
+    if (!empty($this->config['document_root'])) {
+      $document_root = $this->environment->path . '/' . $this->config['document_root'];
+    }
+    else {
+      $document_root = $source_root;
+    }
 
     // Look for this users SSH public key
     // @TODO: Move ssh_authorized_keys to terra config.  Ask the user on first run.
