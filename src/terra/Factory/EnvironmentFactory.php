@@ -323,6 +323,13 @@ class EnvironmentFactory {
       }
     }
 
+    // Add "overrides" to docker-compose.
+    if (isset($this->config['docker_compose']['overrides']) && is_array($this->config['docker_compose']['overrides'])) {
+      foreach ($this->config['docker_compose']['overrides'] as $service => $info) {
+        $compose[$service] = array_merge_recursive($compose[$service], $info);
+      }
+    }
+
     return $compose;
 
   }
