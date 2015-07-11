@@ -78,7 +78,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
     }
 
     // Set the app for this command.
-    $this->app = $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name);
+    $this->app = (object) $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name);
   }
 
   /**
@@ -92,8 +92,8 @@ class Command extends \Symfony\Component\Console\Command\Command {
     }
 
     // If no environments:
-    if (count(($this->app['environments'])) == 0) {
-      $output->writeln("<comment>There are no environments for the app {$this->app['name']}!</comment>");
+    if (count(($this->app->environments)) == 0) {
+      $output->writeln("<comment>There are no environments for the app {$this->app->name}!</comment>");
       $output->writeln("Use the command <info>terra environment:add</info> to add your first environment.");
       return;
     }
@@ -105,14 +105,14 @@ class Command extends \Symfony\Component\Console\Command\Command {
     if (empty($environment_name)) {
       $question = new ChoiceQuestion(
         'Which environment? ',
-        array_keys($this->app['environments']),
+        array_keys($this->app->environments),
         NULL
       );
       $environment_name = $helper->ask($input, $output, $question);
     }
 
     // Set the environment for this command.
-    $this->environment = $this->app['environments'][$environment_name];
+    $this->environment = (object) $this->app->environments[$environment_name];
 
   }
 }
