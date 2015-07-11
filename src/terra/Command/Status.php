@@ -101,7 +101,9 @@ class Status extends Command {
     }
 
     $helper = $this->getHelper('question');
-    $app_name = $input->getArgument('app_name');
+    $app_name = strtr($input->getArgument('app_name'), array(
+      '-' => '_',
+    ));
 
     $app = $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name);
 
