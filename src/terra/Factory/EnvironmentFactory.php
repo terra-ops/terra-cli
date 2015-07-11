@@ -188,24 +188,27 @@ class EnvironmentFactory {
     // Reload config so any changes get picked up.
     $this->reloadConfig();
 
-    // Run the deploy hooks
-    chdir($this->getSourcePath());
-    $process = new Process($this->config['hooks']['deploy']);
-    $process->run(function ($type, $buffer) {
-      if (Process::ERR === $type) {
-        // Error
-        echo $buffer;
-      } else {
-        // OK
-        echo $buffer;
-      }
-    });
+    // Run the deploy hooks, if there are any.
+    if (isset($this->config['hooks']['deploy']) && !empty($this->config['hooks']['deploy'])) {
 
-    // Save new branch to yml
-    $this->director->config['apps'][$this->app]['environments'][$this->name]['git_ref'] =
-      $this->getRepo()->getCurrentBranch();
-    $this->director->saveData();
+      chdir($this->getSourcePath());
+      $process = new Process($this->config['hooks']['deploy']);
+      $process->run(function ($type, $buffer) {
+        if (Process::ERR === $type) {
+          // Error
+          echo $buffer;
+        }
+        else {
+          // OK
+          echo $buffer;
+        }
+      });
+    }
 
+    // @TODO: Save the environment
+    // @TODO: Create EnvironmentFactory->save();
+    // Returning the branch for now. The command is saving the info.
+    return $this->getRepo()->getCurrentBranch();
 
   }
 
