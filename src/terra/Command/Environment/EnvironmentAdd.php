@@ -75,7 +75,7 @@ class EnvironmentAdd extends Command
 
     // Environment Name
     $environment_name = $input->getArgument('name');
-    if (empty($environment_name)) {
+    while (empty($environment_name)) {
       $question = new Question('Environment Name: ', '');
       $environment_name = $helper->ask($input, $output, $question);
     }
