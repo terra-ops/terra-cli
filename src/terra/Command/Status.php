@@ -103,16 +103,6 @@ class Status extends Command {
     $helper = $this->getHelper('question');
     $app_name = $input->getArgument('app_name');
 
-    // If no name specified provide options
-    if (empty($app_name)) {
-      $question = new ChoiceQuestion(
-        'Which app? ',
-        array_keys($this->getApplication()->getTerra()->getConfig()->get('apps')),
-        NULL
-      );
-      $app_name = $helper->ask($input, $output, $question);
-    }
-
     $app = $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name);
 
     if (empty($app)) {
