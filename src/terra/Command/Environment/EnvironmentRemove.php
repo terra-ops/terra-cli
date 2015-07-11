@@ -102,13 +102,9 @@ class EnvironmentRemove extends Command
         $output->writeln("<error>Unable to remove ".$e->getPath() . "</error>");
       }
 
-      // Run docker-compose kill
+      // Destroy the environment
       $environmentFactory = new EnvironmentFactory($environment, $app);
-      // @TODO: Remove ~/.terra/environments/* folder.
-
-      if ($environmentFactory->destroy()) {
-        $output->writeln("<info>Killed the docker containers.</info>");
-      }
+      $environmentFactory->destroy();
 
       unset($app['environments'][$environment_name]);
       $this->getApplication()->getTerra()->getConfig()->add('apps', $app_name, $app);

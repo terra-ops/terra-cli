@@ -361,6 +361,10 @@ class EnvironmentFactory {
    * @return bool|string
    */
   public function destroy() {
+
+    // Run docker-compose kill
+    echo "\n";
+    echo "Running 'docker-compose kill' in " . $this->getDockerComposePath() . "\n";
     $process = new Process('docker-compose kill', $this->getDockerComposePath());
     $process->setTimeout(NULL);
     $process->run(function ($type, $buffer) {
@@ -370,13 +374,22 @@ class EnvironmentFactory {
         echo 'DOCKER > '.$buffer;
       }
     });
-    if (!$process->isSuccessful()) {
-      return FALSE;
-    }
-    else {
-      return $process->getOutput();
-    }
+
+    // Run docker-compose rm
+    echo "\n";
+    echo "Running 'docker-compose rm -f' in " . $this->getDockerComposePath() . "\n";
+    $process = new Process('docker-compose rm -f', $this->getDockerComposePath());
+    $process->setTimeout(NULL);
+    $process->run(function ($type, $buffer) {
+      if (Process::ERR === $type) {
+        echo 'DOCKER > '.$buffer;
+      } else {
+        echo 'DOCKER > '.$buffer;
+      }
+    });
+    // @TODO: Remove ~/.terra/environments/* folder.
   }
+
 
   /**
    * Basically a wrapper for docker-compose scale
