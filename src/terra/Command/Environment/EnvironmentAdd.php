@@ -85,7 +85,7 @@ class EnvironmentAdd extends Command
     if (empty($path)) {
       $config_path = $this->getApplication()->getTerra()->getConfig()->get('apps_basepath');
       $default_path = realpath($config_path) . '/' . $app_name . '/' . $environment_name;
-      $question = new Question("Path: ($default_path)", '');
+      $question = new Question("Path: ($default_path) ", '');
       $path = $helper->ask($input, $output, $question);
       if (empty($path)) {
         $path = $default_path;
