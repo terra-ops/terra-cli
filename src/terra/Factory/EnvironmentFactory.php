@@ -340,6 +340,13 @@ class EnvironmentFactory {
 
   }
 
+  /**
+   * Turns on an environment.
+   *
+   * In this class, we use `docker-compose up`.
+   *
+   * @return bool
+   */
   public function enable() {
     if ($this->writeConfig() == FALSE) {
       return FALSE;
