@@ -271,6 +271,10 @@ class EnvironmentFactory {
       'volumes' => array(
         "$document_root:/usr/share/nginx/html"
       ),
+      'environment' => array(
+        'HOST_UID' => posix_getuid(),
+        'HOST_GID' => posix_getgid(),
+      ),
       'expose' => array(
         "80/tcp",
       ),
