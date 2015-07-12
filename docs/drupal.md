@@ -8,6 +8,8 @@ The app located at https://github.com/jonpugh/drupal-terra will be installed aut
 See https://github.com/jonpugh/drupal-terra/blob/master/.terra.yml for an example on how to get your app to 
 install automatically.
 
+You can watch this app have an environment created here: https://www.youtube.com/watch?v=nNvTiEUXqFE
+
 Setting up a Drupal Site
 ========================
 
