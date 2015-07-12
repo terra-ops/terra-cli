@@ -1,3 +1,13 @@
+Enabling Automatic Installation
+===============================
+
+To get a drupal environment to fully instantiate and enable, you must add to .terra.yml's hooks.
+
+The app located at https://github.com/jonpugh/drupal-terra will be installed automatically upon environment enabling.
+
+See https://github.com/jonpugh/drupal-terra/blob/master/.terra.yml for an example on how to get your app to 
+install automatically.
+
 Setting up a Drupal Site
 ========================
 
