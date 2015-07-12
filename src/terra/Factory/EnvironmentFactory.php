@@ -220,10 +220,25 @@ class EnvironmentFactory {
 
   }
 
+  /**
+   * Get's the path to this environments docker-compose file.
+   *
+   * This is just a temporary solution. We should probably just make a generic
+   * "environment_config_folder" that decides where to put any generated config
+   * for any environment using any provider.
+   *
+   * @return string
+   */
   public function getDockerComposePath() {
     return getenv("HOME") . '/.terra/environments/' . $this->app->name . '/' . $this->app->name . '-' . $this->environment->name;
   }
 
+  /**
+   * Generates an array that will be converted to the `docker-compose.yml` file
+   * for this environment.
+   *
+   * @return array
+   */
   public function getDockerComposeArray() {
 
     $this->getConfig();
