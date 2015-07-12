@@ -123,6 +123,13 @@ class EnvironmentEnable extends Command
 
     $environment_factory->getConfig();
     if (!empty($environment_factory->config['hooks']['enable'])) {
+
+      // Output what we are running
+      $formatter = $this->getHelper('formatter');
+      $errorMessages = array($environment_factory->config['hooks']['enable']);
+      $formattedBlock = $formatter->formatBlock($errorMessages, 'question');
+      $output->writeln($formattedBlock);
+
       chdir($environment_factory->getSourcePath());
       $process = new Process($environment_factory->config['hooks']['enable']);
       $process->run(function ($type, $buffer) {
