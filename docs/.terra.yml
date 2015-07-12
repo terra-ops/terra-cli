@@ -1,8 +1,29 @@
 # The relative path to your exposed web files.
 document_root: docroot
 
+# Hooks are commands that are triggered on certain events
+hooks:
 
+    # On environment:add
+    build: |
+      drush make drupal.make www --prepare-install -y
+      echo "\$databases['default']['default'] = array(
+        'driver' => 'mysql',
+        'database' => 'drupal',
+        'username' => 'drupal',
+        'password' => 'drupal',
+        'host' => 'database',
+      );" >> www/sites/default/settings.php
 
+    # On environment:enable
+    enable: |
+      drush {{alias}} site-install -y
+      drush {{alias}} uli
+
+    # On environment:deploy
+    deploy: |
+      drush {{alias}} updb -y
+      drush {{}} cc all
 
 # Specific settings for docker compose go here
 docker_compose:
