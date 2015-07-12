@@ -106,24 +106,15 @@ class EnvironmentEnable extends Command
       $output->writeln('<error>Environment info not saved.</error>');
     }
 
-    // Offer to write drush alias.
+    // Write drush alias.
     $drush_alias_file_path = "{$_SERVER['HOME']}/.drush/{$app_name}.aliases.drushrc.php";
-
-    $helper = $this->getHelper('question');
-    $question = new ConfirmationQuestion("Write a drush alias file to <comment>$drush_alias_file_path</comment>? [y/N] ", false);
-    if (!$helper->ask($input, $output, $question)) {
-      return;
+    if ($environment_factory->writeDrushAlias()) {
+      $output->writeln("<info>Drush alias file created at {$drush_alias_file_path}</info>");
+      $output->writeln("Wrote drush alias file to <comment>$drush_alias_file_path</comment>");
+      $output->writeln("Use <info>drush @{$app_name}.{$environment_name}</info> to access the site.");
     }
     else {
-
-      // Attempt to write drush alias file.
-      if ($environment_factory->writeDrushAlias()) {
-        $output->writeln("<info>Drush alias file created at {$drush_alias_file_path}</info>");
-        $output->writeln("Use <info>drush @{$app_name}.{$environment_name}</info> to access the site.");
-      }
-      else {
-        $output->writeln('<error>Unable to save drush alias.</error>');
-      }
+      $output->writeln('<error>Unable to save drush alias.</error>');
     }
 
     // Run the enable hooks
