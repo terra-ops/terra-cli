@@ -10,6 +10,8 @@ install automatically.
 
 You can watch this app have an environment created here: https://www.youtube.com/watch?v=nNvTiEUXqFE
 
+![terra environment:add](images/terra-environment-enable-web.gif)
+
 Setting up a Drupal Site
 ========================
 
