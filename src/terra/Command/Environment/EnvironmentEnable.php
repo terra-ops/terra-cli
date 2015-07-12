@@ -124,7 +124,23 @@ class EnvironmentEnable extends Command
       else {
         $output->writeln('<error>Unable to save drush alias.</error>');
       }
+    }
 
+    // Run the enable hooks
+    $output->writeln('');
+    $output->writeln('Running <comment>ENABLE</comment> app hook...');
+
+    $environment_factory->getConfig();
+    if (!empty($environment_factory->config['hooks']['enable'])) {
+      chdir($environment_factory->getSourcePath());
+      $process = new Process($environment_factory->config['hooks']['enable']);
+      $process->run(function ($type, $buffer) {
+        if (Process::ERR === $type) {
+          echo $buffer;
+        } else {
+          echo $buffer;
+        }
+      });
     }
   }
 }
