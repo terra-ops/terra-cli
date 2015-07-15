@@ -374,7 +374,7 @@ class EnvironmentFactory
      */
     public function enable()
     {
-        if ($this->writeConfig() == false) {
+        if ($this->writeConfig() === false) {
             return false;
         }
 
