@@ -46,8 +46,6 @@ class EnvironmentFactory
         $this->environment = (object) $environment;
         $this->app = (object) $app;
         $this->name = $this->environment->name;
-
-  //    $this->loadConfig();
     }
 
     /**
