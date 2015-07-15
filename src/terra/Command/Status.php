@@ -97,7 +97,6 @@ class Status extends Command
             return;
         }
 
-        $helper = $this->getHelper('question');
         $app_name = strtr($input->getArgument('app_name'), array(
         '-' => '_',
         ));
@@ -160,7 +159,6 @@ class Status extends Command
             return;
         }
 
-        $helper = $this->getHelper('question');
         $app_name = $input->getArgument('app_name');
         $environment_name = $input->getArgument('environment_name');
 

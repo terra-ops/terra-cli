@@ -12,6 +12,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 /**
  * Service for an App.
@@ -45,8 +46,6 @@ class EnvironmentFactory
         $this->environment = (object) $environment;
         $this->app = (object) $app;
         $this->name = $this->environment->name;
-
-  //    $this->loadConfig();
     }
 
     /**
@@ -375,7 +374,7 @@ class EnvironmentFactory
      */
     public function enable()
     {
-        if ($this->writeConfig() == false) {
+        if ($this->writeConfig() === false) {
             return false;
         }
 

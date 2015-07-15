@@ -109,7 +109,6 @@ class EnvironmentScale extends Command
 
         $environment_factory->scale($scale);
 
-        $new_scale = $environment_factory->getScale();
         $output->writeln("Environment <comment>{$app_name} {$environment_name}</comment> scaled to <info>{$scale}</info>");
     }
 }

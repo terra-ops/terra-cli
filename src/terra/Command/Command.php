@@ -6,11 +6,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Command\Command as CommandBase;
 
 /**
  * Class Command.
  */
-class Command extends \Symfony\Component\Console\Command\Command
+class Command extends CommandBase
 {
     protected $app;
     protected $environment;
@@ -55,9 +56,7 @@ class Command extends \Symfony\Component\Console\Command\Command
 
         // If there are no apps, end command.
         if (count($this->getApplication()->getTerra()->getConfig()->get('apps')) == 0) {
-            $output->writeln('<comment>There are no apps to remove!</comment>');
-            $output->writeln('Use the command <info>terra app:add</info> to add your first app.');
-            exit;
+            throw new \Exception('There are no apps to remove!. Use the command <info>terra app:add</info> to add your first app.');
         }
 
         $helper = $this->getHelper('question');
