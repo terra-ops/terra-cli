@@ -111,8 +111,6 @@ class EnvironmentTest extends Command
 
             $env['BEHAT_PARAMS'] = json_encode($behat_vars);
 
-            print_r($env);
-
             $process = new Process($hook, $environment_factory->getSourcePath(), $env);
             $process->run(function ($type, $buffer) {
                 if (Process::ERR === $type) {
