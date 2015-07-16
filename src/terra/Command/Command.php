@@ -49,6 +49,18 @@ class Command extends CommandBase
     }
 
     /**
+     * Gets the application instance for this command.
+     *
+     * @return \terra\Console\Application
+     *
+     * @api
+     */
+    public function getApplication()
+    {
+        return parent::getApplication();
+    }
+
+    /**
      * Helper to ask the user what app they want to work with.
      */
     public function getApp(InputInterface $input, OutputInterface $output)
