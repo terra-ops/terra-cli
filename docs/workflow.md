@@ -7,6 +7,16 @@ This file should be updated as things change.
 
 Hopefully this helps developers that will want to help contribute to Terra.
 
+## Terra's environment
+
+This is about the "host", the system running terra, docker, etc.
+
+The user running terra commands (which we will call the `terra` user, does not need sudo access and should not run with sudo.
+
+As long as that user is in the `docker` group, it can run `docker` without sudo.
+
+The user running terra commands should also be able to run `drush`.
+
 ### `terra app:add`
 
 This command writes your "apps" (a website's source code) to the terra config file at `~/.terra/terra`.  
@@ -20,7 +30,7 @@ Nothing else is done at this point. You must create an environment to run your a
 This command does a few things:
 
 1. Clones the app repo into the chosen path. Defaults to `~/Apps/$APP/$ENVIRONMENT`.
-2. Loads up a `.terra.yml` file if there is one.
+2. Loads up a `.terra.yml` file if there is one. If there are "build" hooks, it runs those.  You cannot use an $alias because the site hasn't been built yet, but you can run things like `drush make` or `composer install`
 3. Generates a `docker-compose.yml` file based on information from terra and the apps '.terra.yml' file, for example:
   - uses `document_root` from .terra.yml to construct the path to the web 
   - uses 'docker_compose' to specifiy additions or modifications to the generated docker-compose file.
@@ -33,7 +43,7 @@ This command does a few things:
 
 Then, it asks if you wish to enable it.
 
-5. Runs `docker-compose up` in the `~/.terra/environments/$APP/$APP_$ENVIRONMENT/` folder.
+5. The `EnvironmentFactory->enable()` method runs `docker-compose up` in the `~/.terra/environments/$APP/$APP_$ENVIRONMENT/` folder.
 6. The first time it will pull the images from docker hub. This takes a few minutes.
 7. Then you should see ...
 
@@ -51,3 +61,9 @@ Running ENABLE app hook...
  drush @drupal.anonymous site-install -y
 drush @drupal.anonymous uli
 ```
+
+See `Running ENABLE app hook...`? That is from .terra.yml of the app itself:
+See https://github.com/jonpugh/drupal-terra/blob/master/.terra.yml
+
+The `EnvironmentFactory->enable()` method loads the "app config" from the source code itself, and runs 
+
