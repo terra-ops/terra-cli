@@ -7,7 +7,7 @@ This file should be updated as things change.
 
 Hopefully this helps developers that will want to help contribute to Terra.
 
-## Terra's environment
+## Terra's user and commands
 
 This is about the "host", the system running terra, docker, etc.
 
