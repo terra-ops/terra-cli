@@ -14,6 +14,12 @@ Please join the chat on Gitter.  We want as much feedback as possible!
 
 [Issues](https://github.com/terra-ops/terra-app/issues) and [Story Boarding](https://huboard.com/terra-ops/terra-app/)
 
+## Coding Standards
+
+As a symfony app, we are following PSR-2 Coding Standards.
+
+Use 4 spaces for indentation, and follow all the other rules specified at http://www.php-fig.org/psr/psr-2/
+
 ## Example Project: 18F Agile BPA Prototype
 
 NuCivic submitted a working prototype for the 18F Agile BPA.
