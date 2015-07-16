@@ -106,6 +106,8 @@ Run all of the following commands as root, or with `sudo`.
 
 Running docker in OSx requires a slightly different setup.
 
+There is a lot of nuance in using Docker on OSX.  It will help to read the guide about Docker on OSX here: http://viget.com/extend/how-to-use-docker-on-os-x-the-missing-guide
+
 1. Install PHP & Git:
 
   Install the command line developer tools by installing XCode
