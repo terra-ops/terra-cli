@@ -43,6 +43,8 @@ This command does a few things:
 
 Then, it asks if you wish to enable it.
 
+### `terra environment:enable`
+
 5. The `EnvironmentFactory->enable()` method runs `docker-compose up` in the `~/.terra/environments/$APP/$APP_$ENVIRONMENT/` folder.
 6. The first time it will pull the images from docker hub. This takes a few minutes.
 7. Then you should see ...
@@ -63,7 +65,13 @@ drush @drupal.anonymous uli
 ```
 
 See `Running ENABLE app hook...`? That is from .terra.yml of the app itself:
-See https://github.com/jonpugh/drupal-terra/blob/master/.terra.yml
 
-The `EnvironmentFactory->enable()` method loads the "app config" from the source code itself, and runs 
+This is what the apps .terra.yml file looks like:
+
+```
+drush {alias} site-install -y
+drush {alias} uli
+```
+
+
 
