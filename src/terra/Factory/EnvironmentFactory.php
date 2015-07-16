@@ -455,7 +455,8 @@ class EnvironmentFactory {
       return FALSE;
     }
     else {
-      return array_pop(explode(':', trim($process->getOutput())));
+      $output_array = explode(':', trim($process->getOutput()));
+      return array_pop($output_array);
     }
   }
 
@@ -471,7 +472,8 @@ class EnvironmentFactory {
       return FALSE;
     }
     else {
-      return array_pop(explode(':', trim($process->getOutput())));
+      $output_array = explode(':', trim($process->getOutput()));
+      return array_pop($output_array);
     }
   }
 
