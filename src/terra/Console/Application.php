@@ -60,9 +60,6 @@ class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        // Ask for an app.
-        $helper = $this->getHelper('question');
-
         // Check if docker exists if not throw an error.
         $process = $this->getProcess('docker --version');
         $process->run();
@@ -70,18 +67,6 @@ class Application extends BaseApplication
             // If you do not have docker we do nothing.
             throw new \RuntimeException($process->getErrorOutput());
         }
-
-        // Check if default App folder exists.
-        $path = $this->getTerra()->getConfig()->get('apps_basepath');
-        if (!file_exists($path)) {
-          $question = new ConfirmationQuestion("Create default apps base path at $path ? [y\N] ", false);
-
-          if ($helper->ask($input, $output, $question)) {
-            mkdir($path);
-          }
-        }
-
-
         return parent::doRun($input, $output);
     }
 
