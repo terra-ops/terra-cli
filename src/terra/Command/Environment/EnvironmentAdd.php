@@ -81,7 +81,7 @@ class EnvironmentAdd extends Command
             }
             // If it doesn't exist, just use ~/Apps/$ENV as the default path.
             else {
-                $default_path = $_SERVER['HOME'] . '/' . $this->app->name . '/' . $environment_name;
+                $default_path = $_SERVER['HOME'] . '/Apps/' . $this->app->name . '/' . $environment_name;
             }
             $question = new Question("Path: ($default_path) ", $default_path);
             $path = $helper->ask($input, $output, $question);
