@@ -76,10 +76,7 @@ class Command extends CommandBase
 
         // If no name specified provide options
         if (empty($app_name)) {
-            $choices = $this->getApplication()->getTerra()->getConfig()->get('apps');
-            foreach ($choices as &$choice) {
-              $choice = $choice['description'];
-            }
+            $choices = array_keys($this->getApplication()->getTerra()->getConfig()->get('apps'));
             $question = new ChoiceQuestion(
                 'Which app? ',
                 $choices,
