@@ -86,7 +86,7 @@ class EnvironmentEnable extends Command
 
         // Get new port, set new URL to environment object.
         $port = $environment_factory->getPort();
-        $app['environments'][$environment_name]['url'] = "http://localhost:$port";
+        $app['environments'][$environment_name]['url'] = "http://{$app['host']}:$port";
 
         // Save environment metadata.
         $this->getApplication()->getTerra()->getConfig()->add('apps', array($app_name, 'environments', $environment_name), $app['environments'][$environment_name]);
