@@ -116,6 +116,15 @@ I am going to direct planning in an agile way as much as possible.  Please post 
 #### `terra environment:scale`
   Set the number of "app" containers.  This command is a wrapper for `docker compose app=5`.
 
+# Vagrant
+
+There is a Vagrantfile in the repo that can be used to fire up a linux server with Terra installed.
+
+Use the vagrant plugin "vagrant-hostsupdater" to automatically set your /etc/hosts file for the VM:
+  
+  ```
+  $ vagrant plugin install vagrant-hostsupdater
+  ```
 
 # History
 
