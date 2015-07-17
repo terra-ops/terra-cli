@@ -131,7 +131,8 @@ class Status extends Command
         foreach ($app['environments'] as $environment) {
             // @TODO: Detect if URL proxy is online
             $environment_factory = new EnvironmentFactory($environment, $app);
-            $environment['url'] .= PHP_EOL.'http://'.$environment_factory->getUrl();
+          $environment['url'] = 'http://'. $environment_factory->getHost() . ':' . $environment_factory->getPort();
+          $environment['url'] .= PHP_EOL.'http://'.$environment_factory->getUrl();
             $rows[] = $environment;
         }
 
