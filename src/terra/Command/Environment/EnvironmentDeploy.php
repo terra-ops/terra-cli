@@ -47,7 +47,7 @@ class EnvironmentDeploy extends Command
         $git_ref = $this->getAnswer($input, $output, $question, 'git_ref');
 
         // Notify user.
-        $output->writeln("Deploying App <info>{$this->app['name']}</info> environment <comment>{$this->environment['name']}</comment> to version <question> $git_ref </question> ...");
+        $output->writeln("Deploying App <info>{$this->app->name}</info> environment <comment>{$this->environment->name}</comment> to version <question> $git_ref </question> ...");
 
         // Ask for confirmation.
         $helper = $this->getHelper('question');
@@ -60,10 +60,10 @@ class EnvironmentDeploy extends Command
 
         // Run the deployment.
         $environment = new EnvironmentFactory($this->environment, $this->app);
-        $this->environment['version'] = $environment->deploy($git_ref);
+        $this->environment->version = $environment->deploy($git_ref);
 
         // Save the new version to the config.
-        $this->getApplication()->getTerra()->getConfig()->add('apps', array($this->app['name'], 'environments', $this->environment['name']), $this->environment);
+        $this->getApplication()->getTerra()->getConfig()->add('apps', array($this->app->name, 'environments', $this->environment->name), (array) $this->environment);
         $this->getApplication()->getTerra()->getConfig()->save();
     }
 }

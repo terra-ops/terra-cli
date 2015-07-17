@@ -14,6 +14,12 @@ Please join the chat on Gitter.  We want as much feedback as possible!
 
 [Issues](https://github.com/terra-ops/terra-app/issues) and [Story Boarding](https://huboard.com/terra-ops/terra-app/)
 
+## Coding Standards
+
+As a symfony app, we are following PSR-2 Coding Standards.
+
+Use 4 spaces for indentation, and follow all the other rules specified at http://www.php-fig.org/psr/psr-2/
+
 ## Example Project: 18F Agile BPA Prototype
 
 NuCivic submitted a working prototype for the 18F Agile BPA.
@@ -110,6 +116,15 @@ I am going to direct planning in an agile way as much as possible.  Please post 
 #### `terra environment:scale`
   Set the number of "app" containers.  This command is a wrapper for `docker compose app=5`.
 
+# Vagrant
+
+There is a Vagrantfile in the repo that can be used to fire up a linux server with Terra installed.
+
+Use the vagrant plugin "vagrant-hostsupdater" to automatically set your /etc/hosts file for the VM:
+  
+  ```
+  $ vagrant plugin install vagrant-hostsupdater
+  ```
 
 # History
 
@@ -125,7 +140,7 @@ We love Kalabox and the Kalamuna team, but there are a few key differences:
 
 1. Terra is designed for all things: local development, testing, and production.
 2. Terra is written in PHP & Symfony: Kalabox is written in Node JS
-3. Terra is the successor to Aegir & devshop.  We hope to recruit a large community from those tools.
+3. Terra is a proposed platform to power the future of Aegir & devshop.  We hope to recruit a large community from those tools.
 4. Terra currently extends the kalabox/drush container to offer a container to SSH into.  
  
 We hope to collaborate with them on as much as possible.

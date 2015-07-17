@@ -76,16 +76,23 @@ class Command extends CommandBase
 
         // If no name specified provide options
         if (empty($app_name)) {
+            $choices = array_keys($this->getApplication()->getTerra()->getConfig()->get('apps'));
             $question = new ChoiceQuestion(
                 'Which app? ',
-                array_keys($this->getApplication()->getTerra()->getConfig()->get('apps')),
+                $choices,
                 null
             );
             $app_name = $helper->ask($input, $output, $question);
         }
 
-        // Set the app for this command.
-        $this->app = (object) $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name);
+        // If still empty throw an exception.
+        if (empty($app_name)) {
+            throw new \Exception("App '$app_name' not found.'");
+        }
+        else {
+            // Set the app for this command.
+            $this->app = (object) $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name);
+        }
     }
 
     /**

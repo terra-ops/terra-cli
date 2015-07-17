@@ -67,7 +67,6 @@ class Application extends BaseApplication
             // If you do not have docker we do nothing.
             throw new \RuntimeException($process->getErrorOutput());
         }
-
         return parent::doRun($input, $output);
     }
 
