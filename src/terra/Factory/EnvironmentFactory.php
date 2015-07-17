@@ -477,7 +477,7 @@ class EnvironmentFactory
         return parse_url($_ENV['DOCKER_HOST'], PHP_URL_HOST);
       }
       else {
-        return gethostbyaddr('127.0.0.1');
+        return php_uname('n');
       }
     }
 
