@@ -72,8 +72,17 @@ class EnvironmentAdd extends Command
         // Path
         $path = $input->getArgument('path');
         if (empty($path)) {
+            // Load apps base path from Config.
             $config_path = $this->getApplication()->getTerra()->getConfig()->get('apps_basepath');
-            $default_path = realpath($config_path).'/'.$this->app->name.'/'.$environment_name;
+
+            // If it already exists, use "realpath" to load it.
+            if (file_exists($config_path)) {
+                $default_path = realpath($config_path).'/'.$this->app->name.'/'.$environment_name;
+            }
+            // If it doesn't exist, just use ~/Apps/$ENV as the default path.
+            else {
+                $default_path = $_SERVER['HOME'] . '/' . $this->app->name . '/' . $environment_name;
+            }
             $question = new Question("Path: ($default_path) ", $default_path);
             $path = $helper->ask($input, $output, $question);
             if (empty($path)) {
