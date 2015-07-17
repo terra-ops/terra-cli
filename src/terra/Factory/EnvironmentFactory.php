@@ -517,20 +517,14 @@ class EnvironmentFactory
     {
 
       // Get current scale of app service
-        $process = new Process('docker-compose ps app', $this->getDockerComposePath());
+        $process = new Process('docker-compose ps -q app', $this->getDockerComposePath());
         $process->run();
         if (!$process->isSuccessful()) {
             return false;
         }
-        $container_list = $process->getOutput();
+        $container_list = trim($process->getOutput());
         $lines = explode(PHP_EOL, $container_list);
-        $app_scale = 0;
-        foreach ($lines as $line) {
-            if (strpos($line, "{$this->app->name}{$this->name}_app") === 0) {
-                ++$app_scale;
-            }
-        }
-
+        $app_scale = count($lines);
         return $app_scale;
     }
 
