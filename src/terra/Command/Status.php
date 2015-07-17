@@ -183,6 +183,7 @@ class Status extends Command
         $environment_factory = new EnvironmentFactory($environment, $app);
 
         $environment['scale'] = $environment_factory->getScale();
+        $environment['url'] = 'http://'. $environment_factory->getHost() . ':' . $environment_factory->getPort();
         $environment['url'] .= PHP_EOL.'http://'.$environment_factory->getUrl();
 
         $table = $this->getHelper('table');

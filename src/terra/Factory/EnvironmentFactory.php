@@ -468,6 +468,20 @@ class EnvironmentFactory
     }
 
     /**
+     * Gets the host from either DOCKER_HOST variable or the FQDN hostname.
+     *
+     * @return bool|mixed
+     */
+    public function getHost() {
+      if (isset($_ENV['DOCKER_HOST'])) {
+        return parse_url($_ENV['DOCKER_HOST'], PHP_URL_HOST);
+      }
+      else {
+        return gethostbyaddr('127.0.0.1');
+      }
+    }
+
+    /**
      * Get's the exposed port of the drush container.
      *
      * @return bool|mixed
