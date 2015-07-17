@@ -19,4 +19,10 @@ Vagrant.configure(2) do |config|
     t.vm.provision "shell",
       inline: "su vagrant -c 'ssh-keygen -t rsa -N \"\" -f ~/.ssh/id_rsa' "
   end
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 2048
+    v.cpus = 2
+  end
+
 end
