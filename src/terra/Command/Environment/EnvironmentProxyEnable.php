@@ -21,7 +21,7 @@ class EnvironmentProxyEnable extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('Hello Terra!');
-        $cmd = 'docker run -d -p 80:80 --name terra_proxy -v /var/run/docker.sock:/tmp/docker.sock:ro jwilder/nginx-proxy';
+        $cmd = 'docker run -d -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro jwilder/nginx-proxy';
 
         // Confirm removal of the app.
         $helper = $this->getHelper('question');
