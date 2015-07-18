@@ -110,5 +110,10 @@ class EnvironmentScale extends Command
         $environment_factory->scale($scale);
 
         $output->writeln("Environment <comment>{$app_name} {$environment_name}</comment> scaled to <info>{$scale}</info>");
+
+        // Output the new URL.
+        $local_url = 'http://'. $environment_factory->getHost() . ':' . $environment_factory->getPort();
+        $output->writeln('<info>Environment enabled!</info>  Available at http://'.$environment_factory->getUrl().' and '.$local_url);
+
     }
 }
