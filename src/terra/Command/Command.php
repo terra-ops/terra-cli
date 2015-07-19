@@ -76,10 +76,14 @@ class Command extends CommandBase
 
         // If no name specified provide options
         if (empty($app_name)) {
-            $choices = array_keys($this->getApplication()->getTerra()->getConfig()->get('apps'));
+          $applications = array_flip(array_keys($this->getApplication()->getTerra()->getConfig()->get('apps')));
+          foreach (array_keys($applications) as $app_key) {
+              $applications[$app_key] = $app_key;
+            }
+
             $question = new ChoiceQuestion(
                 'Which app? ',
-                $choices,
+                $applications,
                 null
             );
             $app_name = $helper->ask($input, $output, $question);
@@ -110,7 +114,6 @@ class Command extends CommandBase
         if (count(($this->app->environments)) == 0) {
             $output->writeln("<comment>There are no environments for the app {$this->app->name}!</comment>");
             $output->writeln('Use the command <info>terra environment:add</info> to add your first environment.');
-
             return;
         }
 
@@ -119,9 +122,13 @@ class Command extends CommandBase
 
         // If no environment name specified provide options
         if (empty($environment_name)) {
+            $environments = array_flip(array_keys($this->app->environments));
+            foreach (array_keys($environments) as $env_key) {
+              $environments[$env_key] = $env_key;
+            }
             $question = new ChoiceQuestion(
                 'Which environment? ',
-                array_keys($this->app->environments),
+                $environments,
                 null
             );
             $environment_name = $helper->ask($input, $output, $question);
