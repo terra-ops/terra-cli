@@ -33,52 +33,15 @@ class EnvironmentRemove extends Command
     }
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // If there are no apps, return
-        if (count($this->getApplication()->getTerra()->getConfig()->get('apps')) == 0) {
-            $output->writeln('<comment>There are no apps to remove!</comment>');
-            $output->writeln('Use the command <info>terra app:add</info> to add your first app.');
-
-            return;
-        }
-
-        $helper = $this->getHelper('question');
-        $app_name = $input->getArgument('app_name');
-        $environment_name = $input->getArgument('environment_name');
-
-        // If no name specified provide options
-        if (empty($app_name)) {
-            $question = new ChoiceQuestion(
-                'Which app? ',
-                array_keys($this->getApplication()->getTerra()->getConfig()->get('apps')),
-                null
-            );
-            $app_name = $helper->ask($input, $output, $question);
-        }
-
-        $app = $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name);
-
-        // If no environments:
-        if (count(($app['environments'])) == 0) {
-            $output->writeln("<comment>There are no environments for the app $app_name!</comment>");
-            $output->writeln('Use the command <info>terra environment:add</info> to add your first environment.');
-
-            return;
-        }
-
-        // If no environment name specified provide options
-        if (empty($environment_name)) {
-            $question = new ChoiceQuestion(
-                'Which environment? ',
-                array_keys($app['environments']),
-                null
-            );
-            $environment_name = $helper->ask($input, $output, $question);
-        }
-
-        $environment = $app['environments'][$environment_name];
+      // Ask for an app and environment.
+      $this->getApp($input, $output);
+      $this->getEnvironment($input, $output);
+      $environment_name = $this->environment->name;
+      $app_name = $this->app->name;
 
         // Confirm removal of the app.
-        $question = new ConfirmationQuestion("Are you sure you would like to remove the environment <question>$app_name:$environment_name</question>?  All files at {$environment['path']} will be deleted, and all containers will be killed. [y/N] ", false);
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion("Are you sure you would like to remove the environment <question>$app_name:$environment_name</question>?  All files at {$this->environment->path} will be deleted, and all containers will be killed. [y/N] ", false);
         if (!$helper->ask($input, $output, $question)) {
             $output->writeln('<error>Cancelled</error>');
 
@@ -92,7 +55,7 @@ class EnvironmentRemove extends Command
 
             try {
                 $fs->remove(array(
-                $environment['path'],
+                  $this->environment->path,
                 ));
                 $output->writeln("<info>Files for environment $app_name:$environment_name has been deleted.</info>");
             } catch (IOExceptionInterface $e) {
@@ -100,11 +63,11 @@ class EnvironmentRemove extends Command
             }
 
             // Destroy the environment
-            $environmentFactory = new EnvironmentFactory($environment, $app);
+            $environmentFactory = new EnvironmentFactory($this->environment, $this->app);
             $environmentFactory->destroy();
 
-            unset($app['environments'][$environment_name]);
-            $this->getApplication()->getTerra()->getConfig()->add('apps', $app_name, $app);
+            unset($this->app->environments[$environment_name]);
+            $this->getApplication()->getTerra()->getConfig()->add('apps', $app_name, (array) $this->app);
             $this->getApplication()->getTerra()->getConfig()->save();
 
             $output->writeln("<info>Environment $app_name:$environment_name has been removed.</info>");
