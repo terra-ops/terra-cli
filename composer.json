@@ -2,6 +2,7 @@
     "name": "terra/terra-app",
     "description": "DevOps for All",
     "type": "project",
+    "license": "GPL-2.0",
     "require": {
         "php": ">=5.5.9",
         "symfony/config": "~2.6",
@@ -16,10 +17,16 @@
         {
             "name": "Jon Pugh",
             "email": "jon@thinkdrop.net"
+        },
+        {
+          "name":      "Terra Contributors",
+          "homepage":  "https://github.com/terra-ops/terra-app/graphs/contributors"
         }
     ],
     "support": {
-      "issues": "https://github.com/terra-ops/terra-app/issues"
+      "issues": "https://github.com/terra-ops/terra-app/issues",
+      "docs": "http://terra.readthedocs.org",
+      "forum": "https://gitter.im/terra-ops/terra-app"
     },
     "autoload": {
         "psr-4": { "terra\\": "src/terra/" }
