@@ -75,9 +75,11 @@ class EnvironmentFactory
         }
 
         try {
+            mkdir($path, 0755, TRUE);
+            chdir($path);
             $wrapper = new GitWrapper();
             $wrapper->streamOutput();
-            $wrapper->clone($this->app->repo, $path);
+            $wrapper->cloneRepository($this->app->repo . '.git', $path);
         } catch (\GitWrapper\GitException $e) {
             return false;
         }
@@ -468,17 +470,12 @@ class EnvironmentFactory
     }
 
     /**
-     * Gets the host from either DOCKER_HOST variable or the FQDN hostname.
+     * Gets the application host.
      *
      * @return bool|mixed
      */
     public function getHost() {
-      if (isset($_ENV['DOCKER_HOST'])) {
-        return parse_url($_ENV['DOCKER_HOST'], PHP_URL_HOST);
-      }
-      else {
-        return php_uname('n');
-      }
+        return $this->app->host;
     }
 
     /**
@@ -545,7 +542,7 @@ class EnvironmentFactory
             $drush_alias_file[] = "\$aliases['{$environment_name}'] = array(";
             $drush_alias_file[] = "  'uri' => '{$factory->getHost()}:{$factory->getPort()}',";
             $drush_alias_file[] = "  'root' => '$path',";
-            $drush_alias_file[] = "  'remote-host' => 'localhost',";
+            $drush_alias_file[] = "  'remote-host' => '{$factory->getHost()}',";
             $drush_alias_file[] = "  'remote-user' => 'root',";
             $drush_alias_file[] = "  'ssh-options' => '-p {$factory->getDrushPort()}',";
             $drush_alias_file[] = ');';

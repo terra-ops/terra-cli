@@ -34,6 +34,12 @@ class AppAdd extends Command
             'The description of your app.'
         )
         ->addOption(
+            'host',
+            '',
+            InputArgument::OPTIONAL,
+            'The host of your app'
+        )
+        ->addOption(
             'create-environment',
             '',
             InputArgument::OPTIONAL,
@@ -56,18 +62,22 @@ class AppAdd extends Command
         $name_question = new Question('System name of your project? ', '');
         $description_question = new Question('Description? ', '');
         $repo_question = new Question('Source code repository URL? ', '');
+        $host_default = getenv('DOCKER_HOST') ? parse_url(getenv('DOCKER_HOST'), PHP_URL_HOST) : php_uname('n');
+        $host_question = new Question('Host? [' . $host_default . '] ', $host_default);
 
         // Prompts.
         $name = $this->getAnswer($input, $output, $name_question, 'name');
         $description = $this->getAnswer($input, $output, $description_question, 'description', 'option');
         $repo = $this->getAnswer($input, $output, $repo_question, 'repo');
+        $host = $this->getAnswer($input, $output, $host_question, 'host', 'option');
 
         // Confirmation
         $formatter = $this->getHelper('formatter');
         $lines = array(
           "Name:        $name",
             "Description: $description",
-            "Repo:        $repo"
+            "Repo:        $repo",
+            "Host:        $host"
         );
         $formattedBlock = $formatter->formatBlock($lines, 'fg=black;bg=green');
         $output->writeln($formattedBlock);
@@ -75,7 +85,8 @@ class AppAdd extends Command
         $app = array(
           'name' => $name,
             'description' => $description,
-            'repo' => $repo
+            'repo' => $repo,
+            'host' => $host
         );
         $this->getApplication()->getTerra()->getConfig()->add('apps', $name, $app);
 
