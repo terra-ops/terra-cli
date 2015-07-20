@@ -274,70 +274,70 @@ class EnvironmentFactory
 
         $compose = array();
         $compose['load'] = array(
-        'image' => 'tutum/haproxy',
-        'environment' => array(
-        'VIRTUAL_HOST' => $this->getUrl(),
-        ),
-        'links' => array(
-        'app',
-        ),
-        'expose' => array(
-        '80/tcp',
-        ),
-        'ports' => array(
-        ':80',
-        ),
-        'restart' => 'always',
-        );
+            'image' => 'tutum/haproxy',
+            'environment' => array(
+            'VIRTUAL_HOST' => $this->getUrl(),
+            ),
+            'links' => array(
+                'app',
+            ),
+            'expose' => array(
+                '80/tcp',
+            ),
+            'ports' => array(
+                ':80',
+            ),
+            'restart' => 'always',
+            );
         $compose['app'] = array(
-        'image' => 'terra/drupal',
-        'tty' => true,
-        'stdin_open' => true,
-        'links' => array(
-        'database',
-        ),
-        'volumes' => array(
-        "$document_root:/usr/share/nginx/html",
-        ),
-        'environment' => array(
-        'HOST_UID' => posix_getuid(),
-        'HOST_GID' => posix_getgid(),
-        ),
-        'expose' => array(
-        '80/tcp',
-        ),
-        'restart' => 'always',
-        );
-        $compose['database'] = array(
-        'image' => 'mariadb',
-        'tty' => true,
-        'stdin_open' => true,
-        'environment' => array(
-        'MYSQL_ROOT_PASSWORD' => 'RANDOMIZEPLEASE',
-        'MYSQL_DATABASE' => 'drupal',
-        'MYSQL_USER' => 'drupal',
-        'MYSQL_PASSWORD' => 'drupal',
-        ),
-        'restart' => 'always',
+            'image' => 'terra/drupal',
+            'tty' => true,
+            'stdin_open' => true,
+            'links' => array(
+                'database',
+            ),
+            'volumes' => array(
+                "$document_root:/usr/share/nginx/html",
+            ),
+            'environment' => array(
+                'HOST_UID' => posix_getuid(),
+                'HOST_GID' => posix_getgid(),
+            ),
+            'expose' => array(
+                '80/tcp',
+            ),
+            'restart' => 'always',
+            );
+            $compose['database'] = array(
+                'image' => 'mariadb',
+                'tty' => true,
+                'stdin_open' => true,
+                'environment' => array(
+                    'MYSQL_ROOT_PASSWORD' => 'RANDOMIZEPLEASE',
+                    'MYSQL_DATABASE' => 'drupal',
+                    'MYSQL_USER' => 'drupal',
+                    'MYSQL_PASSWORD' => 'drupal',
+                ),
+                'restart' => 'always',
         );
         $compose['drush'] = array(
-        'image' => 'terra/drush',
-        'tty' => true,
-        'stdin_open' => true,
-        'links' => array(
-        'database',
-        ),
-        'ports' => array(
-        ':22',
-        ),
-        'volumes' => array(
-        "$document_root:/var/www/html",
-        "$source_root:/source",
-        ),
-        'environment' => array(
-        'AUTHORIZED_KEYS' => $ssh_authorized_keys,
-        ),
-        'restart' => 'always',
+            'image' => 'terra/drush',
+            'tty' => true,
+            'stdin_open' => true,
+            'links' => array(
+                'database',
+            ),
+            'ports' => array(
+                ':22',
+            ),
+            'volumes' => array(
+                "$document_root:/var/www/html",
+                "$source_root:/source",
+            ),
+            'environment' => array(
+                'AUTHORIZED_KEYS' => $ssh_authorized_keys,
+            ),
+            'restart' => 'always',
         );
 
       // Add "app_services": Additional containers linked to the app container.
