@@ -79,7 +79,7 @@ class EnvironmentFactory
             chdir($path);
             $wrapper = new GitWrapper();
             $wrapper->streamOutput();
-            $wrapper->cloneRepository($this->app->repo . '.git', $path);
+            $wrapper->cloneRepository($this->app->repo, $path);
         } catch (\GitWrapper\GitException $e) {
             return false;
         }
