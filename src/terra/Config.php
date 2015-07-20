@@ -193,6 +193,10 @@ class Config implements ConfigurationInterface
         }
     }
 
+    /**
+     * Saves the config class to file.
+     * @return bool
+     */
     public function save()
     {
 
