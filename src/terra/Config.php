@@ -194,6 +194,21 @@ class Config implements ConfigurationInterface
     }
 
     /**
+     * Saves an environment to the config class.
+     *
+     * Don't forget to call ::save() afterwards to save to file.
+     *
+     * @param $environment
+     */
+    public function saveEnvironment($environment) {
+        $environment = (object) $environment;
+
+        $environment_config = (array) $environment;
+        unset($environment_config['app']);
+        $this->config['apps'][$environment->app]['environments'][$environment->name] = $environment_config;
+    }
+
+    /**
      * Saves the config class to file.
      * @return bool
      */

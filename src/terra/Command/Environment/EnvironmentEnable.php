@@ -50,14 +50,16 @@ class EnvironmentEnable extends Command
         // Get new port, set new URL to environment object.
         $port = $environment_factory->getPort();
         $host = $environment_factory->getHost();
-        $app['environments'][$environment_name]['url'] = "http://$host:$port";
+        $this->environment->url = "http://$host:$port";
+
+        // When passing to saveEnvironment, it must have app and name properties (for now).
+        $this->environment->app = $app_name;
+        $this->environment->name = $environment_name;
 
         // Save environment metadata.
-        $this->getApplication()->getTerra()->getConfig()->add('apps', array($app_name, 'environments', $environment_name), $app['environments'][$environment_name]);
-
-        // Save config to files.
+        $this->getApplication()->getTerra()->getConfig()->saveEnvironment($this->environment);
         if ($this->getApplication()->getTerra()->getConfig()->save()) {
-            $output->writeln('<info>Environment enabled!</info>  Available at http://'.$environment_factory->getUrl().' and '.$app['environments'][$environment_name]['url']);
+            $output->writeln('<info>Environment enabled!</info>  Available at http://'.$environment_factory->getUrl().' and ' . $this->environment->url);
         } else {
             $output->writeln('<error>Environment info not saved.</error>');
         }

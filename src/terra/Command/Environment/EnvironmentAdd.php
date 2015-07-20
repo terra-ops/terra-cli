@@ -104,6 +104,7 @@ class EnvironmentAdd extends Command
 
         // Environment object
         $environment = array(
+            'app' => $this->app->name,
           'name' => $environment_name,
           'path' => $path,
           'document_root' => '',
@@ -125,7 +126,7 @@ class EnvironmentAdd extends Command
             $environment['version'] = $environmentFactory->getRepo()->getCurrentBranch();
 
             // Save to registry.
-            $this->getApplication()->getTerra()->getConfig()->add('apps', array($this->app->name, 'environments', $environment_name), $environment);
+            $this->getApplication()->getTerra()->getConfig()->saveEnvironment($environment);
             $this->getApplication()->getTerra()->getConfig()->save();
 
             $output->writeln('<info>Environment saved to registry.</info>');
