@@ -88,6 +88,7 @@ class EnvironmentEnable extends Command
 
             chdir($environment_factory->getSourcePath());
             $process = new Process($environment_factory->config['hooks']['enable']);
+            $process->setTimeout(null);
             $process->run(function ($type, $buffer) {
                 if (Process::ERR === $type) {
                     echo $buffer;
