@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use terra\Factory\EnvironmentFactory;
@@ -35,6 +36,11 @@ class EnvironmentAdd extends Command
             'path',
             InputArgument::OPTIONAL,
             'The path to the environment.'
+        )
+        ->addArgument(
+            'branch',
+            InputArgument::OPTIONAL,
+            'The repo branch used to create the environment.'
         )
         ->addArgument(
             'document_root',
@@ -102,6 +108,29 @@ class EnvironmentAdd extends Command
             $path = getcwd().'/'.$path;
         }
 
+        $branch_name = $input->getArgument('branch');
+        if (empty($branch_name)) {
+          $question = new ConfirmationQuestion("Do you want to specify a specific repo branch to clone from? [y\N] ", false);
+          if ($helper->ask($input, $output, $question)) {
+
+            $branch_name = $input->getArgument('branch');
+            while (empty($branch_name)) {
+              $question = new Question("Git branch:");
+              $branch_name = $helper->ask($input, $output, $question);
+
+              // Check if the remote branch exists
+              if ($branch_name) {
+                $process = new Process('git ls-remote ' . $this->app->repo . ' | grep -sw "' . $branch_name . '"');
+                $process->run();
+                if (!$process->isSuccessful()) {
+                  $output->writeln("<error> ERROR </error> Branch <comment>{$branch_name}</comment> not found in repote repo <comment>{$this->app->repo}</comment>");
+                  return;
+                }
+              }
+            }
+          }
+        }
+
         // Environment object
         $environment = array(
             'app' => $this->app->name,
@@ -109,7 +138,7 @@ class EnvironmentAdd extends Command
           'path' => $path,
           'document_root' => '',
           'url' => '',
-          'version' => ''
+          'version' => $branch_name
         );
 
         // Prepare the environment factory.

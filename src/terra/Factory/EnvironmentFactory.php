@@ -77,9 +77,13 @@ class EnvironmentFactory
         try {
             mkdir($path, 0755, TRUE);
             chdir($path);
+            $options = array();
+            if($this->environment->version) {
+              $options['branch'] = $this->environment->version;
+            }
             $wrapper = new GitWrapper();
             $wrapper->streamOutput();
-            $wrapper->cloneRepository($this->app->repo, $path);
+            $wrapper->cloneRepository($this->app->repo, $path, $options);
         } catch (\GitWrapper\GitException $e) {
             return false;
         }
