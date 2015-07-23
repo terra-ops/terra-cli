@@ -287,7 +287,7 @@ class EnvironmentFactory
             'ports' => array(
                 ':80',
             ),
-            'restart' => 'always',
+            'restart' => 'on-failure',
             );
         $compose['app'] = array(
             'image' => 'terra/drupal',
@@ -306,7 +306,7 @@ class EnvironmentFactory
             'expose' => array(
                 '80/tcp',
             ),
-            'restart' => 'always',
+            'restart' => 'on-failure',
             );
             $compose['database'] = array(
                 'image' => 'mariadb',
@@ -318,7 +318,7 @@ class EnvironmentFactory
                     'MYSQL_USER' => 'drupal',
                     'MYSQL_PASSWORD' => 'drupal',
                 ),
-                'restart' => 'always',
+                'restart' => 'on-failure',
         );
         $compose['drush'] = array(
             'image' => 'terra/drush',
@@ -337,7 +337,7 @@ class EnvironmentFactory
             'environment' => array(
                 'AUTHORIZED_KEYS' => $ssh_authorized_keys,
             ),
-            'restart' => 'always',
+            'restart' => 'on-failure',
         );
 
       // Add "app_services": Additional containers linked to the app container.
