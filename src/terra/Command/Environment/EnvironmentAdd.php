@@ -83,7 +83,7 @@ class EnvironmentAdd extends Command
 
             // If it already exists, use "realpath" to load it.
             if (file_exists($config_path)) {
-                $default_path = realpath($config_path).'/'.$this->app->name.'/'.$environment_name;
+                $default_path = realpath($config_path).'/'.$this->app->name.'/'.preg_replace('@[^a-z0-9-]+@','-', strtolower($environment_name));
             }
             // If it doesn't exist, just use ~/Apps/$ENV as the default path.
             else {
@@ -92,7 +92,7 @@ class EnvironmentAdd extends Command
               $question = new ConfirmationQuestion("Create default apps path at $config_path? [y\N] ", false);
               if ($helper->ask($input, $output, $question)) {
                 mkdir($config_path);
-                $default_path = $_SERVER['HOME'] . '/Apps/' . $this->app->name . '/' . $environment_name;
+                $default_path = $_SERVER['HOME'] . '/Apps/' . $this->app->name . '/' . preg_replace('@[^a-z0-9-]+@','-', strtolower($environment_name));
               }
             }
             $question = new Question("Path: ($default_path) ", $default_path);
