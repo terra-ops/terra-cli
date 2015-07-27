@@ -28,7 +28,7 @@ hooks:
 # Specific settings for docker compose go here
 docker_compose:
 
-  # Overrides will replace any
+  # Overrides will replace any item in the entire docker-compose array.
   overrides:
     app:
       image: wordpress
