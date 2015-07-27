@@ -28,6 +28,16 @@ hooks:
 # Specific settings for docker compose go here
 docker_compose:
 
+  # Overrides will replace any
+  overrides:
+    app:
+      image: wordpress
+      environment:
+        WORDPRESS_DB_HOST: database
+        WORDPRESS_DB_USER: drupal
+        WORDPRESS_DB_NAME: drupal
+        WORDPRESS_DB_PASSWORD: drupal
+
   # App services are docker compose images.
   # They will be added as-is to the generated docker-compose.yml file,
   # And attached automatically to the "app" container.
