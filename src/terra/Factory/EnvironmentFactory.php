@@ -297,11 +297,12 @@ class EnvironmentFactory
                 'database',
             ),
             'volumes' => array(
-                "$document_root:/usr/share/nginx/html",
+                "{$this->environment->path}:/app",
             ),
             'environment' => array(
                 'HOST_UID' => posix_getuid(),
                 'HOST_GID' => posix_getgid(),
+                'DOCUMENT_ROOT' => $this->config['document_root'],
             ),
             'expose' => array(
                 '80/tcp',
