@@ -265,8 +265,8 @@ class EnvironmentFactory
             $document_root = $source_root;
         }
 
-      // Look for this users SSH public key
-      // @TODO: Move ssh_authorized_keys to terra config.  Ask the user on first run.
+        // Look for this users SSH public key
+        // @TODO: Move ssh_authorized_keys to terra config.  Ask the user on first run.
         $ssh_key_path = $_SERVER['HOME'].'/.ssh/id_rsa.pub';
         if (file_exists($ssh_key_path)) {
             $ssh_authorized_keys = file_get_contents($ssh_key_path);
@@ -276,7 +276,7 @@ class EnvironmentFactory
         $compose['load'] = array(
             'image' => 'tutum/haproxy',
             'environment' => array(
-            'VIRTUAL_HOST' => $this->getUrl(),
+                'VIRTUAL_HOST' => $this->getUrl(),
             ),
             'links' => array(
                 'app',
@@ -288,7 +288,7 @@ class EnvironmentFactory
                 ':80',
             ),
             'restart' => 'on-failure',
-            );
+        );
         $compose['app'] = array(
             'image' => 'terra/drupal',
             'tty' => true,
@@ -308,17 +308,17 @@ class EnvironmentFactory
             ),
             'restart' => 'on-failure',
             );
-            $compose['database'] = array(
-                'image' => 'mariadb',
-                'tty' => true,
-                'stdin_open' => true,
-                'environment' => array(
-                    'MYSQL_ROOT_PASSWORD' => 'RANDOMIZEPLEASE',
-                    'MYSQL_DATABASE' => 'drupal',
-                    'MYSQL_USER' => 'drupal',
-                    'MYSQL_PASSWORD' => 'drupal',
-                ),
-                'restart' => 'on-failure',
+        $compose['database'] = array(
+            'image' => 'mariadb',
+            'tty' => true,
+            'stdin_open' => true,
+            'environment' => array(
+                'MYSQL_ROOT_PASSWORD' => 'RANDOMIZEPLEASE',
+                'MYSQL_DATABASE' => 'drupal',
+                'MYSQL_USER' => 'drupal',
+                'MYSQL_PASSWORD' => 'drupal',
+            ),
+            'restart' => 'on-failure',
         );
         $compose['drush'] = array(
             'image' => 'terra/drush',
@@ -340,13 +340,13 @@ class EnvironmentFactory
             'restart' => 'on-failure',
         );
 
-      // Add "app_services": Additional containers linked to the app container.
+        // Add "app_services": Additional containers linked to the app container.
         $this->getConfig();
         if (isset($this->config['docker_compose']['app_services']) && is_array($this->config['docker_compose']['app_services'])) {
             foreach ($this->config['docker_compose']['app_services'] as $service => $info) {
                 $compose['app']['links'][] = $service;
 
-          // Look for volume paths to change
+                // Look for volume paths to change
                 foreach ($info['volumes'] as &$volume) {
                     $volume = strtr($volume, array(
                     '{APP_PATH}' => $source_root,
@@ -357,7 +357,7 @@ class EnvironmentFactory
             }
         }
 
-      // Add "overrides" to docker-compose.
+        // Add "overrides" to docker-compose.
         if (isset($this->config['docker_compose']['overrides']) && is_array($this->config['docker_compose']['overrides'])) {
             foreach ($this->config['docker_compose']['overrides'] as $service => $info) {
 
@@ -414,7 +414,7 @@ class EnvironmentFactory
     public function destroy()
     {
 
-      // Run docker-compose kill
+        // Run docker-compose kill
         echo "\n";
         echo "Running 'docker-compose kill' in ".$this->getDockerComposePath()."\n";
         $process = new Process('docker-compose kill', $this->getDockerComposePath());
@@ -427,7 +427,7 @@ class EnvironmentFactory
             }
         });
 
-      // Run docker-compose rm
+        // Run docker-compose rm
         echo "\n";
         echo "Running 'docker-compose rm -f' in ".$this->getDockerComposePath()."\n";
         $process = new Process('docker-compose rm -f', $this->getDockerComposePath());
@@ -439,7 +439,7 @@ class EnvironmentFactory
                 echo 'DOCKER > '.$buffer;
             }
         });
-      // @TODO: Remove ~/.terra/environments/* folder.
+        // @TODO: Remove ~/.terra/environments/* folder.
     }
 
     /**
@@ -525,7 +525,7 @@ class EnvironmentFactory
     public function getScale()
     {
 
-      // Get current scale of app service
+        // Get current scale of app service
         $process = new Process('docker-compose ps -q app', $this->getDockerComposePath());
         $process->run();
         if (!$process->isSuccessful()) {
