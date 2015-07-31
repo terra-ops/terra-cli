@@ -65,10 +65,13 @@ class EnvironmentAdd extends Command
 
         // Ask for environment name
         $environment_name = $input->getArgument('environment_name');
-        while (empty($environment_name) || isset($this->app->environments[$environment_name])) {
+        while (empty($environment_name) || isset($this->app->environments[$environment_name]) || !preg_match('/^[a-zA-Z0-9]+$/', $environment_name)) {
             $question = new Question('Environment name? ');
             $environment_name = $helper->ask($input, $output, $question);
 
+            if(!preg_match('/^[a-zA-Z0-9]+$/', $environment_name)) {
+              $output->writeln("<error> ERROR </error> Environment <comment>{$environment_name}</comment> cannot contain spaces or special characters.");
+            }
             // Look for environment with this name
             if (isset($this->app->environments[$environment_name])) {
                 $output->writeln("<error> ERROR </error> Environment <comment>{$environment_name}</comment> already exists in app <comment>{$this->app->name}</comment>");
@@ -83,7 +86,7 @@ class EnvironmentAdd extends Command
 
             // If it already exists, use "realpath" to load it.
             if (file_exists($config_path)) {
-                $default_path = realpath($config_path).'/'.$this->app->name.'/'.preg_replace('@[^a-z0-9-]+@','-', strtolower($environment_name));
+              $default_path = realpath($config_path).'/'.$this->app->name.'/'.$environment_name;
             }
             // If it doesn't exist, just use ~/Apps/$ENV as the default path.
             else {
@@ -92,7 +95,7 @@ class EnvironmentAdd extends Command
               $question = new ConfirmationQuestion("Create default apps path at $config_path? [y\N] ", false);
               if ($helper->ask($input, $output, $question)) {
                 mkdir($config_path);
-                $default_path = $_SERVER['HOME'] . '/Apps/' . $this->app->name . '/' . preg_replace('@[^a-z0-9-]+@','-', strtolower($environment_name));
+                $default_path = $_SERVER['HOME'] . '/Apps/' . $this->app->name . '/' . $environment_name;
               }
             }
             $question = new Question("Path: ($default_path) ", $default_path);
@@ -109,31 +112,34 @@ class EnvironmentAdd extends Command
         }
 
         $branch_name = $input->getArgument('branch');
-        if (empty($branch_name)) {
-          $question = new ConfirmationQuestion("Do you want to specify a specific repo branch to clone from? [y\N] ", false);
-          if ($helper->ask($input, $output, $question)) {
+        while (empty($branch_name)) {
+          $output->writeln("<info>Getting the default branch for <comment>{$this->app->repo}</comment> </info>");
+          // command to get default branch
+          $process = new Process("git ls-remote " . $this->app->repo . " | awk '{if (a[$1]) { print $2 } a[$1] = $2}' | grep heads | awk -F\"/\" '{print $3 }'");
+          try {
+            $process->mustRun();
+          } catch (ProcessFailedException $e) {
+            $output->writeln("<error> ERROR </error> Unable to find default git branch. <comment>{$e->getMessage()}</comment>");
+          }
+          $default_branch = trim($process->getOutput());
+          $question = new Question("Version? [$default_branch]", $default_branch);
+          $branch_name = $helper->ask($input, $output, $question);
 
-            $branch_name = $input->getArgument('branch');
-            while (empty($branch_name)) {
-              $question = new Question("Git branch:");
-              $branch_name = $helper->ask($input, $output, $question);
-
-              // Check if the remote branch exists
-              if ($branch_name) {
-                $process = new Process('git ls-remote ' . $this->app->repo . ' | grep -sw "' . $branch_name . '"');
-                $process->run();
-                if (!$process->isSuccessful()) {
-                  $output->writeln("<error> ERROR </error> Branch <comment>{$branch_name}</comment> not found in repote repo <comment>{$this->app->repo}</comment>");
-                  return;
-                }
-              }
+          // Check if the remote branch exists
+          if ($branch_name) {
+            $output->writeln("<info>Checking if branch <comment>{$branch_name}</comment> exists in <comment>{$this->app->repo}</comment> </info>");
+            $process = new Process('git ls-remote ' . $this->app->repo . ' | grep -sw "' . $branch_name . '"');
+            $process->run();
+            if (!$process->isSuccessful()) {
+              $output->writeln("<error> ERROR </error> Branch <comment>{$branch_name}</comment> not found in repote repo <comment>{$this->app->repo}</comment>");
+              return;
             }
           }
         }
 
         // Environment object
         $environment = array(
-            'app' => $this->app->name,
+          'app' => $this->app->name,
           'name' => $environment_name,
           'path' => $path,
           'document_root' => '',
