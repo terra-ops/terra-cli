@@ -79,7 +79,7 @@ class EnvironmentEnable extends Command
         $output->writeln('Running <comment>ENABLE</comment> app hook...');
 
         $environment_factory->getConfig();
-        if (!empty($environment_factory->config['hooks']['enable'])) {
+        if (!empty($environment_factory->config['hooks']['enable_first'])) {
             // Output what we are running
             $formatter = $this->getHelper('formatter');
             $errorMessages = array($environment_factory->config['hooks']['enable']);

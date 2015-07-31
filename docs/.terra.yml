@@ -16,7 +16,7 @@ hooks:
       );" >> www/sites/default/settings.php
 
     # On environment:enable
-    enable: |
+    enable_first: |
       drush {{alias}} site-install -y
       drush {{alias}} uli
 
