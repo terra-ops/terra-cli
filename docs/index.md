@@ -2,6 +2,14 @@
 
 ![Terra command line interface](https://pbs.twimg.com/media/CHj2HvyUYAAaivy.png:large)
 
+## About
+
+Terra is a suite of tools for the purpose of standing up web apps with Docker easily.
+
+It is designed to be as simple as possible for developers, while being powerful enough to use in production at scale.
+
+With Terra, all you care about is your site's code.  Stop wasting time setting up environments, let terra and docker do all the work for you.
+
 ## Community
 
 Please join the chat on Gitter.  We want as much feedback as possible!
