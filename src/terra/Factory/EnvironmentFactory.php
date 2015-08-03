@@ -413,6 +413,33 @@ class EnvironmentFactory
     }
 
     /**
+     * Turns off an environment.
+     *
+     * In this class, we use `docker-compose up`.
+     *
+     * @return bool
+     */
+    public function disable()
+    {
+        if ($this->writeConfig() === false) {
+            return false;
+        }
+
+        $process = new Process('docker-compose stop', $this->getDockerComposePath());
+        $process->setTimeout(null);
+        $process->run(function ($type, $buffer) {
+            if (Process::ERR === $type) {
+                echo 'DOCKER > '.$buffer;
+            } else {
+                echo 'DOCKER > '.$buffer;
+            }
+        });
+        if ($process->isSuccessful()) {
+            return true;
+        }
+    }
+
+    /**
      * Destroy an environment.
      *
      * @return bool|string
