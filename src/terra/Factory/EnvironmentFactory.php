@@ -273,6 +273,9 @@ class EnvironmentFactory
         if (file_exists($ssh_key_path)) {
             $ssh_authorized_keys = file_get_contents($ssh_key_path);
         }
+        else {
+            $ssh_authorized_keys = '';
+        }
 
         $compose = array();
         $compose['load'] = array(
