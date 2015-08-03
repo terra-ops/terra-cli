@@ -260,8 +260,10 @@ class EnvironmentFactory
         $source_root = $this->environment->path;
 
         if (!empty($this->config['document_root'])) {
+            $document_root_relative = $this->config['document_root'];
             $document_root = $this->environment->path.'/'.$this->config['document_root'];
         } else {
+            $document_root_relative = '';
             $document_root = $source_root;
         }
 
@@ -302,7 +304,7 @@ class EnvironmentFactory
             'environment' => array(
                 'HOST_UID' => posix_getuid(),
                 'HOST_GID' => posix_getgid(),
-                'DOCUMENT_ROOT' => $this->config['document_root'],
+                'DOCUMENT_ROOT' => $document_root_relative,
             ),
             'expose' => array(
                 '80/tcp',
