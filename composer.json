@@ -1,6 +1,6 @@
 {
-    "name": "terra/terra-app",
-    "description": "DevOps for All",
+    "name": "terra/api",
+    "description": "Terra Command Line Interface",
     "type": "project",
     "license": "GPL-2.0",
     "require": {
