@@ -1,5 +1,5 @@
 {
-    "name": "terra/api",
+    "name": "terra/cli",
     "description": "Terra Command Line Interface",
     "type": "project",
     "license": "GPL-2.0",
