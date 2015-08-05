@@ -11,10 +11,10 @@ Terra depends on the following tools.  The instructions below will guide you thr
 - PHP
 - git
 - Composer [http://getcomposer.org](http://getcomposer.org)
-- Drush [http://drush.org](http://drush.org)
-- Docker [http://docker.com](http://docker.com)
-- Docker Compose [https://docs.docker.com/compose](https://docs.docker.com/compose)
-- Docker Machine [https://docs.docker.com/machine](https://docs.docker.com/machine)
+- Drush (7.x) [http://drush.org](http://drush.org)
+- Docker (1.7.x) [http://docker.com](http://docker.com)
+- Docker Compose (1.3.x) [https://docs.docker.com/compose](https://docs.docker.com/compose)
+- Docker Machine (0.3.x) [https://docs.docker.com/machine](https://docs.docker.com/machine)
 
 Docker Machine isn't currently required but it will be soon. :)
 
