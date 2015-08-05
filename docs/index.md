@@ -22,6 +22,30 @@ Please join the chat on Gitter.  We want as much feedback as possible!
 
 [Issues](https://github.com/terra-ops/terra-app/issues) and [Story Boarding](https://huboard.com/terra-ops/terra-app/)
 
+## Example Apps
+
+**Drupal 7 Core*
+https://github.com/terra-ops/example-drupal
+
+**Drupal 7 Makefile**
+https://github.com/terra-ops/example-drush-make
+
+**Drupal 8**
+https://github.com/terra-ops/example-drupal8
+
+**Wordpress**
+Replaces the `terra/drupal` docker image with `wordpress`
+https://github.com/terra-ops/example-wordpress
+
+**Scaler**
+Simply prints the IP address to test scaling.
+https://github.com/terra-ops/example-scale
+
+**Symfony**
+Terra API is a symfony app.  Use it as an example.
+https://github.com/terra-ops/terra-api
+
+
 ## Coding Standards
 
 As a symfony app, we are following PSR-2 Coding Standards.
