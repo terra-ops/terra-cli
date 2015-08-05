@@ -17,7 +17,7 @@ class AppRemove extends Command
         ->setName('app:remove')
         ->setDescription('Removes an app.')
         ->addArgument(
-            'name',
+            'app_name',
             InputArgument::OPTIONAL,
             'The name the app to remove.'
         )
@@ -25,26 +25,10 @@ class AppRemove extends Command
     }
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // If there are no apps, return
-        if (count($this->getApplication()->getTerra()->getConfig()->get('apps')) == 0) {
-            $output->writeln('<comment>There are no apps to remove!</comment>');
-            $output->writeln('Use the command <info>terra app:add</info> to add your first app.');
-
-            return;
-        }
 
         $helper = $this->getHelper('question');
-        $name = $input->getArgument('name');
-
-        // If no name specified provide options
-        if (empty($name)) {
-            $question = new ChoiceQuestion(
-                'Which app would you like to remove? ',
-                array_keys($this->getApplication()->getTerra()->getConfig()->get('apps')),
-                null
-            );
-            $name = $helper->ask($input, $output, $question);
-        }
+        $this->getApp($input, $output);
+        $name = $this->app->name;
 
         // Confirm removal of the app.
         $question = new ConfirmationQuestion("Are you sure you would like to remove the app <question>$name</question>? [y/N] ", false);
