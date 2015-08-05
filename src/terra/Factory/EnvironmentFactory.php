@@ -547,7 +547,7 @@ class EnvironmentFactory
      */
     public function getUrl()
     {
-        return $this->app->name.'.'.$this->name.'.'.gethostname();
+        return $this->app->name.'.'.$this->name.'.'.$this->app->host;
     }
 
     /**
