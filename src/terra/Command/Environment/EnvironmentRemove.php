@@ -36,6 +36,11 @@ class EnvironmentRemove extends Command
       // Ask for an app and environment.
       $this->getApp($input, $output);
       $this->getEnvironment($input, $output);
+
+        // Don't continue unless we have an environment.
+        if (empty($this->environment)) {
+            return;
+        }
       $environment_name = $this->environment->name;
       $app_name = $this->app->name;
 
