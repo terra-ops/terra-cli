@@ -15,6 +15,7 @@ Terra depends on the following tools.  The instructions below will guide you thr
 - Docker (1.7.x) [http://docker.com](http://docker.com)
 - Docker Compose (1.3.x) [https://docs.docker.com/compose](https://docs.docker.com/compose)
 - Docker Machine (0.3.x) [https://docs.docker.com/machine](https://docs.docker.com/machine)
+- VirtualBox (4.3, [Look for "Older Builds" on the website.](https://www.virtualbox.org/wiki/Download_Old_Builds_4_3)) Required only on MacOSx 
 
 Docker Machine isn't currently required but it will be soon. :)
 
@@ -108,7 +109,11 @@ Run all of the following commands as root, or with `sudo`.
         
 ## OSX
 
-Running docker in OSx requires a slightly different setup.
+Running docker and the others natively in OSx works well.
+
+The docker host, or daemon, must run in a virtualmachine.
+
+"boot2docker" is the virtualmachine 
 
 There is a lot of nuance in using Docker on OSX.  It will help to read the guide about Docker on OSX here: http://viget.com/extend/how-to-use-docker-on-os-x-the-missing-guide
 
