@@ -24,21 +24,28 @@ Please join the chat on Gitter.  We want as much feedback as possible!
 
 ## Example Apps
 
-**Drupal 7 Core*
+### Drupal 7 Core
+
 https://github.com/terra-ops/example-drupal
 
-**Drupal 7 Makefile**
+### Drupal 7 Makefile
+
 https://github.com/terra-ops/example-drush-make
 
-**Drupal 8**
+### Drupal 8
+
 https://github.com/terra-ops/example-drupal8
 
-**Wordpress**
+### Wordpress
+
 Replaces the `terra/drupal` docker image with `wordpress`
+
 https://github.com/terra-ops/example-wordpress
 
-**Scaler**
+### Scaler
+
 Simply prints the IP address to test scaling.
+
 https://github.com/terra-ops/example-scale
 
 **Symfony**
