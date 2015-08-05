@@ -82,12 +82,12 @@ class EnvironmentEnable extends Command
         if (!empty($environment_factory->config['hooks']['enable_first'])) {
             // Output what we are running
             $formatter = $this->getHelper('formatter');
-            $errorMessages = array($environment_factory->config['hooks']['enable']);
+            $errorMessages = array($environment_factory->config['hooks']['enable_first']);
             $formattedBlock = $formatter->formatBlock($errorMessages, 'question');
             $output->writeln($formattedBlock);
 
             chdir($environment_factory->getSourcePath());
-            $process = new Process($environment_factory->config['hooks']['enable']);
+            $process = new Process($environment_factory->config['hooks']['enable_first']);
             $process->setTimeout(null);
             $process->run(function ($type, $buffer) {
                 if (Process::ERR === $type) {
