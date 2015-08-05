@@ -18,7 +18,7 @@ Terra depends on the following tools.  The instructions below will guide you thr
 
 Terra recommends Ubuntu Trusty (14.04 or higher).
 
-### Automatic Install
+### Automatic Install for Ubuntu 14
 
 We have created a `install.sh` script that runs you through this entire process
 
