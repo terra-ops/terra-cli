@@ -11,7 +11,9 @@
         "symfony/process": "~2.6",
         "symfony/yaml": "~2.6",
         "cpliakas/git-wrapper": "~1.4",
-        "teqneers/php-stream-wrapper-for-git": "~1.0"
+        "teqneers/php-stream-wrapper-for-git": "~1.0",
+        "videlalvaro/php-amqplib": "2.2.*",
+        "guzzlehttp/guzzle": "~6.0"
     },
     "authors": [
         {
