@@ -20,7 +20,7 @@ class Queue extends Command
                 'url',
                 InputArgument::OPTIONAL,
                 'The AMPQ server URL in the format of "username:password@server:port/queue',
-                'tcp://guest:guest@localhost:32773/terra'
+                'tcp://guest:guest@local.computer:5672/terra'
             );
     }
 
