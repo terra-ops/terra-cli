@@ -30,7 +30,7 @@ class Queue extends Command
         $server = parse_url($url);
 
         // AMQP server information
-        $server['queue'] = $server['path'];
+        $server['queue'] = substr($server['path'], 1);
         $output->writeln("Checking <question>$url</question> ...");
 
         $connection = new AMQPConnection($server['host'], $server['port'], $server['user'], $server['pass']);
