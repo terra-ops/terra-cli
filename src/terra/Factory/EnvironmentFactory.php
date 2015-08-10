@@ -144,7 +144,8 @@ class EnvironmentFactory
             // Process any string replacements.
             $environment_config_string = file_get_contents($this->getSourcePath().'/.terra.yml');
             $this->config = Yaml::parse(strtr($environment_config_string, array(
-            '{{alias}}' => "@{$this->app->name}.{$this->environment->name}",
+                '{{alias}}' => "@{$this->app->name}.{$this->environment->name}",
+                '{{uri}}' => $this->getUrl(),
             )));
         } else {
             $this->config = null;
