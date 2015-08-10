@@ -51,12 +51,21 @@ class EnvironmentTest extends Command
         $env = array();
         $env['HOME'] = $_SERVER['HOME'];
 
+        // @TODO: Only generate behat vars if the command behat is present.
         $behat_vars = array(
-          'extensions' => array(
-            'Behat\MinkExtension' => array(
-              'base_url' => 'http://'.$environment_factory->getUrl(),
+            'extensions' => array(
+                'Behat\\MinkExtension' => array(
+                    'base_url' => 'http://'.$environment_factory->getUrl(),
+                ),
+                'Drupal\\DrupalExtension' => array(
+                    'drush' => array(
+                        'alias' => $environment_factory->getDrushAlias(),
+                    ),
+                    'drupal' => array(
+                        'drupal_root' => $environment_factory->getDocumentRoot(),
+                    ),
+                ),
             ),
-          ),
         );
 
         // @TODO: This is NOT WORKING.  We MUST figure out how to override the base_url.
