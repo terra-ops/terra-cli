@@ -41,35 +41,43 @@ class EnvironmentTest extends Command
         $environment_factory = new EnvironmentFactory($this->environment, $this->app);
 
         $environment_factory->getConfig();
+        if (isset($environment_factory->config['hooks']['test'])) {
+            $this->executeTests();
+        } elseif ($environment_factory->config['behat_path']) {
+            $this->executeBehatTests($input, $output);
+        }
+    }
 
+    protected function executeTests(InputInterface $input, OutputInterface $output) {
         // Run the tests
         // @TODO: Move to factory.
+
+        $environment_factory = new EnvironmentFactory($this->environment, $this->app);
+
         $output->writeln('<info>TERRA</info> | <comment>Test: Start...</comment>');
         $output->writeln('<info>TERRA</info> | ' . $environment_factory->config['hooks']['test']);
 
         // Set environment variables for behat tests
         $env = array();
         $env['HOME'] = $_SERVER['HOME'];
-
-        // @TODO: Only generate behat vars if the command behat is present.
-        $behat_vars = array(
-            'extensions' => array(
-                'Behat\\MinkExtension' => array(
-                    'base_url' => 'http://'.$environment_factory->getUrl(),
-                ),
-                'Drupal\\DrupalExtension' => array(
-                    'drush' => array(
-                        'alias' => $environment_factory->getDrushAlias(),
-                    ),
-                    'drupal' => array(
-                        'drupal_root' => $environment_factory->getDocumentRoot(),
-                    ),
-                ),
-            ),
-        );
+//        $behat_vars = array(
+//            'extensions' => array(
+//                'Behat\\MinkExtension' => array(
+//                    'base_url' => 'http://'.$environment_factory->getUrl(),
+//                ),
+//                'Drupal\\DrupalExtension' => array(
+//                    'drush' => array(
+//                        'alias' => $environment_factory->getDrushAlias(),
+//                    ),
+//                    'drupal' => array(
+//                        'drupal_root' => $environment_factory->getDocumentRoot(),
+//                    ),
+//                ),
+//            ),
+//        );
 
         // @TODO: This is NOT WORKING.  We MUST figure out how to override the base_url.
-        $env['BEHAT_PARAMS'] = json_encode($behat_vars);
+//        $env['BEHAT_PARAMS'] = json_encode($behat_vars);
 
         $process = new Process($environment_factory->config['hooks']['test'], $environment_factory->getSourcePath(), $env);
         $process->run(function ($type, $buffer) {
@@ -86,5 +94,15 @@ class EnvironmentTest extends Command
             $output->writeln('<info>TERRA</info> | <info>Test Passed: </info> '.$hook);
         }
         $output->writeln('');
+    }
+
+    /**
+     * Using the config item "behat_path", run composer update and bin/behat in the behat path.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function executeBehatTests(InputInterface $input, OutputInterface $output) {
+        $output->writeln('Running Behat Tests...');
     }
 }
