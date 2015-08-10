@@ -79,6 +79,8 @@ class EnvironmentEnable extends Command
         $output->writeln('Running <comment>ENABLE</comment> app hook...');
 
         $environment_factory->getConfig();
+
+        // @TODO: Figure out how to only run this hook the first time!
         if (!empty($environment_factory->config['hooks']['enable_first'])) {
             // Output what we are running
             $formatter = $this->getHelper('formatter');
