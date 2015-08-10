@@ -5,6 +5,7 @@ namespace terra\Command\Environment;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Process\Process;
@@ -31,6 +32,11 @@ class EnvironmentTest extends Command
             'environment_name',
             InputArgument::OPTIONAL,
             'The name the environment.'
+        )
+        ->addOption(
+            'name',
+            NULL,
+            InputOption::VALUE_OPTIONAL
         )
         ;
     }
@@ -163,7 +169,12 @@ class EnvironmentTest extends Command
 
         // 4. Run `bin/behat --colors --config=$PATH` in behat_path.
         // "expand:true" expands scenario outlines, making them readable.
+
         $cmd = 'bin/behat --colors --format-settings=\'{"expand": true}\' --config=' . $behat_path_new;
+        if ($input->getOption('name')) {
+            $cmd .= ' --name=' . $input->getOption('name');
+        }
+
         $output->writeln("Running: $cmd");
         $output->writeln("in: $behat_path");
         $output->writeln('');
