@@ -1,6 +1,11 @@
 # The relative path to your exposed web files.
 document_root: docroot
 
+# The path to your behat.yml and composer.json file for behat tests.
+# If you have this property specified, running the `terra environment:test` command will run `composer update` and then
+# `bin/behat` in that folder!
+behat_path: tests
+
 # Hooks are commands that are triggered on certain events
 hooks:
 
