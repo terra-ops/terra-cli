@@ -2,11 +2,16 @@
 
 namespace terra\Command\Environment;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Filesystem\Filesystem;
+
+
 use terra\Command\Command;
 use terra\Factory\EnvironmentFactory;
 
@@ -106,11 +111,60 @@ class EnvironmentTest extends Command
      */
     protected function executeBehatTests(InputInterface $input, OutputInterface $output) {
         $output->writeln('Running Behat Tests...');
+        $environment_factory = new EnvironmentFactory($this->environment, $this->app);
+        $environment_factory->getConfig();
 
         // 1. Look for behat.yml
-        // 2. Load it, replace necessary items, and clone it to a temporary file.
-        // 3. Run `composer install` in behat_path.
-        // 4. Run `bin/behat --colors --config=$PATH` in behat_path.
+        $behat_path = $this->environment->path . '/' . $environment_factory->config['behat_path'];
+        $behat_yml_path = $behat_path . '/behat.yml';
+        if (!file_exists($behat_path)) {
+            throw new \Exception("Path $behat_path not found. Check your app's .terra.yml file.");
+        }
+        elseif (!file_exists($behat_yml_path)) {
+            throw new \Exception("Behat.yml file not found at $behat_yml_path. Check your app's .terra.yml file.");
+        }
+        $output->writeln('Found behat.yml file at ' . $behat_yml_path);
 
+        // 2. Load it, replace necessary items, and clone it to a temporary file.
+        $behat_yml =  Yaml::parse(file_get_contents($behat_yml_path));
+
+        // Set Base URL
+        $behat_yml['default']['extensions']['Behat\\MinkExtension']['base_url'] = $environment_factory->getUrl();
+        $behat_yml['default']['extensions']['Drupal\\DrupalExtension']['drush']['alias'] = $environment_factory->getDrushAlias();
+
+        // If driver is drupal, add root.
+        if ($behat_yml['default']['extensions']['Drupal\\DrupalExtension']['api_driver'] == 'drupal') {
+            $behat_yml['default']['extensions']['Drupal\\DrupalExtension']['drupal']['root'] = $environment_factory->getDocumentRoot();
+        }
+
+        $behat_yml_new = Yaml::dump($behat_yml, 5, 2);
+        $behat_path_new = tempnam('/tmp', 'behat.') . '.yml';
+        $fs = new Filesystem();
+        $fs->dumpFile($behat_path_new, $behat_yml_new);
+
+        $output->writeln('Generated new behat.yml file at ' . $behat_path_new);
+
+        // 3. Run `composer install` in behat_path.
+        $process = new Process('composer install', $behat_path);
+        $process->run(function ($type, $buffer) {
+            if (Process::ERR === $type) {
+                echo $buffer;
+            } else {
+                echo $buffer;
+            }
+        });
+
+        // 4. Run `bin/behat --colors --config=$PATH` in behat_path.
+        $cmd = 'bin/behat --colors --config=' . $behat_path_new;
+        $output->writeln("Running: $cmd");
+        $output->writeln("in: $behat_path");
+        $process = new Process($cmd, $behat_path);
+        $process->run(function ($type, $buffer) {
+            if (Process::ERR === $type) {
+                echo $buffer;
+            } else {
+                echo $buffer;
+            }
+        });
     }
 }
