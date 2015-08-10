@@ -106,5 +106,11 @@ class EnvironmentTest extends Command
      */
     protected function executeBehatTests(InputInterface $input, OutputInterface $output) {
         $output->writeln('Running Behat Tests...');
+
+        // 1. Look for behat.yml
+        // 2. Load it, replace necessary items, and clone it to a temporary file.
+        // 3. Run `composer install` in behat_path.
+        // 4. Run `bin/behat --colors --config=$PATH` in behat_path.
+
     }
 }
