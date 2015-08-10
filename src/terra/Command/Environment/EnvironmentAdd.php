@@ -91,15 +91,18 @@ class EnvironmentAdd extends Command
             }
             $question = new Question("Path: ($default_path) ", $default_path);
             $path = $helper->ask($input, $output, $question);
-            if (empty($path)) {
-                $path = $default_path;
-            }
         }
 
         // Check for path
         $fs = new Filesystem();
         if (!$fs->isAbsolutePath($path)) {
-            $path = getcwd().'/'.$path;
+            // Don't save the "." to the environments path.
+            if ($path == '.') {
+                $path = getcwd();
+            }
+            else {
+                $path = getcwd().'/'.$path;
+            }
         }
 
         // Environment object
