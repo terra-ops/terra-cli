@@ -43,13 +43,18 @@ class EnvironmentRemove extends Command
         }
       $environment_name = $this->environment->name;
       $app_name = $this->app->name;
+      $helper = $this->getHelper('question');
 
         // Confirm removal of the app.
-        $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion("Are you sure you would like to remove the environment <question>$app_name:$environment_name</question>?  All files at {$this->environment->path} will be deleted, and all containers will be killed. [y/N] ", false);
-        if (!$helper->ask($input, $output, $question)) {
+        if (!$input->hasOption('no-interaction')) {
+            $question = new ConfirmationQuestion("Are you sure you would like to remove the environment <question>$app_name:$environment_name</question>?  All files at {$this->environment->path} will be deleted, and all containers will be killed. [y/N] ", false);
+        }
+        else {
+            $output->writeln("<warning>Running with --no-interaction. Skipping confirmation step.</warning>");
+        }
+        //echo in_array('--no-interaction', $input->tokens);
+        if (!$input->hasOption('no-interaction') && !$helper->ask($input, $output, $question)) {
             $output->writeln('<error>Cancelled</error>');
-
             return;
         } else {
             // Remove the environment from config registry.
