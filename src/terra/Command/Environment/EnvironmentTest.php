@@ -129,7 +129,7 @@ class EnvironmentTest extends Command
         $behat_yml =  Yaml::parse(file_get_contents($behat_yml_path));
 
         // Set Base URL
-        $behat_yml['default']['extensions']['Behat\\MinkExtension']['base_url'] = $environment_factory->getUrl();
+        $behat_yml['default']['extensions']['Behat\\MinkExtension']['base_url'] = 'http://' . $environment_factory->getUrl();
         $behat_yml['default']['extensions']['Drupal\\DrupalExtension']['drush']['alias'] = $environment_factory->getDrushAlias();
 
         // If driver is drupal, add root.
@@ -138,14 +138,15 @@ class EnvironmentTest extends Command
         }
 
         $behat_yml_new = Yaml::dump($behat_yml, 5, 2);
-        $behat_path_new = tempnam('/tmp', 'behat.') . '.yml';
+        $behat_path_new = 'behat.terra.yml';
         $fs = new Filesystem();
         $fs->dumpFile($behat_path_new, $behat_yml_new);
 
         $output->writeln('Generated new behat.yml file at ' . $behat_path_new);
 
         // 3. Run `composer install` in behat_path.
-        $process = new Process('composer install', $behat_path);
+        $output->writeln('');
+        $output->writeln('<question>TERRA</question> | <comment>Running: composer install</comment>');        $process = new Process('composer install', $behat_path);
         $process->run(function ($type, $buffer) {
             if (Process::ERR === $type) {
                 echo $buffer;
@@ -153,6 +154,9 @@ class EnvironmentTest extends Command
                 echo $buffer;
             }
         });
+
+        $output->writeln('');
+        $output->writeln('<question>TERRA</question> | <comment>Behat Tests: Start</comment>');
 
         // 4. Run `bin/behat --colors --config=$PATH` in behat_path.
         $cmd = 'bin/behat --colors --config=' . $behat_path_new;
@@ -166,5 +170,14 @@ class EnvironmentTest extends Command
                 echo $buffer;
             }
         });
+        $output->writeln('');
+
+        if (!$process->isSuccessful()) {
+            $output->writeln('<question>TERRA</question> | <fg=red>Test Failed</> ');
+        } else {
+            $output->writeln('<question>TERRA</question> | <info>Test Passed!</info> ');
+        }
+
+//        $fs->remove($behat_path_new);
     }
 }
