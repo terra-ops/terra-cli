@@ -609,4 +609,18 @@ class EnvironmentFactory
             return false;
         }
     }
+
+    /**
+     * Get the name of the drush alias.
+     */
+    public function getDrushAlias() {
+        return "@{$this->app->name}.{$this->environment->name}";
+    }
+
+    /**
+     * Get the path to document root
+     */
+    public function getDocumentRoot() {
+        return $this->environment->path . '/' . $this->config['document_root'];
+    }
 }
