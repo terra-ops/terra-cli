@@ -42,8 +42,10 @@ class EnvironmentTest extends Command
 
         $environment_factory->getConfig();
         if (isset($environment_factory->config['hooks']['test'])) {
-            $this->executeTests();
-        } elseif ($environment_factory->config['behat_path']) {
+            $this->executeTests($input, $output);
+        }
+
+        if ($environment_factory->config['behat_path']) {
             $this->executeBehatTests($input, $output);
         }
     }
