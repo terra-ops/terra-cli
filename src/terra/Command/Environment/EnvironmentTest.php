@@ -146,7 +146,9 @@ class EnvironmentTest extends Command
 
         // 3. Run `composer install` in behat_path.
         $output->writeln('');
-        $output->writeln('<question>TERRA</question> | <comment>Running: composer install</comment>');        $process = new Process('composer install', $behat_path);
+        $output->writeln('<fg=blue>TERRA</> | <comment>Running: composer install</comment>');
+
+        $process = new Process('composer install', $behat_path);
         $process->run(function ($type, $buffer) {
             if (Process::ERR === $type) {
                 echo $buffer;
@@ -156,7 +158,8 @@ class EnvironmentTest extends Command
         });
 
         $output->writeln('');
-        $output->writeln('<question>TERRA</question> | <comment>Behat Tests: Start</comment>');
+        $output->writeln('<fg=blue>TERRA</> | <comment>Behat Tests: Start</comment>');
+        $output->writeln('');
 
         // 4. Run `bin/behat --colors --config=$PATH` in behat_path.
         $cmd = 'bin/behat --colors --config=' . $behat_path_new;
@@ -173,11 +176,11 @@ class EnvironmentTest extends Command
         $output->writeln('');
 
         if (!$process->isSuccessful()) {
-            $output->writeln('<question>TERRA</question> | <fg=red>Test Failed</> ');
+            $output->writeln('<fg=blue>TERRA</> | <fg=red>Test Failed</> ');
+            return 1;
         } else {
-            $output->writeln('<question>TERRA</question> | <info>Test Passed!</info> ');
+            $output->writeln('<fg=blue>TERRA</> | <info>Test Passed!</info> ');
+            return 0;
         }
-
-//        $fs->remove($behat_path_new);
     }
 }
