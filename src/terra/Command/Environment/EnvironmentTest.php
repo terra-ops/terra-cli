@@ -162,7 +162,8 @@ class EnvironmentTest extends Command
         $output->writeln('<fg=cyan>TERRA</> | <comment>Behat Tests: Start</comment>');
 
         // 4. Run `bin/behat --colors --config=$PATH` in behat_path.
-        $cmd = 'bin/behat --colors --config=' . $behat_path_new;
+        // "expand:true" expands scenario outlines, making them readable.
+        $cmd = 'bin/behat --colors --format-settings=\'{"expand": true}\' --config=' . $behat_path_new;
         $output->writeln("Running: $cmd");
         $output->writeln("in: $behat_path");
         $output->writeln('');
