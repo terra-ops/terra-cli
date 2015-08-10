@@ -149,7 +149,7 @@ class EnvironmentTest extends Command
         $output->writeln('<fg=cyan>TERRA</> | <comment>Running: composer install</comment>');
 
         $process = new Process('composer install', $behat_path);
-        $process->setTimeout();
+        $process->setTimeout(NULL);
         $process->run(function ($type, $buffer) {
             if (Process::ERR === $type) {
                 echo $buffer;
@@ -168,7 +168,7 @@ class EnvironmentTest extends Command
         $output->writeln('');
 
         $process = new Process($cmd, $behat_path);
-        $process->setTimeout();
+        $process->setTimeout(NULL);
         $process->run(function ($type, $buffer) {
             if (Process::ERR === $type) {
                 echo $buffer;
