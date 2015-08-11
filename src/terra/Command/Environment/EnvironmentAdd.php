@@ -37,8 +37,9 @@ class EnvironmentAdd extends Command
             InputArgument::OPTIONAL,
             'The path to the environment.'
         )
-        ->addArgument(
-            'version',
+        ->addOption(
+            'ref',
+            'r',
             InputArgument::OPTIONAL,
             'The git branch, tag, or sha used to create the environment.'
         )
@@ -114,40 +115,23 @@ class EnvironmentAdd extends Command
             }
         }
 
-        $version = $input->getArgument('version');
-        while (empty($version)) {
-          $output->writeln("<info>Getting the default branch for <comment>{$this->app->repo}</comment> </info>");
-          // command to get default branch
-          $process = new Process("git ls-remote " . $this->app->repo . " | awk '{if (a[$1]) { print $2 } a[$1] = $2}' | grep heads | awk -F\"/\" '{print $3 }'");
-          try {
-            $process->mustRun();
-          } catch (ProcessFailedException $e) {
-            $output->writeln("<error> ERROR </error> Unable to find default git branch. <comment>{$e->getMessage()}</comment>");
-          }
-          $default_branch = trim($process->getOutput());
-          $question = new Question("Version? [$default_branch]", $default_branch);
-          $version = $helper->ask($input, $output, $question);
-
-          // Check if the remote branch exists
-          if ($version) {
-            $output->writeln("<info>Checking if branch <comment>{$version}</comment> exists in <comment>{$this->app->repo}</comment> </info>");
-            $process = new Process('git ls-remote ' . $this->app->repo . ' | grep -sw "' . $version . '"');
-            $process->run();
-            if (!$process->isSuccessful()) {
-              $output->writeln("<error> ERROR </error> Branch <comment>{$version}</comment> not found in repote repo <comment>{$this->app->repo}</comment>");
-              return;
-            }
-          }
+        // Ask what version.
+        if (empty($input->getOption('ref'))) {
+            $question = new Question("Version? (git branch, tag or sha) [default] ");
+            $version = $helper->ask($input, $output, $question);
+        }
+        else {
+            $version = $input->getOption('ref');
         }
 
         // Environment object
         $environment = array(
-          'app' => $this->app->name,
-          'name' => $environment_name,
-          'path' => $path,
-          'document_root' => '',
-          'url' => '',
-          'version' => $version
+            'app' => $this->app->name,
+            'name' => $environment_name,
+            'path' => $path,
+            'document_root' => '',
+            'url' => '',
+            'version' => $version,
         );
 
         // Prepare the environment factory.
