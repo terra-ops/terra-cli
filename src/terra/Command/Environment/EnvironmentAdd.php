@@ -114,7 +114,7 @@ class EnvironmentAdd extends Command
             }
         }
 
-        $version = $input->getArgument('git_ref');
+        $version = $input->getArgument('version');
         while (empty($version)) {
           $output->writeln("<info>Getting the default branch for <comment>{$this->app->repo}</comment> </info>");
           // command to get default branch
