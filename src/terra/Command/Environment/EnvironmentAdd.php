@@ -67,14 +67,18 @@ class EnvironmentAdd extends Command
 
         // Ask for environment name
         $environment_name = $input->getArgument('environment_name');
-        while (empty($environment_name) || isset($this->app->environments[$environment_name]) || !preg_match('/^[a-zA-Z0-9]+$/', $environment_name)) {
+        while (empty($environment_name) || isset($this->app->environments[$environment_name])) {
             $question = new Question('Environment name? ');
             $environment_name = $helper->ask($input, $output, $question);
 
+            // Check for spaces or characters.
             if(!preg_match('/^[a-zA-Z0-9]+$/', $environment_name)) {
-              $output->writeln("<error> ERROR </error> Environment <comment>{$environment_name}</comment> cannot contain spaces or special characters.");
+                $output->writeln("<error> ERROR </error> Environment name cannot contain spaces or special characters.");
+                $environment_name = '';
+                continue;
             }
-            // Look for environment with this name
+
+            // Look for environment with this name.
             if (isset($this->app->environments[$environment_name])) {
                 $output->writeln("<error> ERROR </error> Environment <comment>{$environment_name}</comment> already exists in app <comment>{$this->app->name}</comment>");
             }
