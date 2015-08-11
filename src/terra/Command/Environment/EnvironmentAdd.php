@@ -2,6 +2,7 @@
 
 namespace terra\Command\Environment;
 
+use Symfony\Component\Console\Input\InputOption;
 use terra\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -51,8 +52,8 @@ class EnvironmentAdd extends Command
         )
         ->addOption(
             'enable',
-            '',
-            InputArgument::OPTIONAL,
+            'e',
+            InputOption::VALUE_NONE,
             'Enable this environment immediately.'
         )
         ;
