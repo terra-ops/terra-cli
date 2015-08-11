@@ -75,15 +75,19 @@ class EnvironmentFactory
         }
 
         try {
+            // Create App folder
             mkdir($path, 0755, TRUE);
             chdir($path);
-            $options = array();
-            if($this->environment->version) {
-              $options['branch'] = $this->environment->version;
-            }
+
+            // Clone repo
             $wrapper = new GitWrapper();
             $wrapper->streamOutput();
-            $wrapper->cloneRepository($this->app->repo, $path, $options);
+            $wrapper->cloneRepository($this->app->repo, $path);
+
+            // Checkout correct version.
+            $git = new GitWorkingCopy($wrapper, $this->getSourcePath());
+            $git->checkout($this->environment->version);
+
         } catch (\GitWrapper\GitException $e) {
             return false;
         }
