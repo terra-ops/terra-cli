@@ -115,15 +115,6 @@ class EnvironmentAdd extends Command
             }
         }
 
-        // Ask what version.
-        if (empty($input->getOption('ref'))) {
-            $question = new Question("Version? (git branch, tag or sha) [default] ");
-            $version = $helper->ask($input, $output, $question);
-        }
-        else {
-            $version = $input->getOption('ref');
-        }
-
         // Environment object
         $environment = array(
             'app' => $this->app->name,
@@ -131,7 +122,7 @@ class EnvironmentAdd extends Command
             'path' => $path,
             'document_root' => '',
             'url' => '',
-            'version' => $version,
+            'version' => $input->getOption('ref'),
         );
 
         // Prepare the environment factory.
