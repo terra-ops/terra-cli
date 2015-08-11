@@ -38,9 +38,9 @@ class EnvironmentAdd extends Command
             'The path to the environment.'
         )
         ->addArgument(
-            'branch',
+            'version',
             InputArgument::OPTIONAL,
-            'The repo branch used to create the environment.'
+            'The git branch, tag, or sha used to create the environment.'
         )
         ->addArgument(
             'document_root',
@@ -114,8 +114,8 @@ class EnvironmentAdd extends Command
             }
         }
 
-        $branch_name = $input->getArgument('branch');
-        while (empty($branch_name)) {
+        $version = $input->getArgument('git_ref');
+        while (empty($version)) {
           $output->writeln("<info>Getting the default branch for <comment>{$this->app->repo}</comment> </info>");
           // command to get default branch
           $process = new Process("git ls-remote " . $this->app->repo . " | awk '{if (a[$1]) { print $2 } a[$1] = $2}' | grep heads | awk -F\"/\" '{print $3 }'");
@@ -126,15 +126,15 @@ class EnvironmentAdd extends Command
           }
           $default_branch = trim($process->getOutput());
           $question = new Question("Version? [$default_branch]", $default_branch);
-          $branch_name = $helper->ask($input, $output, $question);
+          $version = $helper->ask($input, $output, $question);
 
           // Check if the remote branch exists
-          if ($branch_name) {
-            $output->writeln("<info>Checking if branch <comment>{$branch_name}</comment> exists in <comment>{$this->app->repo}</comment> </info>");
-            $process = new Process('git ls-remote ' . $this->app->repo . ' | grep -sw "' . $branch_name . '"');
+          if ($version) {
+            $output->writeln("<info>Checking if branch <comment>{$version}</comment> exists in <comment>{$this->app->repo}</comment> </info>");
+            $process = new Process('git ls-remote ' . $this->app->repo . ' | grep -sw "' . $version . '"');
             $process->run();
             if (!$process->isSuccessful()) {
-              $output->writeln("<error> ERROR </error> Branch <comment>{$branch_name}</comment> not found in repote repo <comment>{$this->app->repo}</comment>");
+              $output->writeln("<error> ERROR </error> Branch <comment>{$version}</comment> not found in repote repo <comment>{$this->app->repo}</comment>");
               return;
             }
           }
@@ -147,7 +147,7 @@ class EnvironmentAdd extends Command
           'path' => $path,
           'document_root' => '',
           'url' => '',
-          'version' => $branch_name
+          'version' => $version
         );
 
         // Prepare the environment factory.
