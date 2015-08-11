@@ -89,7 +89,11 @@ class EnvironmentFactory
             $git->checkout($this->environment->version);
 
         } catch (\GitWrapper\GitException $e) {
-            return false;
+
+            // If exception is because there is no git ref, continue.
+            if (strpos($e->getMessage(), 'error: pathspec') !== 0) {
+                return false;
+            }
         }
 
         chdir($path);
