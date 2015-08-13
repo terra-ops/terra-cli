@@ -75,13 +75,25 @@ class EnvironmentFactory
         }
 
         try {
+            // Create App folder
             mkdir($path, 0755, TRUE);
             chdir($path);
+
+            // Clone repo
             $wrapper = new GitWrapper();
             $wrapper->streamOutput();
             $wrapper->cloneRepository($this->app->repo, $path);
+
+            // Checkout correct version.
+            $git = new GitWorkingCopy($wrapper, $this->getSourcePath());
+            $git->checkout($this->environment->version);
+
         } catch (\GitWrapper\GitException $e) {
-            return false;
+
+            // If exception is because there is no git ref, continue.
+            if (strpos($e->getMessage(), 'error: pathspec') !== 0) {
+                return false;
+            }
         }
 
         chdir($path);
@@ -608,5 +620,19 @@ class EnvironmentFactory
         } catch (IOException $e) {
             return false;
         }
+    }
+
+    /**
+     * Get the name of the drush alias.
+     */
+    public function getDrushAlias() {
+        return "@{$this->app->name}.{$this->environment->name}";
+    }
+
+    /**
+     * Get the path to document root
+     */
+    public function getDocumentRoot() {
+        return $this->environment->path . '/' . $this->config['document_root'];
     }
 }

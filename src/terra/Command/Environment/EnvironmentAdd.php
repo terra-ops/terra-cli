@@ -2,12 +2,14 @@
 
 namespace terra\Command\Environment;
 
+use Symfony\Component\Console\Input\InputOption;
 use terra\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 use terra\Factory\EnvironmentFactory;
@@ -36,6 +38,12 @@ class EnvironmentAdd extends Command
             InputArgument::OPTIONAL,
             'The path to the environment.'
         )
+        ->addOption(
+            'ref',
+            'r',
+            InputArgument::OPTIONAL,
+            'The git branch, tag, or sha used to create the environment.'
+        )
         ->addArgument(
             'document_root',
             InputArgument::OPTIONAL,
@@ -44,8 +52,8 @@ class EnvironmentAdd extends Command
         )
         ->addOption(
             'enable',
-            '',
-            InputArgument::OPTIONAL,
+            'e',
+            InputOption::VALUE_NONE,
             'Enable this environment immediately.'
         )
         ;
@@ -63,7 +71,14 @@ class EnvironmentAdd extends Command
             $question = new Question('Environment name? ');
             $environment_name = $helper->ask($input, $output, $question);
 
-            // Look for environment with this name
+            // Check for spaces or characters.
+            if(!preg_match('/^[a-zA-Z0-9]+$/', $environment_name)) {
+                $output->writeln("<error> ERROR </error> Environment name cannot contain spaces or special characters.");
+                $environment_name = '';
+                continue;
+            }
+
+            // Look for environment with this name.
             if (isset($this->app->environments[$environment_name])) {
                 $output->writeln("<error> ERROR </error> Environment <comment>{$environment_name}</comment> already exists in app <comment>{$this->app->name}</comment>");
             }
@@ -77,7 +92,7 @@ class EnvironmentAdd extends Command
 
             // If it already exists, use "realpath" to load it.
             if (file_exists($config_path)) {
-                $default_path = realpath($config_path).'/'.$this->app->name.'/'.$environment_name;
+              $default_path = realpath($config_path).'/'.$this->app->name.'/'.$environment_name;
             }
             // If it doesn't exist, just use ~/Apps/$ENV as the default path.
             else {
@@ -108,11 +123,11 @@ class EnvironmentAdd extends Command
         // Environment object
         $environment = array(
             'app' => $this->app->name,
-          'name' => $environment_name,
-          'path' => $path,
-          'document_root' => '',
-          'url' => '',
-          'version' => ''
+            'name' => $environment_name,
+            'path' => $path,
+            'document_root' => '',
+            'url' => '',
+            'version' => $input->getOption('ref'),
         );
 
         // Prepare the environment factory.
