@@ -7,6 +7,7 @@ pages:
   - [containers.md, 'General', 'Docker Container Strategy']
   - [development.md, 'General', 'Developing Terra']
   - [workflow.md, 'General', 'Terra App Workflow']
+  - [commands.md, 'General', 'Common Terra and Docker Commands']
 theme: readthedocs
 site_author: ""
 repo_url: https://github.com/terra-ops/terra-app
