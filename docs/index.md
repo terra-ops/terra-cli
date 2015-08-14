@@ -22,6 +22,37 @@ Please join the chat on Gitter.  We want as much feedback as possible!
 
 [Issues](https://github.com/terra-ops/terra-app/issues) and [Story Boarding](https://huboard.com/terra-ops/terra-app/)
 
+## Tweak the Stack
+
+Since the beginning we knew we had to let users tweak the stack.  
+
+We also wanted it to just work, out of the box, so we created  "Default" docker-compose stack that you can see here: https://raw.githubusercontent.com/terra-ops/terra-cli/master/docs/docker-compose-example.yml
+
+We allow your app's source code to change it's `docker-compose.yml` stack right now:
+
+```.terra.yml
+
+# Specific settings for docker compose go here
+docker_compose:
+
+  # Overrides will replace any item in the entire docker-compose array.
+  overrides:
+    app:
+      image: wordpress
+      links:
+        - storage
+      environment:
+        WORDPRESS_DB_HOST: database
+        WORDPRESS_DB_USER: drupal
+        WORDPRESS_DB_NAME: drupal
+        WORDPRESS_DB_PASSWORD: drupal
+    storage:
+      image: mongo
+```
+This snippet, if put in your apps `.terra.yml` file, will replace the drupal container with  wordpress, and add & link a MongoDB container.
+
+Anything under "docker_compose: overrides:" is merged with the stock stack, which you can see here: https://raw.githubusercontent.com/terra-ops/terra-cli/master/docs/docker-compose-example.yml
+
 ## Example Apps
 
 ### Drupal 7 Core
