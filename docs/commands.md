@@ -20,6 +20,8 @@ terra e:e drupal local
 # Drush alias will be created:
 # @drupal.local
 
+# Enable subdomain routing (drupal.local.example.com)
+terra url-proxy:enable
 
 # View logfiles
 docker logs drupallocal_app_1
