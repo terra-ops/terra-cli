@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Process\Process;
@@ -129,8 +129,7 @@ class EnvironmentRebuild extends Command
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion("Are you sure you want to destroy <fg=red>{$target_alias}</> and replace it with data from <fg=cyan>{$source_alias}</>? [y\N] ", false);
         if (!$helper->ask($input, $output, $question)) {
-            $output->writeln('<error>Rebuild Cancelled</error>');
-            return;
+            $output->writeln('<error>Database Cancelled</error>');
         }
 
         // Database Sync
@@ -147,7 +146,44 @@ class EnvironmentRebuild extends Command
             $output->writeln("<info>SUCCESS</info> Database Copied successfully!");
         }
         else {
-            $output->writeln("<error>FAILURE</error> Database Copy Failed! <comment>$cmd</comment>");
+            $output->writeln("<error>FAILURE</error> Database Copy Failed!");
+        }
+
+        // Files Sync Confirmation
+        $helper = $this->getHelper('question');
+
+        // Files Sync
+        // Get Source Path
+        $default_source = "$source_alias:%files";
+        $default_target = "$target_alias:%files";
+
+        $source_question = new Question("Source path? [$default_source] ", $default_source);
+        $destination_question = new Question("Destination path? [$default_target] ", $default_target);
+
+        $source = $helper->ask($input, $output, $source_question);
+        $target = $helper->ask($input, $output, $destination_question);
+
+        $cmd = "drush rsync $source $target -y";
+
+        $question = new ConfirmationQuestion("Copy files from <fg=cyan>{$source_alias}</> to <fg=red>{$target_alias}</>? Any existing files will be overwritten [y\N] ", false);
+        if (!$helper->ask($input, $output, $question)) {
+            $output->writeln('<error>Rebuild Cancelled</error>');
+            return;
+        }
+
+        $output->writeln('');
+        $output->writeln('Running...');
+        $output->writeln("<comment>$cmd</comment>");
+
+        $process = new Process($cmd);
+        $process->setTimeout(NULL);
+        $process->run();
+
+        if ($process->isSuccessful()) {
+            $output->writeln("<info>SUCCESS</info> Files copied successfully!");
+        }
+        else {
+            $output->writeln("<error>FAILURE</error> Files did not copy successfully!");
         }
     }
 }
