@@ -303,7 +303,7 @@ class EnvironmentFactory
                 '80/tcp',
             ),
             'ports' => array(
-                ':80',
+                "{$this->environment->port}:80",
             ),
             'restart' => 'on-failure',
         );

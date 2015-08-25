@@ -37,4 +37,20 @@ class Terra
     {
         $this->config = $config;
     }
+
+    /**
+     * Looks through config for available ports...
+     *
+     * Still figuring this out...
+     */
+    public function getAvailablePort()
+    {
+        $start = 50000;
+        $this->getConfig();
+        foreach ($this->config['apps'] as $app) {
+            foreach ($app['environments'] as $environment) {
+
+            }
+        }
+    }
 }

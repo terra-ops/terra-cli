@@ -127,6 +127,7 @@ class EnvironmentAdd extends Command
             'path' => $path,
             'document_root' => '',
             'url' => '',
+            'port' => '',
             'version' => $input->getOption('ref'),
         );
 
@@ -142,6 +143,9 @@ class EnvironmentAdd extends Command
 
             // Save current branch
             $environment['version'] = $environmentFactory->getRepo()->getCurrentBranch();
+
+            // Pick a port
+            $environment['port'] = $this->getApplication()->getTerra()->getAvailablePort();
 
             // Save to registry.
             $this->getApplication()->getTerra()->getConfig()->saveEnvironment($environment);
