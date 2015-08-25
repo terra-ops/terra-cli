@@ -33,7 +33,7 @@ hooks:
     # On environment:deploy
     deploy: |
       drush {{alias}} updb -y
-      drush {{}} cc all
+      drush {{alias}} cc all
 
     # On environment:rebuild
     rebuild: |
