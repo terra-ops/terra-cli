@@ -74,6 +74,7 @@ class EnvironmentRebuild extends Command
         }
 
         // Check ssh & sql access to both.
+        $errors = FALSE;
         foreach (array($source_alias, $target_alias) as $alias) {
             $output->writeln("Checking access to alias <fg=cyan>$alias</> ...");
 
@@ -89,6 +90,7 @@ class EnvironmentRebuild extends Command
             }
             else {
                 $output->writeln("<error>FAILURE</error> Unable to connect to $alias via SSH. <comment>$cmd</comment>");
+                $errors = TRUE;
             }
 
             // SQL
@@ -104,6 +106,11 @@ class EnvironmentRebuild extends Command
                 $output->writeln("<error>FAILURE</error> Unable to connect to $alias via MySQL. <comment>$cmd</comment>");
             }
             $output->writeln('');
+        }
+
+        // If errors, don't continue
+        if ($errors) {
+            throw new \Exception('We were unable to connect to both of your environments. Please check your config & try again.');
         }
 
         // Database Sync Confirmation
