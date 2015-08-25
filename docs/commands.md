@@ -18,7 +18,7 @@ terra environment:enable drupal local
 terra e:e drupal local
 
 # Drush alias will be created:
-# @drupal.local
+drush @drupal.local uli
 
 # Enable subdomain routing (drupal.local.example.com)
 terra url-proxy:enable
