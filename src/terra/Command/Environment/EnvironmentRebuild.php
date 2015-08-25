@@ -91,7 +91,7 @@ class EnvironmentRebuild extends Command
 
             $cmd = "drush $alias ssh 'echo \$SSH_CLIENT'";
 
-            // SQL
+            // SSH Check
             $process = new Process($cmd);
             $process->setTimeout(NULL);
             $process->run();
@@ -155,8 +155,15 @@ class EnvironmentRebuild extends Command
 
         // Files Sync
         // Get Source Path
-        $default_source = "$source_alias:%files";
-        $default_target = $environment_factory->getSourcePath() . '/' . $this->environment->document_root;
+        $source_files_path = $environment_factory->runDrushCommand('vget file_public_path --format=string', $source_alias);
+        $target_files_path = $environment_factory->runDrushCommand('vget file_public_path --format=string');
+
+        // If either variable is blank, assume default
+        if (strpos($source_files_path, 'No matching') === 0) $source_files_path = 'sites/default/files';
+        if (strpos($target_files_path, 'No matching') === 0) $target_files_path = 'sites/default/files';
+
+        $default_source = "$source_alias:$source_files_path";
+        $default_target = $environment_factory->getSourcePath() . '/' . $target_files_path;
 
         $source_question = new Question("Source path? [$default_source] ", $default_source);
         $destination_question = new Question("Destination path? [$default_target] ", $default_target);
@@ -164,7 +171,7 @@ class EnvironmentRebuild extends Command
         $source = $helper->ask($input, $output, $source_question);
         $target = $helper->ask($input, $output, $destination_question);
 
-        $cmd = "drush rsync $source $target -y";
+        $cmd = "drush -y rsync $source $target";
 
         $question = new ConfirmationQuestion("Copy files from <fg=cyan>{$source_alias}</> to <fg=red>{$target_alias}</>? Any existing files will be overwritten [y\N] ", false);
         if (!$helper->ask($input, $output, $question)) {
