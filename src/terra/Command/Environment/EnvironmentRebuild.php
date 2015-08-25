@@ -134,7 +134,8 @@ class EnvironmentRebuild extends Command
         }
 
         // Database Sync
-        $cmd = "drush $alias sql-dump --gzip | gzip -cd | drush @nd.local sqlc";
+        $cmd = "drush {$source_alias} sql-dump --gzip | gzip -cd | drush {$target_alias} sqlc";
+        $output->writeln('');
         $output->writeln('Running...');
         $output->writeln("<comment>$cmd</comment>");
 
