@@ -23,6 +23,18 @@ drush @drupal.local uli
 # Enable subdomain routing (drupal.local.example.com)
 terra url-proxy:enable
 
+# Rebuild environment from another drupal site via drush alias
+
+# To rebuild from the source alias defined in your app's .terra.yml file:
+#
+# .terra.yml:
+# |  rebuild_source: @source_alias
+#
+terra environment:rebuild
+
+# To rebuild from any source alias
+terra environment:rebuild -s @source_alias
+
 # View logfiles
 docker logs drupallocal_app_1
 
