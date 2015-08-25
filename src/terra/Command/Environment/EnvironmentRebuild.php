@@ -104,6 +104,7 @@ class EnvironmentRebuild extends Command
             }
             else {
                 $output->writeln("<error>FAILURE</error> Unable to connect to $alias via MySQL. <comment>$cmd</comment>");
+                $errors = TRUE;
             }
             $output->writeln('');
         }
