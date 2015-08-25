@@ -74,10 +74,9 @@ class EnvironmentRebuild extends Command
         }
 
         // Check ssh & sql access to both.
-        $output->writeln("Checking access to alias <comment>$source_alias</comment> ...");
-        $output->writeln("Checking access to alias <comment>$target_alias</comment> ...");
-
         foreach (array($source_alias, $target_alias) as $alias) {
+            $output->writeln("Checking access to alias <fg=cyan>$alias</> ...");
+
             $cmd = "drush $alias ssh 'echo \$SSH_CLIENT'";
 
             // SQL
@@ -104,15 +103,31 @@ class EnvironmentRebuild extends Command
             else {
                 $output->writeln("<error>FAILURE</error> Unable to connect to $alias via MySQL. <comment>$cmd</comment>");
             }
-
+            $output->writeln('');
         }
 
+        // Database Sync Confirmation
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion("Are you sure you want to destroy <fg=red>{$target_alias}</> and replace it with data from <fg=cyan>{$source_alias}</>? [y\N] ", false);
+        if (!$helper->ask($input, $output, $question)) {
+            $output->writeln('<error>Rebuild Cancelled</error>');
+            return;
+        }
 
-//
-//Drush alias @northdakota.current found!
-//    Connected to @northdakota.current successfully!
-//    Are you sure you would like to destroy the database from environment @nd.local?  It will be replaced with the database from @northdakota.current. [y/N] y
-//Running drush @northdakota.current sql-dump --gzip | gzip -cd | drush @nd.local sqlc...
+        // Database Sync
+        $cmd = "drush $alias sql-dump --gzip | gzip -cd | drush @nd.local sqlc";
+        $output->writeln('Running...');
+        $output->writeln("<comment>$cmd</comment>");
 
+        $process = new Process($cmd);
+        $process->setTimeout(NULL);
+        $process->run();
+
+        if ($process->isSuccessful()) {
+            $output->writeln("<info>SUCCESS</info> Database Copied successfully!");
+        }
+        else {
+            $output->writeln("<error>FAILURE</error> Database Copy Failed! <comment>$cmd</comment>");
+        }
     }
 }
