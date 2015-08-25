@@ -131,22 +131,23 @@ class EnvironmentRebuild extends Command
         if (!$helper->ask($input, $output, $question)) {
             $output->writeln('<error>Database Cancelled</error>');
         }
-
-        // Database Sync
-        $cmd = "drush {$source_alias} sql-dump --gzip | gzip -cd | drush {$target_alias} sqlc";
-        $output->writeln('');
-        $output->writeln('Running...');
-        $output->writeln("<comment>$cmd</comment>");
-
-        $process = new Process($cmd);
-        $process->setTimeout(NULL);
-        $process->run();
-
-        if ($process->isSuccessful()) {
-            $output->writeln("<info>SUCCESS</info> Database Copied successfully!");
-        }
         else {
-            $output->writeln("<error>FAILURE</error> Database Copy Failed!");
+            // Database Sync
+            $cmd = "drush {$source_alias} sql-dump --gzip | gzip -cd | drush {$target_alias} sqlc";
+            $output->writeln('');
+            $output->writeln('Running...');
+            $output->writeln("<comment>$cmd</comment>");
+
+            $process = new Process($cmd);
+            $process->setTimeout(NULL);
+            $process->run();
+
+            if ($process->isSuccessful()) {
+                $output->writeln("<info>SUCCESS</info> Database Copied successfully!");
+            }
+            else {
+                $output->writeln("<error>FAILURE</error> Database Copy Failed!");
+            }
         }
 
         // Files Sync Confirmation
@@ -155,7 +156,7 @@ class EnvironmentRebuild extends Command
         // Files Sync
         // Get Source Path
         $default_source = "$source_alias:%files";
-        $default_target = "$target_alias:%files";
+        $default_target = $environment_factory->getSourcePath() . '/' . $this->environment->document_root;
 
         $source_question = new Question("Source path? [$default_source] ", $default_source);
         $destination_question = new Question("Destination path? [$default_target] ", $default_target);
