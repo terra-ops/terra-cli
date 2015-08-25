@@ -202,6 +202,7 @@ class EnvironmentRebuild extends Command
             $output->writeln("<comment>{$environment_factory->config['hooks']['rebuild']}</comment>");
 
             $process = new Process($environment_factory->config['hooks']['rebuild'], $environment_factory->getSourcePath());
+            $process->setTimeout(NULL);
             $process->run(function ($type, $buffer) {
                 if (Process::ERR === $type) {
                     echo $buffer;
