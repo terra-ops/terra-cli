@@ -190,6 +190,9 @@ I am going to direct planning in an agile way as much as possible.  Please post 
 #### `terra environment:disable`
   Runs `docker-compose stop` to disable an environment.
   
+#### `terra environment:rebuild`
+  Looks in your app's .terra.yml file for `rebuild_source: @drushalias`.  Syncs the database, copies the files, then runs the rebuild hooks.
+  
 #### `terra environment:status`
   Provides status information about an environment, including path and URL.
 
