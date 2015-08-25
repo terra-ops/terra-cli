@@ -168,7 +168,7 @@ class EnvironmentRebuild extends Command
         if (strpos($target_files_path, 'No matching') === 0) $target_files_path = 'sites/default/files';
 
         $default_source = "$source_alias:$source_files_path";
-        $default_target = $environment_factory->getSourcePath() . '/' . $target_files_path;
+        $default_target = $environment_factory->getSourcePath() . '/' . $environment_factory->config['document_root'] . '/' .   $target_files_path;
 
         $source_question = new Question("Source path? [$default_source] ", $default_source);
         $destination_question = new Question("Destination path? [$default_target] ", $default_target);
