@@ -635,4 +635,21 @@ class EnvironmentFactory
     public function getDocumentRoot() {
         return $this->environment->path . '/' . $this->config['document_root'];
     }
+
+    /**
+     * Runs a drush command for a specified alias.
+     */
+    public function runDrushCommand($drush_command, $alias = NULL) {
+
+        if ($alias == NULL) {
+            $alias = $this->getDrushAlias();
+        }
+
+        $cmd = "drush {$alias} $drush_command";
+
+        $process = new Process($cmd);
+        $process->setTimeout(null);
+        $process->run();
+        return trim($process->getOutput());
+    }
 }
