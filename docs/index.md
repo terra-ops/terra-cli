@@ -187,6 +187,9 @@ I am going to direct planning in an agile way as much as possible.  Please post 
 #### `terra environment:enable`
   Runs `docker-compose up` to initiate an environment.
   
+#### `terra environment:disable`
+  Runs `docker-compose stop` to disable an environment.
+  
 #### `terra environment:status`
   Provides status information about an environment, including path and URL.
 
