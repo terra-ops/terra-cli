@@ -193,5 +193,29 @@ class EnvironmentRebuild extends Command
         else {
             $output->writeln("<error>FAILURE</error> Files did not copy successfully!");
         }
+
+        // Rebuild Hooks
+        if (isset($environment_factory->config['hooks']['rebuild'])) {
+
+            $output->writeln('');
+            $output->writeln('Running <fg=cyan>rebuild</> hooks from .terra.yml...');
+            $output->writeln("<comment>{$environment_factory->config['hooks']['rebuild']}</comment>");
+
+            $process = new Process($environment_factory->config['hooks']['rebuild'], $environment_factory->getSourcePath());
+            $process->run(function ($type, $buffer) {
+                if (Process::ERR === $type) {
+                    echo $buffer;
+                } else {
+                    echo $buffer;
+                }
+            });
+
+            if (!$process->isSuccessful()) {
+                $output->writeln("<info>SUCCESS</info> Rebuild hooks completed successfully.");
+            } else {
+                $output->writeln("<error>FAILURE</error> Rebuild hooks not copy successfully!");
+            }
+            $output->writeln('');
+        }
     }
 }

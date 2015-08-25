@@ -35,6 +35,10 @@ hooks:
       drush {{alias}} updb -y
       drush {{}} cc all
 
+    # On environment:rebuild
+    rebuild: |
+      drush {{alias}} en devel -y
+
 # Specific settings for docker compose go here
 docker_compose:
 
