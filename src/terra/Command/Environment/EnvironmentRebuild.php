@@ -63,10 +63,20 @@ class EnvironmentRebuild extends Command
                 throw new \Exception("To run the 'environment:rebuild' command you must have 'rebuild_source: @drushalias' in your app's .terra.yml file (or specify the source drush alias with 'environment:rebuild --rebuild_source=@alias').");
             }
         }
+        else {
+            $rebuild_source_config = $environment_factory->config['rebuild_source'];
+            $output->writeln("Found <comment>rebuild_source: $rebuild_source_config</comment> in <fg=cyan>.terra.yml</> file...");
+        }
 
         // Get source and target aliases
         $source_alias = $rebuild_source_argument? $rebuild_source_argument: $environment_factory->config['rebuild_source'];
         $target_alias = $environment_factory->getDrushAlias();
+
+        // Mention to user where the alias is coming from.
+        if ($rebuild_source_argument)
+        {
+            $output->writeln("Using terra command option for source alias: <fg=cyan>$rebuild_source_argument</>");
+        }
 
         // Check that source doesn't equal target
         if ($source_alias == $target_alias) {
@@ -74,6 +84,7 @@ class EnvironmentRebuild extends Command
         }
 
         // Check ssh & sql access to both.
+        $output->writeln('');
         $errors = FALSE;
         foreach (array($source_alias, $target_alias) as $alias) {
             $output->writeln("Checking access to alias <fg=cyan>$alias</> ...");
