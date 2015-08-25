@@ -129,7 +129,7 @@ class EnvironmentRebuild extends Command
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion("Are you sure you want to destroy <fg=red>{$target_alias}</> and replace it with data from <fg=cyan>{$source_alias}</>? [y\N] ", false);
         if (!$helper->ask($input, $output, $question)) {
-            $output->writeln('<error>Database Cancelled</error>');
+            $output->writeln('<error>Database sync Cancelled</error>');
         }
         else {
             // Database Sync
@@ -152,6 +152,11 @@ class EnvironmentRebuild extends Command
 
         // Files Sync Confirmation
         $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion("Copy files from <fg=cyan>{$source_alias}</> to <fg=red>{$target_alias}</>? Any existing files will be overwritten [y\N] ", false);
+        if (!$helper->ask($input, $output, $question)) {
+            $output->writeln('<error>Files sync cancelled</error>');
+            return;
+        }
 
         // Files Sync
         // Get Source Path
@@ -173,11 +178,6 @@ class EnvironmentRebuild extends Command
 
         $cmd = "drush -y rsync $source $target";
 
-        $question = new ConfirmationQuestion("Copy files from <fg=cyan>{$source_alias}</> to <fg=red>{$target_alias}</>? Any existing files will be overwritten [y\N] ", false);
-        if (!$helper->ask($input, $output, $question)) {
-            $output->writeln('<error>Rebuild Cancelled</error>');
-            return;
-        }
 
         $output->writeln('');
         $output->writeln('Running...');
