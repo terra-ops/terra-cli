@@ -211,10 +211,10 @@ class EnvironmentRebuild extends Command
                 }
             });
 
-            if (!$process->isSuccessful()) {
+            if ($process->isSuccessful()) {
                 $output->writeln("<info>SUCCESS</info> Rebuild hooks completed successfully.");
             } else {
-                $output->writeln("<error>FAILURE</error> Rebuild hooks not copy successfully!");
+                $output->writeln("<error>FAILURE</error> Rebuild hooks did not complete successfully.");
             }
             $output->writeln('');
         }
