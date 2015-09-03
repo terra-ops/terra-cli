@@ -105,7 +105,7 @@ class EnvironmentRebuild extends Command
             }
 
             // SQL
-            $cmd = "drush $alias sql-query 'DESCRIBE system'";
+            $cmd = "drush $alias sql-query 'SHOW TABLES'";
             $process = new Process($cmd);
             $process->setTimeout(NULL);
             $process->run();
