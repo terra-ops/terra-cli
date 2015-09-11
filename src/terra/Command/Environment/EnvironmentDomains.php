@@ -47,6 +47,17 @@ class EnvironmentDomains extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        // Check if "app" argument is an action.
+        if ($input->getArgument('app_name') == 'add' || $input->getArgument('app_name') == 'remove') {
+            // Move argument from app_name to action
+            $input->setArgument('action', $input->getArgument('app_name'));
+            $input->setArgument('app_name', '');
+
+            // Move argument from env_name to domain
+            $input->setArgument('domain', $input->getArgument('environment_name'));
+            $input->setArgument('environment_name', '');
+        }
+
         // Ask for an app.
         $helper = $this->getHelper('question');
         $this->getApp($input, $output);

@@ -8,6 +8,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Filesystem\Filesystem;
@@ -54,10 +57,16 @@ class EnvironmentTest extends Command
         $environment_factory->getConfig();
         if (isset($environment_factory->config['hooks']['test'])) {
             $this->executeTests($input, $output);
+            return;
         }
 
         if ($environment_factory->config['behat_path']) {
             $this->executeBehatTests($input, $output);
+            return;
+        }
+
+        if (empty($environment_factory->config['behat_path'])) {
+            $this->prepareBehat($input, $output, $environment_factory);
         }
     }
 
@@ -197,5 +206,79 @@ class EnvironmentTest extends Command
             $output->writeln('<fg=cyan>TERRA</> | <info>Test Passed!</info> ');
             return 0;
         }
+    }
+
+    protected function prepareBehat(InputInterface $input, OutputInterface $output, EnvironmentFactory $environment_factory) {
+        $output->writeln("I noticed you don't have behat tests for your project.");
+
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion('Would you like to add behat tests? [y\N] ');
+        if ($helper->ask($input, $output, $question)) {
+            $question = new Question('Where would you like to add your tests? (tests) ', 'tests');
+            $tests_path = $helper->ask($input, $output, $question);
+
+            // Create tests path
+            $tests_path = $environment_factory->getSourcePath() . '/' . $tests_path;
+            $fs = new Filesystem();
+            try {
+                $fs->mkdir($environment_factory->getSourcePath() . '/' . $tests_path);
+            }
+            catch (IOException $e) {
+                throw \Exception($e->getMessage());
+            }
+            $output->writeln("<info>SUCCESS</info> Created $tests_path.");
+
+            // Create composer.json and behat.yml
+            $composer_path = $environment_factory->getSourcePath() . '/' . $tests_path . '/composer.json';
+            $behat_yml_path = $environment_factory->getSourcePath() . '/' . $tests_path . '/behat.yml';
+
+            try {
+                $fs->dumpFile($composer_path, $this->getBehatDrupalComposer());
+                $fs->dumpFile($behat_yml_path, $this->getBehatYml($environment_factory->getUrl()));
+                $output->writeln("<info>SUCCESS</info> Created composer.json and behat.yml.");
+            }
+            catch (IOException $e) {
+                throw \Exception($e->getMessage());
+            }
+
+            // Run composer install
+            $process = new Process('composer install', $tests_path);
+
+            // Run behat --init
+
+            // Set behat_path in .terra.yml
+        }
+    }
+
+    protected function getBehatDrupalComposer() {
+        return json_encode(array(
+            'require' => array(
+                'drupal/drupal-extension' => '~3.0',
+            ),
+            'config' => array(
+                'bin-dir' => 'bin/',
+            ),
+        ));
+    }
+    protected function getBehatYml($url) {
+        return <<<YML
+default:
+  suites:
+    default:
+      contexts:
+        - FeatureContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\MessageContext
+        - Drupal\DrupalExtension\Context\DrushContext
+  extensions:
+    Behat\MinkExtension:
+      goutte: ~
+      selenium2: ~
+      base_url: $url
+    Drupal\DrupalExtension:
+      blackbox: ~
+YML;
+
     }
 }
