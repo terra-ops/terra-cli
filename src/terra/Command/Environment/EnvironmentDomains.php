@@ -3,6 +3,7 @@
 namespace terra\Command\Environment;
 
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 use terra\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -87,8 +88,10 @@ class EnvironmentDomains extends Command
             return;
         }
         elseif ($input->getArgument('action') == 'add') {
-            $output->writeln('Adding a domain...');
             $this->executeAddDomain($input, $output);
+        }
+        elseif ($input->getArgument('action') == 'remove') {
+            $this->executeRemoveDomain($input, $output);
         }
 
     }
@@ -121,7 +124,53 @@ class EnvironmentDomains extends Command
         // Save the new version to the config.
         $this->getApplication()->getTerra()->getConfig()->add('apps', array($this->app->name, 'environments', $this->environment->name), (array) $this->environment);
         $this->getApplication()->getTerra()->getConfig()->save();
-        $output->writeln("<info>Domain added!</info>");
+        $output->writeln("<info>Domain added!</info> Changes won't take effect until the container is restarted.");
+        $output->writeln('');
+    }
+
+    /**
+     * Remove a domain.
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function executeRemoveDomain(InputInterface $input, OutputInterface $output) {
+
+        // If no domains are left, exit
+        if (empty($this->environment->domains)) {
+            $output->writeln('<comment>There are no domains assigned to this environment!</comment>');
+            return;
+        }
+
+        // Ask for a domain
+        if ($input->getArgument('domain') == NULL) {
+            $helper = $this->getHelper('question');
+            $domains = $this->environment->domains;
+            $question = new ChoiceQuestion(
+                'Which domain would you like to remove? ',
+                $domains,
+                null
+            );
+            $name = $helper->ask($input, $output, $question);
+        }
+
+        // Confirm removal.
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion("Remove the domain <comment>$name</comment> from the environment <info>{$this->app->name}:{$this->environment->name}</info> [y/N]? ", FALSE);
+
+        if (!$helper->ask($input, $output, $question)) {
+            $output->writeln("<fg=red>Domain not removed.</>");
+            $output->writeln('');
+            return;
+        }
+
+        // Find and remove the domain from the config.
+        $key = array_search($name, $this->environment->domains);
+        unset($this->environment->domains[$key]);
+
+        // Save the new version to the config.
+        $this->getApplication()->getTerra()->getConfig()->add('apps', array($this->app->name, 'environments', $this->environment->name), (array) $this->environment);
+        $this->getApplication()->getTerra()->getConfig()->save();
+        $output->writeln("<info>Domain removed.</info>");
         $output->writeln('');
     }
 }
