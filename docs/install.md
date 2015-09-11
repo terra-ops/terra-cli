@@ -41,6 +41,18 @@ If you have *ANY* problems with these instructions, please submit an issue at ht
 
 Thanks!
 
+## Upgrade
+
+Terra is still in pre-release development!
+
+Master branch is generally stable.You can always update your terra install easily thanks to composer:
+
+```
+composer global update
+```
+
+This command updates all of the composer packages you have installed using `composer global`, including drush.
+
 ## About `local.computer`
 
 The domain name [local.computer](http://local.computer) was purchased by @jonpugh for Terra and docker development.
