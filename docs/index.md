@@ -4,7 +4,7 @@
 
 ## About
 
-Terra is a suite of tools for the purpose of standing up web apps with Docker quickly and easily.
+Terra is a suite of tools for the purpose of quickly and easily standing up web apps with Docker.
 
 It is designed to be as simple as possible for developers, while being powerful enough to use in production at scale.
 
