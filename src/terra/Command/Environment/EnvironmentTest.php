@@ -144,7 +144,7 @@ class EnvironmentTest extends Command
         $behat_yml =  Yaml::parse(file_get_contents($behat_yml_path));
 
         // Set Base URL
-        $behat_yml['default']['extensions']['Behat\\MinkExtension']['base_url'] = 'http://' . $environment_factory->getUrl();
+        $behat_yml['default']['extensions']['Behat\\MinkExtension']['base_url'] = "http://{$environment_factory->getHost()}:{$environment_factory->getPort()}";
         $behat_yml['default']['extensions']['Drupal\\DrupalExtension']['drush']['alias'] = $environment_factory->getDrushAlias();
 
         // If driver is drupal, add root.
@@ -218,7 +218,8 @@ class EnvironmentTest extends Command
             $tests_path = $helper->ask($input, $output, $question);
 
             // Create tests path
-            $tests_path = $environment_factory->getSourcePath() . '/' . $tests_path;
+            //$tests_path = $environment_factory->getSourcePath() . '/' . $tests_path;
+            $tests_path = $tests_path;
             $fs = new Filesystem();
             try {
                 $fs->mkdir($environment_factory->getSourcePath() . '/' . $tests_path);
@@ -234,19 +235,44 @@ class EnvironmentTest extends Command
 
             try {
                 $fs->dumpFile($composer_path, $this->getBehatDrupalComposer());
-                $fs->dumpFile($behat_yml_path, $this->getBehatYml($environment_factory->getUrl()));
+                $url = "http://{$environment_factory->getHost()}:{$environment_factory->getPort()}";
+                $fs->dumpFile($behat_yml_path, $this->getBehatYml($url));
                 $output->writeln("<info>SUCCESS</info> Created composer.json and behat.yml.");
             }
             catch (IOException $e) {
                 throw \Exception($e->getMessage());
             }
 
+            $behat_path = $this->environment->path . '/' . $tests_path;
+
             // Run composer install
-            $process = new Process('composer install', $tests_path);
+            $output->writeln("<info>RUNNING</info> composer install");
+            $output->writeln("in: $behat_path");
+            $process = new Process('composer install', $behat_path);
+            $process->setTimeout(NULL);
+            $process->run(function ($type, $buffer) {
+                if (Process::ERR === $type) {
+                    echo $buffer;
+                } else {
+                    echo $buffer;
+                }
+            });
+            $output->writeln("");
 
             // Run behat --init
+            $output->writeln("<info>RUNNING</info> bin/behat --init");
+            $output->writeln("in: $behat_path");
+            $process = new Process('bin/behat --init', $behat_path);
+            $process->run(function ($type, $buffer) {
+                if (Process::ERR === $type) {
+                    echo $buffer;
+                } else {
+                    echo $buffer;
+                }
+            });
 
             // Set behat_path in .terra.yml
+            $output->writeln("<comment>NOTE You should add `behat_path: $tests_path` to .terra.yml.</>");
         }
     }
 
