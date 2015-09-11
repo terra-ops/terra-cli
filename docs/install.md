@@ -15,7 +15,7 @@ This process is basically the same on Windows, OSX, and Linux.  If running Linux
 7. Type `terra` to make sure it works.  You will see a list of commands.
 8. Type `terra app:add`.  All you need is a git URL with your site. There are no arguments or options required. It will walk you through creating a new environment as well, and then ask if you'd like to enable it.
 9. When you enable your environment the first time, it will take time to download all of the Docker containers.  Please be patient. Once they are downloaded this enabling environments is very fast.
-10. Once the environment enables, Terra will show you the system URL, usually something like http://local.computer:35000.  Click that and you should see your drupal site.
+10. Once the environment enables, Terra will show you the system URL, usually something like http://local.computer:35000.  Click that and you should see your drupal site. (See below for more on local.computer)
 11. Setup your database connection info in settings.php:
   ```php
   $databases['default']['default'] = array(
@@ -40,6 +40,16 @@ That's it! Remember the commands `terra` which will show you the available comma
 If you have *ANY* problems with these instructions, please submit an issue at https://github.com/terra-ops/terra-cli/issues! 
 
 Thanks!
+
+## About `local.computer`
+
+The domain name [local.computer](http://local.computer) was purchased by @jonpugh for Terra and docker development.
+
+The hostnames [local.computer](http://local.computer) and all subdomains (*.local.computer) resolve to the default docker-machine IP: 192.168.99.100
+
+You can use "local.computer" as the host for your apps if you are using the Docker toolbox.
+
+If you create more docker machines, or change the default one, it might not have the same IP.  Make sure your docker machine always has that IP if you don't want to set your own DNS or load sites via IP.
 
 ### Archived, lengthy Instructions 
 Currently there are a few steps to get terra working.  
