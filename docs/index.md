@@ -8,11 +8,11 @@ Terra is a suite of tools for the purpose of quickly and easily standing up web 
 
 It is designed to be as simple as possible for developers, while being powerful enough to use in production at scale.
 
-With Terra, all you care about is your site's code.  Stop wasting time setting up environments, let terra and docker do all the work for you.
+With Terra, all you care about is your site's code. Stop wasting time setting up environments. Let terra and docker do all the work for you.
 
 ## Community
 
-Please join the chat on Gitter.  We want as much feedback as possible!
+Please join the chat on Gitter. We want as much feedback as possible!
 
 [![Join the chat at https://gitter.im/opendevshop/devshop](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/terra-ops/terra-app)
 
@@ -28,7 +28,7 @@ Since the beginning we knew we had to let users tweak the stack.
 
 We also wanted it to just work, out of the box, so we created  "Default" docker-compose stack that you can see here: https://raw.githubusercontent.com/terra-ops/terra-cli/master/docs/docker-compose-example.yml
 
-We allow your app's source code to change it's `docker-compose.yml` stack right now:
+We allow your app's source code to change its `docker-compose.yml` stack right now:
 
 ```.terra.yml
 
@@ -158,7 +158,7 @@ This makes it easy to get environments running quickly on hosted servers or on l
 
 See https://huboard.com/terra-ops/terra-app/ for the user story board.
 
-I am going to direct planning in an agile way as much as possible.  Please post as much feedback as you can in the issue queues.
+I am going to direct planning in an agile way as much as possible. Please post as much feedback as you can in the issue queues.
 
 ## Requirements
 
