@@ -1,5 +1,47 @@
 # Installation
 
+## Quick Start
+
+This process is basically the same on Windows, OSX, and Linux.  If running Linux, you can skip virtualbox if you want to run docker locally.
+
+1. [VirtualBox 5+](https://www.virtualbox.org/wiki/Downloads) and [Docker Toolbox](https://www.docker.com/toolbox)
+2. PHP & Git.
+3. Composer: `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer` 
+3. Terra: `composer global require terra/terra-app:dev-master`
+4. Drush: `composer global require drush/drush`
+5. Put `export PATH="$HOME/.composer/vendor/bin:$PATH` in your `.bash_profile` file to make `terra` and `drush` executable.
+5. Open *Applications >  Docker > Docker Quickstart Terminal* or *Kitematic* (Docker UI). Either way, you will have to first wait for the VM to download and start.
+6. Launch *Docker Quickstart Terminal* or click the *Docker Cli* button in Kitematic to open a terminal.
+7. Type `terra` to make sure it works.  You will see a list of commands.
+8. Type `terra app:add`.  All you need is a git URL with your site. There are no arguments or options required. It will walk you through creating a new environment as well, and then ask if you'd like to enable it.
+9. When you enable your environment the first time, it will take time to download all of the Docker containers.  Please be patient. Once they are downloaded this enabling environments is very fast.
+10. Once the environment enables, Terra will show you the system URL, usually something like http://local.computer:35000.  Click that and you should see your drupal site.
+11. Setup your database connection info in settings.php:
+  ```php
+  $databases['default']['default'] = array(
+    'driver' => 'mysql',
+    'database' => 'drupal',
+    'username' => 'drupal',
+    'password' => 'drupal',
+    'host' => 'database',
+  );
+  ```
+  It's always the same, for every site.
+  
+12. Try the drush alias to ensure the DB is connected and the containers are running
+  ```sh
+  $ drush @APP.ENVIRONMENT ssh
+  $ drush @APP.ENVIRONMENT sqlc
+  $ drush @APP.ENVIRONMENT site-install
+  ```
+
+That's it! Remember the commands `terra` which will show you the available commands, and `terra status`, which will show you the available apps and environments.
+
+If you have *ANY* problems with these instructions, please submit an issue at https://github.com/terra-ops/terra-cli/issues! 
+
+Thanks!
+
+### Archived, lengthy Instructions 
 Currently there are a few steps to get terra working.  
 
 We want installation to be as fast and simple as possible, so we will be working on a single install script that sets up all of the prerequisites for any OS. 
