@@ -290,11 +290,18 @@ class EnvironmentFactory
             $ssh_authorized_keys = '';
         }
 
+        // Get Virtual Hosts array
+        $hosts = $this->getUrl();
+
+        if (!empty($this->environment->domains)) {
+            $hosts .= ',' . implode(',', $this->environment->domains);
+        }
+
         $compose = array();
         $compose['load'] = array(
             'image' => 'tutum/haproxy',
             'environment' => array(
-                'VIRTUAL_HOST' => $this->getUrl(),
+                'VIRTUAL_HOST' => $hosts,
             ),
             'links' => array(
                 'app',
