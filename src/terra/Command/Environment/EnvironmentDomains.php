@@ -94,6 +94,20 @@ class EnvironmentDomains extends Command
             $this->executeRemoveDomain($input, $output);
         }
 
+        // Offer to re-enable the environment
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion("Re-enable the environment <info>{$this->app->name}:{$this->environment->name}</info> [y/N]? ", FALSE);
+
+        if ($helper->ask($input, $output, $question)) {
+            // Run environment:enable command.
+            $command = $this->getApplication()->find('environment:enable');
+            $arguments = array(
+                'app_name' => $this->app->name,
+                'environment_name' => $this->environment->name,
+            );
+            $input = new ArrayInput($arguments);
+            $command->run($input, $output);
+        }
     }
 
     /**
@@ -118,13 +132,13 @@ class EnvironmentDomains extends Command
         if (!$helper->ask($input, $output, $question)) {
             $output->writeln("<fg=red>Domain not added.</>");
             $output->writeln('');
-            return;
+            exit;
         }
 
         // Save the new version to the config.
         $this->getApplication()->getTerra()->getConfig()->add('apps', array($this->app->name, 'environments', $this->environment->name), (array) $this->environment);
         $this->getApplication()->getTerra()->getConfig()->save();
-        $output->writeln("<info>Domain added!</info> Changes won't take effect until the container is restarted.");
+        $output->writeln("<info>Domain added!</info> Changes won't take effect until the environment is restarted.");
         $output->writeln('');
     }
 
@@ -138,7 +152,7 @@ class EnvironmentDomains extends Command
         // If no domains are left, exit
         if (empty($this->environment->domains)) {
             $output->writeln('<comment>There are no domains assigned to this environment!</comment>');
-            return;
+            exit;
         }
 
         // Ask for a domain
@@ -160,7 +174,7 @@ class EnvironmentDomains extends Command
         if (!$helper->ask($input, $output, $question)) {
             $output->writeln("<fg=red>Domain not removed.</>");
             $output->writeln('');
-            return;
+            exit;
         }
 
         // Find and remove the domain from the config.
@@ -170,7 +184,7 @@ class EnvironmentDomains extends Command
         // Save the new version to the config.
         $this->getApplication()->getTerra()->getConfig()->add('apps', array($this->app->name, 'environments', $this->environment->name), (array) $this->environment);
         $this->getApplication()->getTerra()->getConfig()->save();
-        $output->writeln("<info>Domain removed.</info>");
+        $output->writeln("<info>Domain removed.</info> Changes won't take effect until the environment is restarted.");
         $output->writeln('');
     }
 }
