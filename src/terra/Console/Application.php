@@ -67,6 +67,7 @@ class Application extends BaseApplication
         $commands[] = new Command\Status();
         $commands[] = new Command\Queue();
         $commands[] = new Command\Run();
+        $commands[] = new Command\Drush();
 
         return $commands;
     }
