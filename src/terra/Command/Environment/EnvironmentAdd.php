@@ -128,6 +128,7 @@ class EnvironmentAdd extends Command
             'document_root' => '',
             'url' => '',
             'version' => $input->getOption('ref'),
+            'domains' => array(),
         );
 
         // Prepare the environment factory.
