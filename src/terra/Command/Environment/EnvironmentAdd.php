@@ -56,6 +56,12 @@ class EnvironmentAdd extends Command
             InputOption::VALUE_NONE,
             'Enable this environment immediately.'
         )
+        ->addOption(
+            'no-interaction',
+            'ni',
+            InputOption::VALUE_NONE,
+            'Hide all prompts.'
+        )
         ;
     }
 
@@ -104,8 +110,14 @@ class EnvironmentAdd extends Command
                 $default_path = $_SERVER['HOME'] . '/Apps/' . $this->app->name . '/' . $environment_name;
               }
             }
-            $question = new Question("Path: ($default_path) ", $default_path);
-            $path = $helper->ask($input, $output, $question);
+            if (!$input->hasOption('no-interaction')) {
+                $question = new Question("Path: ($default_path) ", $default_path);
+                $path = $helper->ask($input, $output, $question);
+            }
+            else {
+                $output->writeln("<warning>Running with --no-interaction. Using default path ($default_path).</warning>");
+                $path = $default_path;
+            }
         }
 
         // Check for path
