@@ -7,7 +7,7 @@ This process is basically the same on Windows, OSX, and Linux.  If running Linux
  1. [VirtualBox 5+](https://www.virtualbox.org/wiki/Downloads) and [Docker Toolbox](https://www.docker.com/toolbox)
  2. PHP & Git.
  3. Composer: `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer` 
- 3. Terra: `composer global require terra/terra-app:dev-master`
+ 3. Terra: `composer global require terra/cli:dev-master`
  4. Drush: `composer global require drush/drush`
  5. Put `export PATH="$HOME/.composer/vendor/bin:$PATH` in your `.bash_profile` file to make `terra` and `drush` executable.
  5. Open *Applications >  Docker > Docker Quickstart Terminal* or *Kitematic* (Docker UI). Either way, you will have to first wait for the VM to download and start.
@@ -93,7 +93,7 @@ We have created a `install.sh` script that runs you through this entire process
 
 To run the automatic installer, run the following commands as root:
 
-        wget https://raw.githubusercontent.com/terra-ops/terra-app/master/install.sh
+        wget https://raw.githubusercontent.com/terra-ops/terra-cli/master/install.sh
         bash install.sh
 
 ### Manual Install
@@ -150,12 +150,12 @@ Run all of the following commands as root, or with `sudo`.
   
   To install terra automatically, run the following as *your user* (not root):
     
-        composer global require terra/terra-app:dev-master
+        composer global require terra/cli:dev-master
         echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> $HOME/.bashrc
   
   To install terra manually, run the following as *root*::
   
-        git clone https://github.com/terra-ops/terra-app.git /usr/share/terra
+        git clone https://github.com/terra-ops/terra-cli.git /usr/share/terra
         cd /usr/share/terra
         composer install
         ln -s /usr/share/terra/bin/terra /usr/local/bin/terra
@@ -206,12 +206,12 @@ There is a lot of nuance in using Docker on OSX.  It will help to read the guide
   
   To install terra automatically, run the following as *your user* (not root):
     
-        composer global require terra/terra-app:dev-master
+        composer global require terra/cli:dev-master
         echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> $HOME/.bashrc
   
   To install terra manually, run the following as *root*::
   
-        git clone https://github.com/terra-ops/terra-app.git /usr/share/terra
+        git clone https://github.com/terra-ops/terra-cli.git /usr/share/terra
         cd /usr/share/terra
         composer install
         ln -s /usr/share/terra/bin/terra /usr/local/bin/terra
@@ -227,13 +227,13 @@ There is a lot of nuance in using Docker on OSX.  It will help to read the guide
 
 **If you plan on contributing to Terra:**
 
-- Fork [https://github.com/terra-ops/terra-app](https://github.com/terra-ops/terra-app)
+- Fork [https://github.com/terra-ops/terra-cli](https://github.com/terra-ops/terra-cli)
 
 Then:
 
-    git clone https://github.com/your_username/terra-app.git
-    ln -s /path/to/terra-app/terra /usr/local/bin/terra
-    cd /path/to/terra-app
+    git clone https://github.com/your_username/terra-cli.git
+    ln -s /path/to/terra-cli/bin/terra /usr/local/bin/terra
+    cd /path/to/terra-cli
     composer install
 
 

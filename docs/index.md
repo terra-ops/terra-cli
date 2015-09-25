@@ -14,13 +14,13 @@ With Terra, all you care about is your site's code. Stop wasting time setting up
 
 Please join the chat on Gitter. We want as much feedback as possible!
 
-[![Join the chat at https://gitter.im/opendevshop/devshop](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/terra-ops/terra-app)
+[![Join the chat at https://gitter.im/opendevshop/devshop](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/terra-ops/terra-cli)
 
 ## Documentation & Issues
 
 [Read the Docs](http://terra.readthedocs.org/) or help [improve the docs](https://github.com/terra/devshop/edit/0.x/README.md).
 
-[Issues](https://github.com/terra-ops/terra-app/issues) and [Story Boarding](https://huboard.com/terra-ops/terra-app/)
+[Issues](https://github.com/terra-ops/terra-cli/issues) and [Story Boarding](https://huboard.com/terra-ops/terra-cli/)
 
 ## Tweak the Stack
 
@@ -156,7 +156,7 @@ This makes it easy to get environments running quickly on hosted servers or on l
 
 ## Planning
 
-See https://huboard.com/terra-ops/terra-app/ for the user story board.
+See https://huboard.com/terra-ops/terra-cli/ for the user story board.
 
 I am going to direct planning in an agile way as much as possible. Please post as much feedback as you can in the issue queues.
 
