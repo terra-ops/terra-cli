@@ -31,8 +31,13 @@ class AppRemove extends Command
         $name = $this->app->name;
 
         // Confirm removal of the app.
-        $question = new ConfirmationQuestion("Are you sure you would like to remove the app <question>$name</question>? [y/N] ", false);
-        if (!$helper->ask($input, $output, $question)) {
+        if (!$input->hasOption('no-interaction')) {
+            $question = new ConfirmationQuestion("Are you sure you would like to remove the app <question>$name</question>? [y/N] ", false);
+        }
+        else {
+            $output->writeln("<warning>Running with --no-interaction. Skipping confirmation step.</warning>");
+        }       
+        if (!$input->hasOption('no-interaction') && !$helper->ask($input, $output, $question)) {
             $output->writeln('<error>Cancelled</error>');
 
             return;
