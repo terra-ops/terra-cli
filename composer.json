@@ -22,13 +22,13 @@
         },
         {
           "name":      "Terra Contributors",
-          "homepage":  "https://github.com/terra-ops/terra-app/graphs/contributors"
+          "homepage":  "https://github.com/terra-ops/terra-cli/graphs/contributors"
         }
     ],
     "support": {
-      "issues": "https://github.com/terra-ops/terra-app/issues",
+      "issues": "https://github.com/terra-ops/terra-cli/issues",
       "docs": "http://terra.readthedocs.org",
-      "forum": "https://gitter.im/terra-ops/terra-app"
+      "forum": "https://gitter.im/terra-ops/terra-cli"
     },
     "autoload": {
         "psr-4": { "terra\\": "src/terra/" }

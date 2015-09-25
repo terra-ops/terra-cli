@@ -28,7 +28,7 @@ You can access the environment by hostname, which is generated as `http://projec
 
 If your project is called `myhomepage` and your enviroment was called `live`, and the name of the host of the containers was called `business.com`, the terra environment will automatically be available at `http://myhomepage.live.business.com`, if the DNS is set to resolve.
 
-The issue to allow production domains is available at https://github.com/terra-ops/terra-app/issues/18.
+The issue to allow production domains is available at https://github.com/terra-ops/terra-cli/issues/18.
 
 Environment containers
 ------------------

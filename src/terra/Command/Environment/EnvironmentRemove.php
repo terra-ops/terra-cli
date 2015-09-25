@@ -52,7 +52,6 @@ class EnvironmentRemove extends Command
         else {
             $output->writeln("<warning>Running with --no-interaction. Skipping confirmation step.</warning>");
         }
-        //echo in_array('--no-interaction', $input->tokens);
         if (!$input->hasOption('no-interaction') && !$helper->ask($input, $output, $question)) {
             $output->writeln('<error>Cancelled</error>');
             return;
