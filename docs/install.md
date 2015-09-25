@@ -9,7 +9,7 @@ This process is basically the same on Windows, OSX, and Linux.  If running Linux
  3. Composer: `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer` 
  3. Terra: `composer global require terra/cli:dev-master`
  4. Drush: `composer global require drush/drush`
- 5. Put `export PATH="$HOME/.composer/vendor/bin:$PATH` in your `.bash_profile` file to make `terra` and `drush` executable.
+ 5. Put `export PATH="$HOME/.composer/vendor/bin:$PATH"` in your `.bash_profile` file to make `terra` and `drush` executable.
  5. Open *Applications >  Docker > Docker Quickstart Terminal* or *Kitematic* (Docker UI). Either way, you will have to first wait for the VM to download and start.
  6. Launch *Docker Quickstart Terminal* or click the *Docker Cli* button in Kitematic to open a terminal.
  7. Type `terra` to make sure it works.  You will see a list of commands.
