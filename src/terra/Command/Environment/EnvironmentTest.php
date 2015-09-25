@@ -218,8 +218,6 @@ class EnvironmentTest extends Command
             $tests_path = $helper->ask($input, $output, $question);
 
             // Create tests path
-            //$tests_path = $environment_factory->getSourcePath() . '/' . $tests_path;
-            $tests_path = $tests_path;
             $fs = new Filesystem();
             try {
                 $fs->mkdir($environment_factory->getSourcePath() . '/' . $tests_path);
