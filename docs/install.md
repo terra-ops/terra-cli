@@ -4,19 +4,19 @@
 
 This process is basically the same on Windows, OSX, and Linux.  If running Linux, you can skip virtualbox if you want to run docker locally.
 
-1. [VirtualBox 5+](https://www.virtualbox.org/wiki/Downloads) and [Docker Toolbox](https://www.docker.com/toolbox)
-2. PHP & Git.
-3. Composer: `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer` 
-3. Terra: `composer global require terra/terra-app:dev-master`
-4. Drush: `composer global require drush/drush`
-5. Put `export PATH="$HOME/.composer/vendor/bin:$PATH` in your `.bash_profile` file to make `terra` and `drush` executable.
-5. Open *Applications >  Docker > Docker Quickstart Terminal* or *Kitematic* (Docker UI). Either way, you will have to first wait for the VM to download and start.
-6. Launch *Docker Quickstart Terminal* or click the *Docker Cli* button in Kitematic to open a terminal.
-7. Type `terra` to make sure it works.  You will see a list of commands.
-8. Type `terra app:add`.  All you need is a git URL with your site. There are no arguments or options required. It will walk you through creating a new environment as well, and then ask if you'd like to enable it.
-9. When you enable your environment the first time, it will take time to download all of the Docker containers.  Please be patient. Once they are downloaded this enabling environments is very fast.
-10. Once the environment enables, Terra will show you the system URL, usually something like http://local.computer:35000.  Click that and you should see your drupal site. (See below for more on local.computer)
-11. Setup your database connection info in settings.php:
+ 1. [VirtualBox 5+](https://www.virtualbox.org/wiki/Downloads) and [Docker Toolbox](https://www.docker.com/toolbox)
+ 2. PHP & Git.
+ 3. Composer: `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer` 
+ 3. Terra: `composer global require terra/terra-app:dev-master`
+ 4. Drush: `composer global require drush/drush`
+ 5. Put `export PATH="$HOME/.composer/vendor/bin:$PATH` in your `.bash_profile` file to make `terra` and `drush` executable.
+ 5. Open *Applications >  Docker > Docker Quickstart Terminal* or *Kitematic* (Docker UI). Either way, you will have to first wait for the VM to download and start.
+ 6. Launch *Docker Quickstart Terminal* or click the *Docker Cli* button in Kitematic to open a terminal.
+ 7. Type `terra` to make sure it works.  You will see a list of commands.
+ 8. Type `terra app:add`.  All you need is a git URL with your site. There are no arguments or options required. It will walk you through creating a new environment as well, and then ask if you'd like to enable it.
+ 9. When you enable your environment the first time, it will take time to download all of the Docker containers.  Please be patient. Once they are downloaded this enabling environments is very fast.
+ 10. Once the environment enables, Terra will show you the system URL, usually something like http://local.computer:35000.  Click that and you should see your drupal site. (See below for more on local.computer)
+ 11. Setup your database connection info in settings.php:
   ```php
   $databases['default']['default'] = array(
     'driver' => 'mysql',
@@ -28,7 +28,7 @@ This process is basically the same on Windows, OSX, and Linux.  If running Linux
   ```
   It's always the same, for every site.
   
-12. Try the drush alias to ensure the DB is connected and the containers are running
+ 12. Try the drush alias to ensure the DB is connected and the containers are running
   ```sh
   $ drush @APP.ENVIRONMENT ssh
   $ drush @APP.ENVIRONMENT sqlc
@@ -100,12 +100,12 @@ To run the automatic installer, run the following commands as root:
 
 Run all of the following commands as root, or with `sudo`.
 
-1. Install PHP & Git:
+ 1. Install PHP & Git:
 
         apt-get update
         apt-get install php5-cli git
 
-2. Install Composer:  
+ 2. Install Composer:  
   
   From https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx
   
@@ -113,26 +113,26 @@ Run all of the following commands as root, or with `sudo`.
 
   This will install the composer.phar file at /usr/local/bin/composer.
   
-3. Install Docker:
+ 3. Install Docker:
 
   From https://docs.docker.com/installation/ubuntulinux
 
         wget -qO- https://get.docker.com/ | sh
         
-4. Add your user to the `docker` group:
+ 4. Add your user to the `docker` group:
 
         usermod -aG docker your-user
 
   The docker installer will remind you of this at the end.
 
-5. Install Docker Compose:
+ 5. Install Docker Compose:
 
   From https://docs.docker.com/compose/install/
   
         curl -L https://github.com/docker/compose/releases/download/1.2.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
         chmod +x /usr/local/bin/docker-compose
 
-6. Install Drush:
+ 6. Install Drush:
 
   Drush is used to connect to your running drupal sites.  This step is not required.
 
@@ -143,7 +143,7 @@ Run all of the following commands as root, or with `sudo`.
         composer install
         ln -s /usr/share/drush/drush /usr/local/bin/drush
 
-6. Install Terra:
+ 6. Install Terra:
 
   Terra can be installed with `composer global require` however an extra step is 
   needed to put composer's `bin` folder into your system path.
@@ -160,7 +160,7 @@ Run all of the following commands as root, or with `sudo`.
         composer install
         ln -s /usr/share/terra/bin/terra /usr/local/bin/terra
 
-7. Generate an SSH key:
+ 7. Generate an SSH key:
 
   To connect to your drupal sites via drush, your terra user must have an SSH public key.
   
@@ -169,7 +169,7 @@ Run all of the following commands as root, or with `sudo`.
          ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
   
 
-7. Switch back to your user and run `terra` to see if it works!
+ 8. Switch back to your user and run `terra` to see if it works!
         
 ## OSX
 
@@ -181,17 +181,17 @@ The docker host, or daemon, must run in a virtualmachine.
 
 There is a lot of nuance in using Docker on OSX.  It will help to read the guide about Docker on OSX here: http://viget.com/extend/how-to-use-docker-on-os-x-the-missing-guide
 
-1. Install PHP & Git:
+ 1. Install PHP & Git:
 
   Install the command line developer tools by installing XCode
 
-2. Install composer:
+ 2. Install composer:
 
   From https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx
   
         curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-3. Install docker & docker-compose:
+ 3. Install docker & docker-compose:
 
   The easiest way to get up and running on OSX with Docker is to use [Kitematic](http://kitematic.com). Kitematic will handle all prerequisites.
 
@@ -199,7 +199,7 @@ There is a lot of nuance in using Docker on OSX.  It will help to read the guide
 
   ![Kitematic CLI](images/kitematic_cli.png)
 
-6. Install Terra:
+ 6. Install Terra:
 
   Terra can be installed with `composer global require` however an extra step is 
   needed to put composer's `bin` folder into your system path.
@@ -244,3 +244,4 @@ Try to run `terra` on the command line and you should see the default output. Re
 ![Terra CLI](images/terra_cli.png)
 
 Next you should read up on the [containers strategy](containers.md) or jump right in and try [setting up a sample Drupal installation](drupal.md).
+    
