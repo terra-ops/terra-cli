@@ -58,7 +58,7 @@ class EnvironmentAdd extends Command
         )
         ->addOption(
             'no-interaction',
-            'ni',
+            null,
             InputOption::VALUE_NONE,
             'Hide all prompts.'
         )
@@ -110,12 +110,12 @@ class EnvironmentAdd extends Command
                 $default_path = $_SERVER['HOME'] . '/Apps/' . $this->app->name . '/' . $environment_name;
               }
             }
-            if (!$input->hasOption('no-interaction')) {
+            if (!$input->getOption('no-interaction')) {
                 $question = new Question("Path: ($default_path) ", $default_path);
                 $path = $helper->ask($input, $output, $question);
             }
             else {
-                $output->writeln("<warning>Running with --no-interaction. Using default path ($default_path).</warning>");
+                $output->writeln("<info>Running with --no-interaction. Using default path ($default_path).</info>");
                 $path = $default_path;
             }
         }

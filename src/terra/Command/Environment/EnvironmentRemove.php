@@ -50,7 +50,7 @@ class EnvironmentRemove extends Command
             $question = new ConfirmationQuestion("Are you sure you would like to remove the environment <question>$app_name:$environment_name</question>?  All files at {$this->environment->path} will be deleted, and all containers will be killed. [y/N] ", false);
         }
         else {
-            $output->writeln("<warning>Running with --no-interaction. Skipping confirmation step.</warning>");
+            $output->writeln("<info>Running with --no-interaction. Skipping confirmation step.</info>");
         }
         if (!$input->hasOption('no-interaction') && !$helper->ask($input, $output, $question)) {
             $output->writeln('<error>Cancelled</error>');
