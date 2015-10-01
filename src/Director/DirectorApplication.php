@@ -223,14 +223,8 @@ class DirectorApplication extends BaseApplication
    */
   private function getLoader() {
 
-    // Use $_SERVER['director_config_path'] if present.
-    $data_directories = array();
-    if (isset($GLOBALS['_SERVER']['director_config_path'])) {
-      $data_directories[] = $GLOBALS['_SERVER']['director_config_path'];
-    }
-    // Default to the config folder within this application.
-    // @TODO: Not sure how to properly deal with this yet.
-    $data_directories[] = __DIR__ . '/../../config';
+    // Default to the home folder.
+    $data_directories[] = $GLOBALS['_SERVER']['HOME'] . '/.director';
 
     // Attempt to locate data file
     $locator = new FileLocator($data_directories);
