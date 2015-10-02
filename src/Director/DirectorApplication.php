@@ -166,10 +166,20 @@ class DirectorApplication extends BaseApplication
       }
 
       // If a server has a vars file, add it to the
-      if (isset($server['vars_files'])) {
+      $vars_file_path = $this->configPath . '/vars/' . $server_name . '.yml';
+      if (isset($server['vars_files']) || file_exists($vars_file_path)) {
         $playbook_file[] = "  vars_files: ";
-        foreach ($server['vars_files'] as $vars_file) {
-          $playbook_file[] = "    - " . $vars_file;
+
+        if (isset($server['vars_files'])) {
+          foreach ($server['vars_files'] as $vars_file) {
+            if (file_exists($this->configPath . '/vars/' . $vars_file)) {
+              $playbook_file[] = "    - " . $vars_file;
+            }
+          }
+        }
+
+        if (file_exists($vars_file_path)) {
+          $playbook_file[] = "    - " . 'vars/' . $server_name . '.yml';
         }
       }
     }
