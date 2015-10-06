@@ -2,6 +2,7 @@
 
 namespace terra\Command\Environment;
 
+use Symfony\Component\Console\Input\InputOption;
 use terra\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,6 +29,12 @@ class EnvironmentRemove extends Command
             'environment_name',
             InputArgument::OPTIONAL,
             'The name the environment to remove.'
+        )
+        ->addOption(
+            'no-interaction',
+            null,
+            InputOption::VALUE_NONE,
+            'Hide all prompts.'
         )
         ;
     }
