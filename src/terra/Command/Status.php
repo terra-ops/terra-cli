@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Status extends Command
 {
@@ -54,6 +55,20 @@ class Status extends Command
      */
     protected function systemStatus(InputInterface $input, OutputInterface $output)
     {
+        // If no apps, trigger app:Add command.
+        $helper = $this->getHelper('question');
+        $apps = $this->getApplication()->getTerra()->getConfig()->get('apps');
+        if (empty($apps)) {
+            $output->writeln('You have no apps!');
+            $question = new ConfirmationQuestion("Add an App? [y\N] ", false);
+            if ($helper->ask($input, $output, $question)) {
+                // Run environment:add command.
+                $command = $this->getApplication()->find('app:add');
+                $command->run($input, $output);
+                return;
+            }
+        }
+
         // APPS table.
         $table = $this->getHelper('table');
         $table->setHeaders(array(
