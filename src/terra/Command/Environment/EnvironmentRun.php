@@ -59,7 +59,7 @@ class EnvironmentRun extends Command {
 
     // Use docker-compose to run the command on the specified "service"
     $process = new Process("docker-compose -f {$environment_factory->getDockerComposePath()}/docker-compose.yml run $service $commands");
-    echo $process->getCommandLine();
+    $output->writeln($process->getCommandLine());
 
     $process->setTty(true)->run();
     // executes after the command finishes
@@ -67,7 +67,7 @@ class EnvironmentRun extends Command {
       throw new \RuntimeException($process->getErrorOutput());
     }
 
-    echo $process->getOutput();
+    $output->writeln($process->getOutput());
     return;
   }
 }
