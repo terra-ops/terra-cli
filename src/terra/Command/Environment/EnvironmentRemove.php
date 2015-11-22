@@ -2,6 +2,7 @@
 
 namespace terra\Command\Environment;
 
+use Symfony\Component\Console\Input\InputOption;
 use terra\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,6 +30,12 @@ class EnvironmentRemove extends Command
             InputArgument::OPTIONAL,
             'The name the environment to remove.'
         )
+        ->addOption(
+            'no-interaction',
+            null,
+            InputOption::VALUE_NONE,
+            'Hide all prompts.'
+        )
         ;
     }
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -50,7 +57,7 @@ class EnvironmentRemove extends Command
             $question = new ConfirmationQuestion("Are you sure you would like to remove the environment <question>$app_name:$environment_name</question>?  All files at {$this->environment->path} will be deleted, and all containers will be killed. [y/N] ", false);
         }
         else {
-            $output->writeln("<warning>Running with --no-interaction. Skipping confirmation step.</warning>");
+            $output->writeln("<info>Running with --no-interaction. Skipping confirmation step.</info>");
         }
         if (!$input->hasOption('no-interaction') && !$helper->ask($input, $output, $question)) {
             $output->writeln('<error>Cancelled</error>');
