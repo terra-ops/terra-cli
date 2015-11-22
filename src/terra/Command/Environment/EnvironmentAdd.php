@@ -109,7 +109,7 @@ class EnvironmentAdd extends Command
                 $path = $helper->ask($input, $output, $question);
             }
             else {
-                $output->writeln("<info>Running with --no-interaction. Using default path ($default_path).</info>");
+                $output->writeln("<info>Running with --yes flag. Using default path ($default_path).</info>");
                 $path = $default_path;
             }
         }

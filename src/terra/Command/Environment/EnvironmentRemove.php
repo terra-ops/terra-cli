@@ -30,12 +30,6 @@ class EnvironmentRemove extends Command
             InputArgument::OPTIONAL,
             'The name the environment to remove.'
         )
-        ->addOption(
-            'no-interaction',
-            null,
-            InputOption::VALUE_NONE,
-            'Hide all prompts.'
-        )
         ;
     }
     protected function execute(InputInterface $input, OutputInterface $output)
