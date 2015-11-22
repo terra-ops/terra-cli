@@ -56,12 +56,6 @@ class EnvironmentAdd extends Command
             InputOption::VALUE_NONE,
             'Enable this environment immediately.'
         )
-        ->addOption(
-            'no-interaction',
-            null,
-            InputOption::VALUE_NONE,
-            'Hide all prompts.'
-        )
         ;
     }
 
@@ -110,7 +104,7 @@ class EnvironmentAdd extends Command
                 $default_path = $_SERVER['HOME'] . '/Apps/' . $this->app->name . '/' . $environment_name;
               }
             }
-            if (!$input->getOption('no-interaction')) {
+            if (!$input->getOption('yes')) {
                 $question = new Question("Path: ($default_path) ", $default_path);
                 $path = $helper->ask($input, $output, $question);
             }
