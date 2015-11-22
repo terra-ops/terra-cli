@@ -19,8 +19,8 @@ use Symfony\Component\Process\Process;
 class Drush extends Command {
   protected function configure() {
     $this
-      ->setName('drush')
-      ->setDescription('run something on a container')
+      ->setName('environment:drush')
+      ->setDescription("Run a drush command on an environment's drush container.")
       ->addArgument(
         'app_name',
         InputArgument::REQUIRED,
