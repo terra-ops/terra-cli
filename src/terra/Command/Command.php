@@ -8,6 +8,8 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Command\Command as CommandBase;
 
+use terra\Factory\EnvironmentFactory;
+
 /**
  * Class Command.
  */
@@ -144,5 +146,17 @@ class Command extends CommandBase
 
         // Set the environment for this command.
         $this->environment = (object) $this->app->environments[$environment_name];
+    }
+
+    /**
+     * Get an environmentFactory class
+     *
+     * @return \terra\Factory\EnvironmentFactory
+     *
+     * @api
+     */
+    public function getEnvironmentFactory()
+    {
+      return new EnvironmentFactory($this->environment, $this->app);
     }
 }
