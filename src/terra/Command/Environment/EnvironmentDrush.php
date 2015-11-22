@@ -6,7 +6,7 @@
  * Time: 11:09 PM
  */
 
-namespace terra\Command;
+namespace terra\Command\Environment;
 
 use terra\Factory\EnvironmentFactory;
 use Symfony\Component\Console\Input\InputArgument;
