@@ -19,8 +19,8 @@ use Symfony\Component\Process\Process;
 class Run extends Command {
   protected function configure() {
     $this
-      ->setName('run')
-      ->setDescription('run something on a container')
+      ->setName('environment:run')
+      ->setDescription("Run a command on one of an environment's containers.")
       ->addArgument(
         'app_name',
         InputArgument::REQUIRED,
@@ -44,48 +44,16 @@ class Run extends Command {
   }
 
   protected function execute(InputInterface $input, OutputInterface $output) {
-    // If there are no apps, return
-    if (count($this->getApplication()
-        ->getTerra()
-        ->getConfig()
-        ->get('apps')) == 0
-    ) {
-      $output->writeln('<comment>There are no apps!</comment>');
-      $output->writeln('Use the command <info>terra app:add</info> to add your first app.');
 
-      return;
-    }
+    // Ask for an app and environment.
+    $this->getApp($input, $output);
+    $this->getEnvironment($input, $output);
 
-    $app_name = $input->getArgument('app_name');
-    $environment_name = $input->getArgument('environment_name');
+    $environment_factory = $this->getEnvironmentFactory();
     $service = $input->getArgument('service');
     $commands = implode(" ",$input->getArgument('commands'));
 
-    $app = $this->getApplication()
-      ->getTerra()
-      ->getConfig()
-      ->get('apps', $app_name);
-
-    // If no environments:
-    if (count(($app['environments'])) == 0) {
-      $output->writeln('<comment>There are no environments!</comment>');
-      $output->writeln('Use the command <info>terra environment:add</info> to add your first environment.');
-
-      return;
-    }
-
-    // If no environment by that name...
-    if (!isset($app['environments'][$environment_name])) {
-      $output->writeln("<error>There is no environment named {$environment_name} in the app {$app_name}</error>");
-
-      return;
-    }
-
-    $environment = $app['environments'][$environment_name];
-    $environment_factory = new EnvironmentFactory($environment, $app);
-
-    // Get current scale of app service
-
+    // Use docker-compose to run the command on the specified "service"
     $process = new Process("docker-compose -f {$environment_factory->getDockerComposePath()}/docker-compose.yml run $service $commands");
     echo $process->getCommandLine();
 
