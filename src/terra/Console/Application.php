@@ -64,10 +64,10 @@ class Application extends BaseApplication
         $commands[] = new Command\Environment\EnvironmentTest();
         $commands[] = new Command\Environment\EnvironmentRebuild();
         $commands[] = new Command\Environment\EnvironmentDomains();
+        $commands[] = new Command\EnvironmentDrush();
+        $commands[] = new Command\EnvironmentRun();
         $commands[] = new Command\Status();
         $commands[] = new Command\Queue();
-        $commands[] = new Command\Run();
-        $commands[] = new Command\Drush();
 
         return $commands;
     }

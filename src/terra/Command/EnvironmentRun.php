@@ -16,7 +16,7 @@ use Symfony\Component\Process\Process;
 
 
 
-class Run extends Command {
+class EnvironmentRun extends Command {
   protected function configure() {
     $this
       ->setName('environment:run')

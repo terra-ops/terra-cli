@@ -16,7 +16,7 @@ use Symfony\Component\Process\Process;
 
 
 
-class Drush extends Command {
+class EnvironmentDrush extends Command {
   protected function configure() {
     $this
       ->setName('environment:drush')
