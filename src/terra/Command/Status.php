@@ -6,6 +6,7 @@ use terra\Factory\EnvironmentFactory;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 class Status extends Command
 {
@@ -63,10 +64,13 @@ class Status extends Command
         ));
 
         $rows = array();
+        $options = array();
         foreach ($this->getApplication()
                ->getTerra()
                ->getConfig()
                ->get('apps') as $app) {
+
+            $options[] = $app['name'];
             $row = array(
             $app['name'],
             $app['description'],
@@ -77,6 +81,23 @@ class Status extends Command
         }
         $table->setRows($rows);
         $table->render($output);
+
+        $helper = $this->getHelper('question');
+        $question = new Question('App? ');
+        $question->setAutocompleterValues($options);
+
+        // Run app status
+        $name = $helper->ask($input, $output, $question);
+        if (empty($name)) {
+            return;
+        }
+        else {
+            // If an app name was chosen, run appStatus
+            $formatter = $this->getHelper('formatter');
+            $input->setArgument('app_name', $name);
+            $this->appStatus($input, $output);
+
+        }
     }
 
     /**
@@ -88,7 +109,7 @@ class Status extends Command
      */
     protected function appStatus(InputInterface $input, OutputInterface $output)
     {
-
+        $output->writeln('<info>App:</info> ' . $input->getArgument('app_name'));
       // If there are no apps, return
         if (count($this->getApplication()->getTerra()->getConfig()->get('apps')) == 0) {
             $output->writeln('<comment>There are no apps!</comment>');
