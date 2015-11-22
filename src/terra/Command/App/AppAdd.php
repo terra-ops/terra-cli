@@ -63,6 +63,11 @@ class AppAdd extends Command
         $description_question = new Question('Description? ', '');
         $repo_question = new Question('Source code repository URL? ', '');
         $host_default = getenv('DOCKER_HOST') ? parse_url(getenv('DOCKER_HOST'), PHP_URL_HOST) : php_uname('n');
+
+        // Allow local.computer
+        if ($host_default == '192.168.99.100') {
+            $host_default = 'local.computer';
+        }
         $host_question = new Question('Host? [' . $host_default . '] ', $host_default);
 
         // Prompts.

@@ -1,6 +1,16 @@
 # The relative path to your exposed web files.
 document_root: docroot
 
+# Rebuild Source
+# A drush alias from which to rebuild your environments.  Having this property allows the `terra environment:rebuild`
+# command to quickly sync your environment's database and files from a different instance.
+rebuild_source: @drush.alias
+
+# The path to your behat.yml and composer.json file for behat tests.
+# If you have this property specified, running the `terra environment:test` command will run `composer update` and then
+# `bin/behat` in that folder!
+behat_path: tests
+
 # Hooks are commands that are triggered on certain events
 hooks:
 
@@ -23,7 +33,11 @@ hooks:
     # On environment:deploy
     deploy: |
       drush {{alias}} updb -y
-      drush {{}} cc all
+      drush {{alias}} cc all
+
+    # On environment:rebuild
+    rebuild: |
+      drush {{alias}} en devel -y
 
 # Specific settings for docker compose go here
 docker_compose:

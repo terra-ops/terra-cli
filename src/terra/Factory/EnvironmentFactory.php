@@ -75,13 +75,25 @@ class EnvironmentFactory
         }
 
         try {
+            // Create App folder
             mkdir($path, 0755, TRUE);
             chdir($path);
+
+            // Clone repo
             $wrapper = new GitWrapper();
             $wrapper->streamOutput();
             $wrapper->cloneRepository($this->app->repo, $path);
+
+            // Checkout correct version.
+            $git = new GitWorkingCopy($wrapper, $this->getSourcePath());
+            $git->checkout($this->environment->version);
+
         } catch (\GitWrapper\GitException $e) {
-            return false;
+
+            // If exception is because there is no git ref, continue.
+            if (strpos($e->getMessage(), 'error: pathspec') !== 0) {
+                return false;
+            }
         }
 
         chdir($path);
@@ -144,7 +156,8 @@ class EnvironmentFactory
             // Process any string replacements.
             $environment_config_string = file_get_contents($this->getSourcePath().'/.terra.yml');
             $this->config = Yaml::parse(strtr($environment_config_string, array(
-            '{{alias}}' => "@{$this->app->name}.{$this->environment->name}",
+                '{{alias}}' => "@{$this->app->name}.{$this->environment->name}",
+                '{{uri}}' => $this->getUrl(),
             )));
         } else {
             $this->config = null;
@@ -277,11 +290,18 @@ class EnvironmentFactory
             $ssh_authorized_keys = '';
         }
 
+        // Get Virtual Hosts array
+        $hosts = $this->getUrl();
+
+        if (!empty($this->environment->domains)) {
+            $hosts .= ',' . implode(',', $this->environment->domains);
+        }
+
         $compose = array();
         $compose['load'] = array(
             'image' => 'tutum/haproxy',
             'environment' => array(
-                'VIRTUAL_HOST' => $this->getUrl(),
+                'VIRTUAL_HOST' => $hosts,
             ),
             'links' => array(
                 'app',
@@ -365,19 +385,24 @@ class EnvironmentFactory
 
         // Add "overrides" to docker-compose.
         if (isset($this->config['docker_compose']['overrides']) && is_array($this->config['docker_compose']['overrides'])) {
-            foreach ($this->config['docker_compose']['overrides'] as $service => $info) {
+            foreach ($this->config['docker_compose']['overrides'] as $service => $service_info) {
 
                 // For each service, loop through properties.
-                foreach ($info as $property_name => $property_value) {
+                if (isset($compose[$service])) {
+                    foreach ($service_info as $property_name => $property_value) {
 
-                    // If the property is an array (like environment variables) merge it.
-                    if (is_array($property_value)) {
-                        $compose[$service][$property_name] = array_merge_recursive($compose[$service][$property_name], $property_value);
+                        // If the property is an array (like environment variables) merge it.
+                        if (is_array($property_value)) {
+                            $compose[$service][$property_name] = array_merge_recursive($compose[$service][$property_name], $property_value);
+                        }
+                        // If property is not an array, replace it.
+                        else {
+                            $compose[$service][$property_name] = $property_value;
+                        }
                     }
-                    // If property is not an array, replace it.
-                    else {
-                        $compose[$service][$property_name] = $property_value;
-                    }
+                }
+                else {
+                    $compose[$service] = $service_info;
                 }
             }
         }
@@ -547,7 +572,7 @@ class EnvironmentFactory
      */
     public function getUrl()
     {
-        return $this->app->name.'.'.$this->name.'.'.gethostname();
+        return $this->app->name.'.'.$this->name.'.'.$this->app->host;
     }
 
     /**
@@ -602,5 +627,36 @@ class EnvironmentFactory
         } catch (IOException $e) {
             return false;
         }
+    }
+
+    /**
+     * Get the name of the drush alias.
+     */
+    public function getDrushAlias() {
+        return "@{$this->app->name}.{$this->environment->name}";
+    }
+
+    /**
+     * Get the path to document root
+     */
+    public function getDocumentRoot() {
+        return $this->environment->path . '/' . $this->config['document_root'];
+    }
+
+    /**
+     * Runs a drush command for a specified alias.
+     */
+    public function runDrushCommand($drush_command, $alias = NULL) {
+
+        if ($alias == NULL) {
+            $alias = $this->getDrushAlias();
+        }
+
+        $cmd = "drush {$alias} $drush_command";
+
+        $process = new Process($cmd);
+        $process->setTimeout(null);
+        $process->run();
+        return trim($process->getOutput());
     }
 }

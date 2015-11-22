@@ -1,6 +1,6 @@
 {
-    "name": "terra/terra-app",
-    "description": "DevOps for All",
+    "name": "terra/cli",
+    "description": "Terra Command Line Interface",
     "type": "project",
     "license": "GPL-2.0",
     "require": {
@@ -11,7 +11,9 @@
         "symfony/process": "~2.6",
         "symfony/yaml": "~2.6",
         "cpliakas/git-wrapper": "~1.4",
-        "teqneers/php-stream-wrapper-for-git": "~1.0"
+        "teqneers/php-stream-wrapper-for-git": "~1.0",
+        "videlalvaro/php-amqplib": "2.2.*",
+        "guzzlehttp/guzzle": "~6.0"
     },
     "authors": [
         {
@@ -20,13 +22,13 @@
         },
         {
           "name":      "Terra Contributors",
-          "homepage":  "https://github.com/terra-ops/terra-app/graphs/contributors"
+          "homepage":  "https://github.com/terra-ops/terra-cli/graphs/contributors"
         }
     ],
     "support": {
-      "issues": "https://github.com/terra-ops/terra-app/issues",
+      "issues": "https://github.com/terra-ops/terra-cli/issues",
       "docs": "http://terra.readthedocs.org",
-      "forum": "https://gitter.im/terra-ops/terra-app"
+      "forum": "https://gitter.im/terra-ops/terra-cli"
     },
     "autoload": {
         "psr-4": { "terra\\": "src/terra/" }

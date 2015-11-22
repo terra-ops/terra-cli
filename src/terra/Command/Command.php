@@ -31,7 +31,7 @@ class Command extends CommandBase
      * @return mixed
      *               The value derived from either the argument/option or the value.
      */
-    public function getAnswer(InputInterface $input, OutputInterface $output, Question $question, $argument_name, $type = 'argument')
+    public function getAnswer(InputInterface $input, OutputInterface $output, Question $question, $argument_name, $type = 'argument', $required = FALSE)
     {
         $helper = $this->getHelper('question');
 
@@ -42,7 +42,15 @@ class Command extends CommandBase
         }
 
         if (empty($value)) {
-            $value = $helper->ask($input, $output, $question);
+
+            if ($required) {
+                while (empty($value)) {
+                    $value = $helper->ask($input, $output, $question);
+                }
+            }
+            else {
+                $value = $helper->ask($input, $output, $question);
+            }
         }
 
         return $value;

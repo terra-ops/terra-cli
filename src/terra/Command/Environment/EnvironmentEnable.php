@@ -79,15 +79,18 @@ class EnvironmentEnable extends Command
         $output->writeln('Running <comment>ENABLE</comment> app hook...');
 
         $environment_factory->getConfig();
+        $output->writeln('Sleeping for 5 seconds to let db server start...');
+        sleep(5);
+        // @TODO: Figure out how to only run this hook the first time!
         if (!empty($environment_factory->config['hooks']['enable_first'])) {
             // Output what we are running
             $formatter = $this->getHelper('formatter');
-            $errorMessages = array($environment_factory->config['hooks']['enable']);
+            $errorMessages = array($environment_factory->config['hooks']['enable_first']);
             $formattedBlock = $formatter->formatBlock($errorMessages, 'question');
             $output->writeln($formattedBlock);
 
             chdir($environment_factory->getSourcePath());
-            $process = new Process($environment_factory->config['hooks']['enable']);
+            $process = new Process($environment_factory->config['hooks']['enable_first']);
             $process->setTimeout(null);
             $process->run(function ($type, $buffer) {
                 if (Process::ERR === $type) {
