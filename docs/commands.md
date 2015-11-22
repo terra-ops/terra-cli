@@ -35,6 +35,14 @@ terra environment:rebuild
 # To rebuild from any source alias
 terra environment:rebuild -s @source_alias
 
+# Run a drush command inside the drush container
+terra environment:drush PROJECT ENVIRONMENT status
+terra environment:drush PROJECT ENVIRONMENT uli
+
+# Run an arbitrary command inside any container.  
+# Services are from docker composer: load, app, database, drush.
+terra environment:run PROJECT ENVIRONMENT SERVICE ping google.com
+
 # View logfiles
 docker logs drupallocal_app_1
 
