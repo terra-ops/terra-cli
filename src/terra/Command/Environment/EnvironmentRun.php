@@ -50,6 +50,9 @@ class EnvironmentRun extends Command {
     $this->getApp($input, $output);
     $this->getEnvironment($input, $output);
 
+    $output->writeln('<info>App:</info> ' . $this->app->name);
+    $output->writeln('<info>Environment:</info> ' . $this->environment->name);
+
     $environment_factory = $this->getEnvironmentFactory();
     $service = $input->getArgument('service');
     $commands = implode(" ",$input->getArgument('commands'));
