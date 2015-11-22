@@ -98,14 +98,14 @@ class EnvironmentAdd extends Command
             else {
 
               // Offer to create the apps path.
-              $question = new ConfirmationQuestion("Create default apps path at $config_path? [y\N] ", false);
+              $question = new ConfirmationQuestion("Default apps folder {$config_path} is missing.  Create it? [y\N] ", false);
               if ($helper->ask($input, $output, $question)) {
                 mkdir($config_path);
                 $default_path = $_SERVER['HOME'] . '/Apps/' . $this->app->name . '/' . $environment_name;
               }
             }
             if (!$input->getOption('yes')) {
-                $question = new Question("Path: ($default_path) ", $default_path);
+                $question = new Question("Environment Source Code Path: ($default_path) ", $default_path);
                 $path = $helper->ask($input, $output, $question);
             }
             else {
