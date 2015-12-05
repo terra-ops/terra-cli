@@ -270,6 +270,9 @@ class EnvironmentFactory
     {
         $this->getConfig();
 
+        // Determine format for load port
+        $load_port = isset($this->environment->port) ? "{$this->environment->port}:80" : 80;
+
         $source_root = $this->environment->path;
 
         if (!empty($this->config['document_root'])) {
@@ -303,7 +306,7 @@ class EnvironmentFactory
                 '80/tcp',
             ),
             'ports' => array(
-                "{$this->environment->port}:80",
+                $load_port,
             ),
             'restart' => 'on-failure',
         );
@@ -347,7 +350,7 @@ class EnvironmentFactory
                 'database',
             ),
             'ports' => array(
-                ':22',
+                22,
             ),
             'volumes' => array(
                 "$document_root:/var/www/html",
