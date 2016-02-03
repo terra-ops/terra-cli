@@ -96,7 +96,7 @@ class EnvironmentUpdate extends Command
             if ($branch != $version) {
                 $wrapper->git("checkout -b {$branch}", $path);
             }
-            $drush_output = 'OH YEAH! TERRA UPDATE!';
+            $drush_output = 'Coming soon: captured drush output in commit messages.';
 
             $question = new ConfirmationQuestion('Are you sure you want to  add, commit, and push all changes? ', FALSE);
             if ($helper->ask($input, $output, $question)) {
