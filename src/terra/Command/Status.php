@@ -156,9 +156,8 @@ class Status extends Command
         $table = $this->getHelper('table');
         $table->setHeaders(array(
           'Name',
-          'Code Path',
-          'docroot',
-          'URLs',
+          'Code Path / docroot',
+          'URLs & Drush Alias',
           'Version',
         ));
 
@@ -173,9 +172,16 @@ class Status extends Command
             $environment['domains'][] = 'http://'.$environment_factory->getUrl();
 
             $environment['url'] = implode(PHP_EOL, $environment['domains']);
+            $environment['url'] .= PHP_EOL . $environment_factory->getDrushAlias();
+
             unset($environment['domains']);
 
-            $rows[] = $environment;
+            $rows[] = array(
+                $environment['name'],
+                $environment['path'] . PHP_EOL . $environment['document_root'],
+                $environment['url'],
+                $environment['version'],
+            );
         }
 
         $table->setRows($rows);
