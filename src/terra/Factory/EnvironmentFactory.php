@@ -600,7 +600,7 @@ class EnvironmentFactory
      */
     public function writeDrushAlias()
     {
-        $drush_alias_file_path = "{$_SERVER['HOME']}/.drush/{$this->app->name}.aliases.drushrc.php";
+        $drush_alias_file_path = "{$_SERVER['HOME']}/.drush/terra.{$this->app->name}.aliases.drushrc.php";
 
         $drush_alias_file = array();
         $drush_alias_file[] = '<?php';
@@ -633,7 +633,7 @@ class EnvironmentFactory
      * Get the name of the drush alias.
      */
     public function getDrushAlias() {
-        return "@{$this->app->name}.{$this->environment->name}";
+        return "@terra.{$this->app->name}.{$this->environment->name}";
     }
 
     /**
