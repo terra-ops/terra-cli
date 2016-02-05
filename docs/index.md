@@ -10,6 +10,12 @@ It is designed to be as simple as possible for developers, while being powerful 
 
 With Terra, all you care about is your site's code. Stop wasting time setting up environments. Let terra and docker do all the work for you.
 
+## .terra.yml
+
+Your .terra.yml file gives you tons of power.
+
+Check out a [sample .terra.yml file](https://github.com/terra-ops/terra-cli/blob/master/docs/.terra.yml) and put one in your app's source code.
+
 ## Community
 
 Please join the chat on Gitter. We want as much feedback as possible!
