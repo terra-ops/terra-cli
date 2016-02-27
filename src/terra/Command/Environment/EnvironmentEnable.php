@@ -69,7 +69,7 @@ class EnvironmentEnable extends Command
         if ($environment_factory->writeDrushAlias()) {
             $output->writeln("<info>Drush alias file created at {$drush_alias_file_path}</info>");
             $output->writeln("Wrote drush alias file to <comment>$drush_alias_file_path</comment>");
-            $output->writeln("Use <info>drush @{$app_name}.{$environment_name}</info> to access the site.");
+            $output->writeln("Use <info>drush {$environment_factory->getDrushAlias()}</info> to access the site.");
         } else {
             $output->writeln('<error>Unable to save drush alias.</error>');
         }
