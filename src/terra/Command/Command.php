@@ -45,6 +45,10 @@ class Command extends CommandBase
 
         if (empty($value)) {
 
+            // If we are in non-interactive mode, we have no choice but to return nothing.
+            if ($input->getOption('yes')) {
+                return '';
+            }
             if ($required) {
                 while (empty($value)) {
                     $value = $helper->ask($input, $output, $question);
