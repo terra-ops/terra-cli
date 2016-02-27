@@ -102,7 +102,11 @@ class AppAdd extends Command
         }
 
 
-        // Offer to enable the environment
+        // Offer to enable the environment (only if interactive.)
+        if ($input->isInteractive()) {
+            return;
+        }
+
         $question = new ConfirmationQuestion("Create an environment? [y\N] ", false);
         if ($input->getOption('create-environment') || $helper->ask($input, $output, $question)) {
 
