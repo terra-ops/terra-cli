@@ -88,6 +88,7 @@ class EnvironmentAdd extends Command
         $path = $input->getArgument('path');
         if (empty($path)) {
             // Load apps base path from Config.
+            // @TODO: #110 Ask what they want their apps_basepath to be anc save it to the config.
             $config_path = $this->getApplication()->getTerra()->getConfig()->get('apps_basepath');
 
             // If it already exists, use "realpath" to load it.
