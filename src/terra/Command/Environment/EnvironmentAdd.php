@@ -168,7 +168,7 @@ class EnvironmentAdd extends Command
         // Offer to enable the environment
         $question = new ConfirmationQuestion("Enable this environment? [y\N] ", false);
         if ($input->getOption('enable') || $helper->ask($input, $output, $question)) {
-            // Run environment:add command.
+            // Run environment:enable command.
             $command = $this->getApplication()->find('environment:enable');
             $arguments = array(
               'app_name' => $this->app->name,
