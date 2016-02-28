@@ -100,19 +100,19 @@ class Status extends Command
         $helper = $this->getHelper('question');
         $question = new Question('App? ');
         $question->setAutocompleterValues($options);
-
-        // Run app status
-        $name = $helper->ask($input, $output, $question);
-        if (empty($name)) {
-            return;
-        }
-        else {
-            // If an app name was chosen, run appStatus
-            $formatter = $this->getHelper('formatter');
-            $input->setArgument('app_name', $name);
-            $this->appStatus($input, $output);
-
-        }
+//
+//        // Run app status
+//        $name = $helper->ask($input, $output, $question);
+//        if (empty($name)) {
+//            return;
+//        }
+//        else {
+//            // If an app name was chosen, run appStatus
+//            $formatter = $this->getHelper('formatter');
+//            $input->setArgument('app_name', $name);
+//            $this->appStatus($input, $output);
+//
+//        }
     }
 
     /**
