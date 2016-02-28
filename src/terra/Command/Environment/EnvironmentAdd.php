@@ -126,6 +126,10 @@ class EnvironmentAdd extends Command
             }
         }
 
+        // Ask for git version
+        $version_question = new Question('Git branch or tag? [default branch] ', '');
+        $version = $this->getAnswer($input, $output, $version_question, 'ref', 'option');
+
         // Environment object
         $environment = array(
             'app' => $this->app->name,
@@ -133,7 +137,7 @@ class EnvironmentAdd extends Command
             'path' => $path,
             'document_root' => '',
             'url' => '',
-            'version' => $input->getOption('ref'),
+            'version' => $version,
             'domains' => array(),
         );
 
