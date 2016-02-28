@@ -153,12 +153,17 @@ class EnvironmentFactory
         // Look for .terra.yml
         $fs = new FileSystem();
         if ($fs->exists($this->getSourcePath().'/.terra.yml')) {
-            // Process any string replacements.
-            $environment_config_string = file_get_contents($this->getSourcePath().'/.terra.yml');
-            $this->config = Yaml::parse(strtr($environment_config_string, array(
-                '{{alias}}' => $this->getDrushAlias(),
-                '{{uri}}' => $this->getUrl(),
-            )));
+            try {
+                // Process any string replacements.
+                $environment_config_string = file_get_contents($this->getSourcePath().'/.terra.yml');
+                $this->config = Yaml::parse(strtr($environment_config_string, array(
+                  '{{alias}}' => $this->getDrushAlias(),
+                  '{{uri}}' => $this->getUrl(),
+                )));
+            }
+            catch (\Symfony\Component\Yaml\Exception\ParseException $e) {
+                $this->config = null;
+            }
         } else {
             $this->config = null;
         }
