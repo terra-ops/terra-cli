@@ -68,7 +68,7 @@ class AppAdd extends Command
         if ($host_default == '192.168.99.100') {
             $host_default = 'local.computer';
         }
-        $host_question = new Question('Host? [' . $host_default . '] ', $host_default);
+        $host_question = new Question('Host? Terra uses this to show links to your environments. It must resolve to the docker machine you are working with. [' . $host_default . '] ', $host_default);
 
         // Prompts.
         $name = $this->getAnswer($input, $output, $name_question, 'name');
