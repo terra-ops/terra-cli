@@ -159,6 +159,8 @@ class EnvironmentFactory
                 $this->config = Yaml::parse(strtr($environment_config_string, array(
                   '{{alias}}' => $this->getDrushAlias(),
                   '{{uri}}' => $this->getUrl(),
+                  '{{environment}}' => $this->environment->name,
+                  '{{apps}}' => $this->app->name,
                 )));
             }
             catch (\Symfony\Component\Yaml\Exception\ParseException $e) {
