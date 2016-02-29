@@ -371,9 +371,9 @@ $this->environment->name;
         );
 
         // Set global service config options
-        foreach ($compose as &$service) {
-            $service['restart'] = 'on-failure';
-            $service['labels'] =  array(
+        foreach ($compose as $name => $service) {
+            $compose[$name]['restart'] = 'on-failure';
+            $compose[$name]['labels'] =  array(
               "org.terra.environment=$environment_label",
             );
         }
