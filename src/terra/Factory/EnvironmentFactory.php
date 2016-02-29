@@ -302,6 +302,9 @@ class EnvironmentFactory
             $hosts .= ',' . implode(',', $this->environment->domains);
         }
 
+        $environment_label = $this->app->name . ':' .
+$this->environment->name;
+
         $compose = array();
         $compose['load'] = array(
             'image' => 'tutum/haproxy',
@@ -317,7 +320,6 @@ class EnvironmentFactory
             'ports' => array(
                 '80',
             ),
-            'restart' => 'on-failure',
         );
         $compose['app'] = array(
             'image' => 'terra/drupal',
@@ -337,8 +339,7 @@ class EnvironmentFactory
             'expose' => array(
                 '80/tcp',
             ),
-            'restart' => 'on-failure',
-            );
+        );
         $compose['database'] = array(
             'image' => 'mariadb',
             'tty' => true,
@@ -349,7 +350,6 @@ class EnvironmentFactory
                 'MYSQL_USER' => 'drupal',
                 'MYSQL_PASSWORD' => 'drupal',
             ),
-            'restart' => 'on-failure',
         );
         $compose['drush'] = array(
             'image' => 'terra/drush',
@@ -368,8 +368,15 @@ class EnvironmentFactory
             'environment' => array(
                 'AUTHORIZED_KEYS' => $ssh_authorized_keys,
             ),
-            'restart' => 'on-failure',
         );
+
+        // Set global service config options
+        foreach ($compose as &$service) {
+            $service['restart'] = 'on-failure';
+            $service['labels'] =  array(
+              "org.terra.environment=$environment_label",
+            );
+        }
 
         // Add "app_services": Additional containers linked to the app container.
         $this->getConfig();
