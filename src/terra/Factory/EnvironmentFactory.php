@@ -370,14 +370,6 @@ $this->environment->name;
             ),
         );
 
-        // Set global service config options
-        foreach ($compose as $name => $service) {
-            $compose[$name]['restart'] = 'on-failure';
-            $compose[$name]['labels'] =  array(
-              "org.terra.environment=$environment_label",
-            );
-        }
-
         // Add "app_services": Additional containers linked to the app container.
         $this->getConfig();
         if (isset($this->config['docker_compose']['app_services']) && is_array($this->config['docker_compose']['app_services'])) {
@@ -419,6 +411,14 @@ $this->environment->name;
                     $compose[$service] = $service_info;
                 }
             }
+        }
+
+        // Set global service config options
+        foreach ($compose as $name => $service) {
+            $compose[$name]['restart'] = 'on-failure';
+            $compose[$name]['labels'] =  array(
+              "org.terra.environment=$environment_label",
+            );
         }
 
         return $compose;
