@@ -385,10 +385,12 @@ $this->environment->name;
                 $compose['app']['links'][] = $service;
 
                 // Look for volume paths to change
-                foreach ($info['volumes'] as &$volume) {
-                    $volume = strtr($volume, array(
-                    '{APP_PATH}' => $source_root,
-                    ));
+                if (is_array($info['volumes'])) {
+                    foreach ($info['volumes'] as &$volume) {
+                        $volume = strtr($volume, array(
+                          '{APP_PATH}' => $source_root,
+                        ));
+                    }
                 }
 
                 $compose[$service] = $info;
