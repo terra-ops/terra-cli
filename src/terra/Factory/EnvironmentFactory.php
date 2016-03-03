@@ -159,6 +159,8 @@ class EnvironmentFactory
                 $this->config = Yaml::parse(strtr($environment_config_string, array(
                   '{{alias}}' => $this->getDrushAlias(),
                   '{{uri}}' => $this->getUrl(),
+                  '{{environment}}' => $this->environment->name,
+                  '{{apps}}' => $this->app->name,
                 )));
             }
             catch (\Symfony\Component\Yaml\Exception\ParseException $e) {
@@ -302,6 +304,9 @@ class EnvironmentFactory
             $hosts .= ',' . implode(',', $this->environment->domains);
         }
 
+        $environment_label = $this->app->name . ':' .
+$this->environment->name;
+
         $compose = array();
         $compose['load'] = array(
             'image' => 'tutum/haproxy',
@@ -317,7 +322,6 @@ class EnvironmentFactory
             'ports' => array(
                 '80',
             ),
-            'restart' => 'on-failure',
         );
         $compose['app'] = array(
             'image' => 'terra/drupal',
@@ -337,8 +341,7 @@ class EnvironmentFactory
             'expose' => array(
                 '80/tcp',
             ),
-            'restart' => 'on-failure',
-            );
+        );
         $compose['database'] = array(
             'image' => 'mariadb',
             'tty' => true,
@@ -349,7 +352,6 @@ class EnvironmentFactory
                 'MYSQL_USER' => 'drupal',
                 'MYSQL_PASSWORD' => 'drupal',
             ),
-            'restart' => 'on-failure',
         );
         $compose['drush'] = array(
             'image' => 'terra/drush',
@@ -368,7 +370,6 @@ class EnvironmentFactory
             'environment' => array(
                 'AUTHORIZED_KEYS' => $ssh_authorized_keys,
             ),
-            'restart' => 'on-failure',
         );
 
         // Add "app_services": Additional containers linked to the app container.
@@ -378,10 +379,12 @@ class EnvironmentFactory
                 $compose['app']['links'][] = $service;
 
                 // Look for volume paths to change
-                foreach ($info['volumes'] as &$volume) {
-                    $volume = strtr($volume, array(
-                    '{APP_PATH}' => $source_root,
-                    ));
+                if (isset($info['volumes'])) {
+                    foreach ($info['volumes'] as &$volume) {
+                        $volume = strtr($volume, array(
+                          '{APP_PATH}' => $source_root,
+                        ));
+                    }
                 }
 
                 $compose[$service] = $info;
@@ -410,6 +413,16 @@ class EnvironmentFactory
                     $compose[$service] = $service_info;
                 }
             }
+        }
+
+        // Set global service config options
+        foreach ($compose as $name => $service) {
+            $compose[$name]['restart'] = 'on-failure';
+
+            $compose[$name]['labels']['io.rancher.stack.name'] = "terra_{$this->app->name}_{$this->environment->name}";
+            $compose[$name]['labels']['io.rancher.stack_service.name'] = "terra_{$this->app->name}_{$this->environment->name}/{$name}";
+
+            $compose[$name]['labels']['io.rancher.container.network'] = 'TRUE';
         }
 
         return $compose;
