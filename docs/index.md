@@ -28,94 +28,6 @@ Please join the chat on Gitter. We want as much feedback as possible!
 
 [Issues](https://github.com/terra-ops/terra-cli/issues) and [Story Boarding](https://huboard.com/terra-ops/terra-cli/)
 
-## Tweak the Stack
-
-Since the beginning we knew we had to let users tweak the stack.  
-
-We also wanted it to just work, out of the box, so we created  "Default" docker-compose stack that you can see here: https://raw.githubusercontent.com/terra-ops/terra-cli/master/docs/docker-compose-example.yml
-
-We allow your app's source code to change its `docker-compose.yml` stack right now:
-
-```.terra.yml
-
-# Specific settings for docker compose go here
-docker_compose:
-
-  # Overrides will replace any item in the entire docker-compose array.
-  overrides:
-    app:
-      image: wordpress
-      links:
-        - storage
-      environment:
-        WORDPRESS_DB_HOST: database
-        WORDPRESS_DB_USER: drupal
-        WORDPRESS_DB_NAME: drupal
-        WORDPRESS_DB_PASSWORD: drupal
-    storage:
-      image: mongo
-```
-This snippet, if put in your apps `.terra.yml` file, will replace the drupal container with  wordpress, and add & link a MongoDB container.
-
-Anything under "docker_compose: overrides:" is merged with the stock stack, which you can see here: https://raw.githubusercontent.com/terra-ops/terra-cli/master/docs/docker-compose-example.yml
-
-## Example Apps
-
-### Drupal 7 Core
-
-https://github.com/terra-ops/example-drupal
-
-### Drupal 7 Makefile
-
-https://github.com/terra-ops/example-drush-make
-
-### Drupal 8
-
-https://github.com/terra-ops/example-drupal8
-
-### Wordpress
-
-Replaces the `terra/drupal` docker image with `wordpress`
-
-https://github.com/terra-ops/example-wordpress
-
-### Scaler
-
-Simply prints the IP address to test scaling.
-
-https://github.com/terra-ops/example-scale
-
-**Symfony**
-Terra API is a symfony app.  Use it as an example.
-https://github.com/terra-ops/terra-api
-
-
-## Coding Standards
-
-As a symfony app, we are following PSR-2 Coding Standards.
-
-Use 4 spaces for indentation, and follow all the other rules specified at http://www.php-fig.org/psr/psr-2/
-
-## Example Project: 18F Agile BPA Prototype
-
-NuCivic submitted a working prototype for the 18F Agile BPA.
-
-We used Terra as the recommended method for recreating the site on another server.
-
-See the [instructions](example-setup.md) on setting up http://openfda.nucivic.build on another server using Terra. 
-
-## Terra Apps
-
-Each app you run with terra should have a `.terra.yml` file in the root.
-
-To see an example file, see https://github.com/terra-ops/terra-cli/blob/master/docs/.terra.yml
-
-## Terra API
-
-The "Terra API" project serves as a web based interface for Terra. It is built on Drupal 8.
-
-See the [terra-api](https://github.com/terra-ops/terra-api/blob/master/README.md) GitHub repo for more information.
-
 ## Origin
 
 Terra was created as a proof of concept. Symfony CLI had proven itself worthy with projects like 
@@ -221,6 +133,94 @@ Use the vagrant plugin "vagrant-hostsupdater" to automatically set your /etc/hos
   ```
   $ vagrant plugin install vagrant-hostsupdater
   ```
+
+## Tweak the Stack
+
+Since the beginning we knew we had to let users tweak the stack.  
+
+We also wanted it to just work, out of the box, so we created  "Default" docker-compose stack that you can see here: https://raw.githubusercontent.com/terra-ops/terra-cli/master/docs/docker-compose-example.yml
+
+We allow your app's source code to change its `docker-compose.yml` stack right now:
+
+```.terra.yml
+
+# Specific settings for docker compose go here
+docker_compose:
+
+  # Overrides will replace any item in the entire docker-compose array.
+  overrides:
+    app:
+      image: wordpress
+      links:
+        - storage
+      environment:
+        WORDPRESS_DB_HOST: database
+        WORDPRESS_DB_USER: drupal
+        WORDPRESS_DB_NAME: drupal
+        WORDPRESS_DB_PASSWORD: drupal
+    storage:
+      image: mongo
+```
+This snippet, if put in your apps `.terra.yml` file, will replace the drupal container with  wordpress, and add & link a MongoDB container.
+
+Anything under "docker_compose: overrides:" is merged with the stock stack, which you can see here: https://raw.githubusercontent.com/terra-ops/terra-cli/master/docs/docker-compose-example.yml
+
+## Example Apps
+
+### Drupal 7 Core
+
+https://github.com/terra-ops/example-drupal
+
+### Drupal 7 Makefile
+
+https://github.com/terra-ops/example-drush-make
+
+### Drupal 8
+
+https://github.com/terra-ops/example-drupal8
+
+### Wordpress
+
+Replaces the `terra/drupal` docker image with `wordpress`
+
+https://github.com/terra-ops/example-wordpress
+
+### Scaler
+
+Simply prints the IP address to test scaling.
+
+https://github.com/terra-ops/example-scale
+
+**Symfony**
+Terra API is a symfony app.  Use it as an example.
+https://github.com/terra-ops/terra-api
+
+
+## Coding Standards
+
+As a symfony app, we are following PSR-2 Coding Standards.
+
+Use 4 spaces for indentation, and follow all the other rules specified at http://www.php-fig.org/psr/psr-2/
+
+## Example Project: 18F Agile BPA Prototype
+
+NuCivic submitted a working prototype for the 18F Agile BPA.
+
+We used Terra as the recommended method for recreating the site on another server.
+
+See the [instructions](example-setup.md) on setting up http://openfda.nucivic.build on another server using Terra. 
+
+## Terra Apps
+
+Each app you run with terra should have a `.terra.yml` file in the root.
+
+To see an example file, see https://github.com/terra-ops/terra-cli/blob/master/docs/.terra.yml
+
+## Terra API
+
+The "Terra API" project serves as a web based interface for Terra. It is built on Drupal 8.
+
+See the [terra-api](https://github.com/terra-ops/terra-api/blob/master/README.md) GitHub repo for more information.
 
 # History
 
