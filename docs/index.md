@@ -55,7 +55,7 @@ docker_compose:
     storage:
       image: mongo
 ```
-This snippet, if put in your apps `.terra.yml` file, will replace the drupal container with  wordpress, and add & link a MongoDB container.
+This snippet, if put in your apps `.terra.yml` file, will replace the Drupal container with  Wordpress, and add & link a MongoDB container.
 
 Anything under "docker_compose: overrides:" is merged with the stock stack, which you can see here: https://raw.githubusercontent.com/terra-ops/terra-cli/master/docs/docker-compose-example.yml
 
@@ -92,7 +92,7 @@ https://github.com/terra-ops/terra-api
 
 ## Coding Standards
 
-As a symfony app, we are following PSR-2 Coding Standards.
+As a Symfony app, we are following PSR-2 Coding Standards.
 
 Use 4 spaces for indentation, and follow all the other rules specified at http://www.php-fig.org/psr/psr-2/
 
@@ -118,9 +118,9 @@ See the [terra-api](https://github.com/terra-ops/terra-api/blob/master/README.md
 
 ## Origin
 
-Terra is the spiritual successor to [Aegir](http://aegirproject.org) & [DevShop](http://devshop.readthedocs.org), the Drupal site hosting platforms. It came from the idea that we could benefit from starting over. 
+Terra is the spiritual successor to [Aegir](http://aegirproject.org) & [Devshop](http://devshop.readthedocs.org), the Drupal site hosting platforms. It came from the idea that we could benefit from starting over.
 
-The feeling was that with modern libraries like symfony, ansible, and docker we would be able to do a lot quickly, and, well I've been able to do a lot, pretty quickly.  
+The feeling was that with modern libraries like Symfony, Ansible, and Docker we would be able to do a lot quickly, and, well I've been able to do a lot, pretty quickly.
 
 Now I am on a mission to call everyone to action to work behind a common tool for us all.
 
@@ -209,7 +209,7 @@ I am going to direct planning in an agile way as much as possible. Please post a
 
 There is a Vagrantfile in the repo that can be used to fire up a linux server with Terra installed.
 
-Use the vagrant plugin "vagrant-hostsupdater" to automatically set your /etc/hosts file for the VM:
+Use the Vagrant plugin "vagrant-hostsupdater" to automatically set your /etc/hosts file for the VM:
   
   ```
   $ vagrant plugin install vagrant-hostsupdater
@@ -229,7 +229,7 @@ We love Kalabox and the Kalamuna team, but there are a few key differences:
 
 1. Terra is designed for all things: local development, testing, and production.
 2. Terra is written in PHP & Symfony: Kalabox is written in Node JS
-3. Terra is a proposed platform to power the future of Aegir & devshop.  We hope to recruit a large community from those tools.
+3. Terra is a proposed platform to power the future of Aegir & Devshop.  We hope to recruit a large community from those tools.
 4. Terra currently extends the kalabox/drush container to offer a container to SSH into.  
  
 We hope to collaborate with them on as much as possible.
