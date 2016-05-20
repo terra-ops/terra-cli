@@ -118,11 +118,18 @@ See the [terra-api](https://github.com/terra-ops/terra-api/blob/master/README.md
 
 ## Origin
 
-Terra is the spiritual successor to [Aegir](http://aegirproject.org) & [DevShop](http://devshop.readthedocs.org), the Drupal site hosting platforms. It came from the idea that we could benefit from starting over. 
+Terra was created as a proof of concept. Symfony CLI had proven itself worthy with projects like 
 
-The feeling was that with modern libraries like symfony, ansible, and docker we would be able to do a lot quickly, and, well I've been able to do a lot, pretty quickly.  
+- https://github.com/pantheon-systems/terminus
+- https://github.com/platformsh/platformsh-cli
+- https://github.com/ericduran/flo
+- https://github.com/jonpugh/director
 
-Now I am on a mission to call everyone to action to work behind a common tool for us all.
+The creator of Terra, Jon Pugh, is also the creator of [OpenDevShop](http://getdevshop.com). He was brought on as a maintainer of the [Aegir Project](http://aegirproject.org) by Christopher Gervais.
+
+Jon wanted to create a new CLI that could replace the [Provision](http://drupal.org/project/provision.org) project, and service as the backbone of new projects like Aegir and DevShop.
+
+The goal is to be more than just a simple CLI, more than a great local dev tool, but to also attempt to solve the bigger problems of scaling, testing, deploying, and monitoring web software.
 
 ## Purpose
 
