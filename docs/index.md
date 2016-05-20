@@ -20,17 +20,17 @@ Check out a [sample .terra.yml file](https://github.com/terra-ops/terra-cli/blob
 
 Please join the chat on Gitter. We want as much feedback as possible!
 
-[![Join the chat at https://gitter.im/opendevshop/devshop](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/terra-ops/terra-cli)
+[![Join the chat at https://gitter.im/terra-ops/terra-cli](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/terra-ops/terra-cli)
 
 ## Documentation & Issues
 
-[Read the Docs](http://terra.readthedocs.org/) or help [improve the docs](https://github.com/terra/devshop/edit/0.x/README.md).
+[Read the Docs](http://terra.readthedocs.org/) or help [improve the docs](https://github.com/terra-ops/terra-cli/edit/master/docs/index.md).
 
 [Issues](https://github.com/terra-ops/terra-cli/issues) and [Story Boarding](https://huboard.com/terra-ops/terra-cli/)
 
 ## Origin
 
-Terra was created as a proof of concept. Symfony CLI had proven itself worthy with projects like 
+Terra was created as a proof of concept. Symfony CLI had proven itself worthy with projects like
 
 - https://github.com/pantheon-systems/terminus
 - https://github.com/platformsh/platformsh-cli
@@ -128,7 +128,7 @@ I am going to direct planning in an agile way as much as possible. Please post a
 
 There is a Vagrantfile in the repo that can be used to fire up a linux server with Terra installed.
 
-Use the vagrant plugin "vagrant-hostsupdater" to automatically set your /etc/hosts file for the VM:
+Use the Vagrant plugin "vagrant-hostsupdater" to automatically set your /etc/hosts file for the VM:
   
   ```
   $ vagrant plugin install vagrant-hostsupdater
@@ -136,7 +136,7 @@ Use the vagrant plugin "vagrant-hostsupdater" to automatically set your /etc/hos
 
 ## Tweak the Stack
 
-Since the beginning we knew we had to let users tweak the stack.  
+Since the beginning we knew we had to let users tweak the stack.
 
 We also wanted it to just work, out of the box, so we created  "Default" docker-compose stack that you can see here: https://raw.githubusercontent.com/terra-ops/terra-cli/master/docs/docker-compose-example.yml
 
@@ -208,7 +208,7 @@ NuCivic submitted a working prototype for the 18F Agile BPA.
 
 We used Terra as the recommended method for recreating the site on another server.
 
-See the [instructions](example-setup.md) on setting up http://openfda.nucivic.build on another server using Terra. 
+See the [instructions](example-setup.md) on setting up http://openfda.nucivic.build on another server using Terra.
 
 ## Terra Apps
 
@@ -236,7 +236,7 @@ We love Kalabox and the Kalamuna team, but there are a few key differences:
 
 1. Terra is designed for all things: local development, testing, and production.
 2. Terra is written in PHP & Symfony: Kalabox is written in Node JS
-3. Terra is a proposed platform to power the future of Aegir & devshop.  We hope to recruit a large community from those tools.
+3. Terra is a proposed platform to power the future of Aegir & Devshop.  We hope to recruit a large community from those tools.
 4. Terra currently extends the kalabox/drush container to offer a container to SSH into.  
  
 We hope to collaborate with them on as much as possible.
