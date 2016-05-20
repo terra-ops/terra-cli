@@ -150,6 +150,11 @@ class EnvironmentAdd extends Command
         if ($environmentFactory->init($path)) {
             // Load config from file.
             $environmentFactory->getConfig();
+            
+            if ($environmentFactory->config == NULL) {
+                // @TODO: If no .terra.yml file is found, offer to create one.
+                $this->createTerraYml($input, $output, $environmentFactory);
+            }
             $environment['document_root'] = isset($environmentFactory->config['document_root']) ? $environmentFactory->config['document_root'] : '';
 
             // Save current branch
@@ -178,5 +183,13 @@ class EnvironmentAdd extends Command
             $input = new ArrayInput($arguments);
             $command->run($input, $output);
         }
+    }
+    
+    /**
+     * Help the user create their .terra.yml file.
+     */
+    protected function createTerraYml(InputInterface $input, OutputInterface $output, EnvironmentFactory $environment)
+    {
+       $output->writeln('No .terra.yml found. Soon we will help create it for you. For now, See https://github.com/terra-ops/terra-cli/blob/master/docs/.terra.yml');  
     }
 }
