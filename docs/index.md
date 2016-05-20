@@ -39,7 +39,7 @@ Terra was created as a proof of concept. Symfony CLI had proven itself worthy wi
 
 The creator of Terra, Jon Pugh, is also the creator of [OpenDevShop](http://getdevshop.com). He was brought on as a maintainer of the [Aegir Project](http://aegirproject.org) by Christopher Gervais.
 
-Jon wanted to create a new CLI that could replace the [Provision](http://drupal.org/project/provision.org) project, and service as the backbone of new projects like Aegir and DevShop.
+Jon wanted to create a new CLI that could replace the [Provision](http://drupal.org/project/provision.org) project, and service as the backbone of products like Aegir and DevShop.
 
 The goal is to be more than just a simple CLI, more than a great local dev tool, but to also attempt to solve the bigger problems of scaling, testing, deploying, and monitoring web software.
 
