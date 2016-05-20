@@ -20,11 +20,11 @@ Check out a [sample .terra.yml file](https://github.com/terra-ops/terra-cli/blob
 
 Please join the chat on Gitter. We want as much feedback as possible!
 
-[![Join the chat at https://gitter.im/opendevshop/devshop](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/terra-ops/terra-cli)
+[![Join the chat at https://gitter.im/terra-ops/terra-cli](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/terra-ops/terra-cli)
 
 ## Documentation & Issues
 
-[Read the Docs](http://terra.readthedocs.org/) or help [improve the docs](https://github.com/terra/devshop/edit/0.x/README.md).
+[Read the Docs](http://terra.readthedocs.org/) or help [improve the docs](https://github.com/terra-ops/terra-cli/edit/master/docs/index.md).
 
 [Issues](https://github.com/terra-ops/terra-cli/issues) and [Story Boarding](https://huboard.com/terra-ops/terra-cli/)
 
