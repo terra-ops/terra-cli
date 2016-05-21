@@ -187,9 +187,21 @@ class EnvironmentAdd extends Command
     
     /**
      * Help the user create their .terra.yml file.
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \terra\Factory\EnvironmentFactory                 $environment
      */
     protected function createTerraYml(InputInterface $input, OutputInterface $output, EnvironmentFactory $environment)
     {
-       $output->writeln('No .terra.yml found. Soon we will help create it for you. For now, See https://github.com/terra-ops/terra-cli/blob/master/docs/.terra.yml');  
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion(
+          'No .terra.yml found. Would you like to create one? [y\N] ', false
+        );
+        if ($helper->ask($input, $output, $question)) {
+            $output->writeln(
+              'This is under construction. In the meantime see: https://github.com/terra-ops/terra-cli/blob/master/docs/.terra.yml'
+            );
+        }
     }
 }
