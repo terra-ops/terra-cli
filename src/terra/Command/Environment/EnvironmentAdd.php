@@ -198,7 +198,7 @@ class EnvironmentAdd extends Command
 
         // If yes, gather the necessary info for creating .terra.yml.
         if ($helper->ask($input, $output, $question)) {
-            $question = new Question('Please enter the relative path to your exposed web files: ', '');
+            $question = new Question('Please enter the relative path to your exposed web files: [.] ', '.');
             $document_root = $helper->ask($input, $output, $question);
             $environment->config['document_root'] = $document_root;
 
