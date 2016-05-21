@@ -679,7 +679,7 @@ $this->environment->name;
     }
 
     /**
-     * Generates the `terra.yml` file for this environment.
+     * Generates the `.terra.yml` file for this environment.
      *
      * @return string
      */
@@ -696,7 +696,7 @@ $this->environment->name;
     }
 
     /**
-     * Write the terra.yml file.
+     * Write the `.terra.yml` file.
      *
      * @return bool
      */
