@@ -677,4 +677,38 @@ $this->environment->name;
         $process->run();
         return trim($process->getOutput());
     }
+
+    /**
+     * Generates the `terra.yml` file for this environment.
+     *
+     * @return array
+     */
+    public function getTerraYmlContent()
+    {
+        $dumper = new Dumper();
+
+        // A mix of comments and YAML output.
+        $content = "# The relative path to your exposed web files.\n";
+        $input = array('document_root' => $this->config['document_root']);
+        $content .= $dumper->dump($input, 10);
+
+        return $content;
+    }
+
+    /**
+     * Write the terra.yml file.
+     *
+     * @return bool
+     */
+    public function writeTerraYml()
+    {
+        // Create the environment's terra.yml file.
+        $fs = new Filesystem();
+        try {
+            $fs->dumpFile($this->getSourcePath().'/.terra.yml', $this->getTerraYmlContent());
+            return true;
+        } catch (IOExceptionInterface $e) {
+            return false;
+        }
+    }
 }
