@@ -681,7 +681,7 @@ $this->environment->name;
     /**
      * Generates the `terra.yml` file for this environment.
      *
-     * @return array
+     * @return string
      */
     public function getTerraYmlContent()
     {
