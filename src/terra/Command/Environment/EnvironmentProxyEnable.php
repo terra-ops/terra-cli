@@ -33,6 +33,7 @@ class EnvironmentProxyEnable extends Command
         } else {
             // We must use the jwilder/nginx-proxy image to allow multiple URLs per docker host.
             $process = new Process($cmd);
+            $process->setTimeout(null);
             $process->run(function ($type, $buffer) {
                 if (Process::ERR === $type) {
                     echo 'DOCKER > '.$buffer;
