@@ -150,6 +150,10 @@ class EnvironmentAdd extends Command
         if ($environmentFactory->init($path)) {
             // Load config from file.
             $environmentFactory->getConfig();
+            
+            if ($environmentFactory->config == NULL) {
+                $this->createTerraYml($input, $output, $environmentFactory);
+            }
             $environment['document_root'] = isset($environmentFactory->config['document_root']) ? $environmentFactory->config['document_root'] : '';
 
             // Save current branch
@@ -177,6 +181,34 @@ class EnvironmentAdd extends Command
             );
             $input = new ArrayInput($arguments);
             $command->run($input, $output);
+        }
+    }
+    
+    /**
+     * Help the user create their .terra.yml file.
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \terra\Factory\EnvironmentFactory                 $environment
+     */
+    protected function createTerraYml(InputInterface $input, OutputInterface $output, EnvironmentFactory $environment)
+    {
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion('No .terra.yml found. Would you like to create one? [y\N] ', false);
+
+        // If yes, gather the necessary info for creating .terra.yml.
+        if ($helper->ask($input, $output, $question)) {
+            $question = new Question('Please enter the relative path to your exposed web files: [.] ', '.');
+            $document_root = $helper->ask($input, $output, $question);
+            $environment->config['document_root'] = $document_root;
+
+            // Create the terra.yml file.
+            if($environment->writeTerraYml()) {
+                $output->writeln('.terra.yml has been created in the repository root.');
+            }
+            else{
+                $output->writeln('There was an error creating .terra.yml.');
+            }
         }
     }
 }
