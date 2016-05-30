@@ -4,9 +4,11 @@ namespace terra\Command\Environment;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use terra\Command\Command;
 use terra\Factory\EnvironmentFactory;
 
@@ -38,6 +40,9 @@ class EnvironmentEnable extends Command
 
         $environment_name = $this->environment->name;
         $app_name = $this->app->name;
+
+        // Ensure that URL Proxy is running and if not offer to enable it.
+        $this->ensureProxy($input, $output);
 
         // Attempt to enable the environment.
         $environment_factory = new EnvironmentFactory($this->environment, $this->app);
@@ -99,6 +104,39 @@ class EnvironmentEnable extends Command
                     echo $buffer;
                 }
             });
+        }
+    }
+
+    /**
+     * Ensure that URL proxy is running and if not offer to enable it.
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    protected function ensureProxy(InputInterface $input, OutputInterface $output)
+    {
+        // Get running containers.
+        $cmd = 'docker ps';
+        $process = new Process($cmd);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        // Look for running instance of URL proxy in `docker ps` output.
+        if (!strpos($process->getOutput(), 'jwilder/nginx-proxy')) {
+            // If there's no running instance, offer to create one
+            $helper = $this->getHelper('question');
+            $question = new ConfirmationQuestion("URL proxy is not running, would you like to enable it now? [Y/n] ", true);
+            if (!$helper->ask($input, $output, $question)) {
+                $output->writeln('<error>Cancelled</error>');
+            } else {
+                $output->writeln('Starting URL proxy...');
+                $command = $this->getApplication()->find('url-proxy:enable');
+                $proxyInput = new StringInput('url-proxy:enable');
+                $command->run($proxyInput, $output);
+            }
         }
     }
 }
