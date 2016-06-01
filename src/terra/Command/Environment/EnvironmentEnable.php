@@ -70,7 +70,7 @@ class EnvironmentEnable extends Command
         }
 
         // Write drush alias.
-        $drush_alias_file_path = "{$_SERVER['HOME']}/.drush/{$app_name}.aliases.drushrc.php";
+        $drush_alias_file_path = "{$_SERVER['HOME']}/.drush/terra.{$app_name}.aliases.drushrc.php";
         if ($environment_factory->writeDrushAlias()) {
             $output->writeln("<info>Drush alias file created at {$drush_alias_file_path}</info>");
             $output->writeln("Wrote drush alias file to <comment>$drush_alias_file_path</comment>");
