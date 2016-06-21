@@ -631,7 +631,7 @@ $this->environment->name;
             $drush_alias_file[] = "  'uri' => '{$factory->getHost()}:{$factory->getPort()}',";
             $drush_alias_file[] = "  'root' => '$path',";
             $drush_alias_file[] = "  'remote-host' => '{$factory->getHost()}',";
-            $drush_alias_file[] = "  'remote-user' => 'root',";
+            $drush_alias_file[] = "  'remote-user' => 'drush',";
             $drush_alias_file[] = "  'ssh-options' => '-p {$factory->getDrushPort()}',";
             $drush_alias_file[] = ');';
         }
