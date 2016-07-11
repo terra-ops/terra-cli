@@ -58,6 +58,7 @@ class EnvironmentFactory
         // Check if clone already exists at this path. If so we can safely skip.
         if (file_exists($path)) {
             $wrapper = new GitWrapper();
+            $wrapper->setTimeout(3600);
 
             try {
                 $working_copy = new GitWorkingCopy($wrapper, $path);
@@ -81,6 +82,7 @@ class EnvironmentFactory
 
             // Clone repo
             $wrapper = new GitWrapper();
+            $wrapper->setTimeout(3600);
             $wrapper->streamOutput();
             $wrapper->cloneRepository($this->app->repo, $path);
 
