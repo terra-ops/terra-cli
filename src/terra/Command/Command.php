@@ -2,6 +2,7 @@
 
 namespace terra\Command;
 
+use Symfony\Component\Config\Definition\Builder\ParentNodeDefinitionInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
@@ -17,6 +18,32 @@ class Command extends CommandBase
 {
     protected $app;
     protected $environment;
+
+    /**
+     * Detect app and environment from current path.
+     *
+     * @param InputInterface  $input  An InputInterface instance
+     * @param OutputInterface $output An OutputInterface instance
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        // Determine app and environment from path.
+        $cwd = getcwd();
+        $config = $this->getApplication()->getTerra()->getConfig();
+
+        foreach ($config->get('apps') as $app) {
+            foreach ($app['environments'] as $environment) {
+                if (strpos($cwd, $environment['path']) === 0) {
+                    $input->setArgument('app_name', $app['name']);
+                    $input->setArgument('environment_name', $environment['name']);
+
+                    $environment_string = $app['name'] . ':' . $environment['name'];
+
+                    $output->writeln("Using environment <question>$environment_string</question>");
+                }
+            }
+        }
+    }
 
     /**
      * Helper to ask a question only if a default argument is not present.
