@@ -175,7 +175,7 @@ class EnvironmentAdd extends Command
             $environment['version'] = $environmentFactory->getRepo()->getCurrentBranch();
 
             // Pick a port
-            $environment['port'] = $this->getApplication()->getTerra()->getAvailablePort();
+            $environment['port'] = $environmentFactory->getAvailablePort();
 
             // Save to registry.
             $this->getApplication()->getTerra()->getConfig()->saveEnvironment($environment);
