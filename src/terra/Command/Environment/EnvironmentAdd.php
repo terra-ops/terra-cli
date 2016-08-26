@@ -88,8 +88,22 @@ class EnvironmentAdd extends Command
         $path = $input->getArgument('path');
         if (empty($path)) {
             // Load apps base path from Config.
-            // @TODO: #110 Ask what they want their apps_basepath to be anc save it to the config.
             $config_path = $this->getApplication()->getTerra()->getConfig()->get('apps_basepath');
+
+            // If no apps path is set, ask for it now.
+            if (empty($config_path)) {
+                $default = $_SERVER['HOME'] . '/Apps';
+                $question = new Question("Where would you like to store your Apps source code? [$default] ", $default);
+
+                while (empty($config_path)) {
+                    $config_path = $helper->ask($input, $output, $question);
+                }
+
+                // Save to config.
+                $config = $this->getApplication()->getTerra()->getConfig();
+                $config->set('apps_basepath', $config_path);
+                $config->save();
+            }
 
             // If it already exists, use "realpath" to load it.
             if (file_exists($config_path)) {
