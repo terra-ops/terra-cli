@@ -2,11 +2,14 @@
 
 namespace terra\Command;
 
+use Symfony\Component\Config\Definition\Builder\ParentNodeDefinitionInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Command\Command as CommandBase;
+
+use terra\Factory\EnvironmentFactory;
 
 /**
  * Class Command.
@@ -15,6 +18,32 @@ class Command extends CommandBase
 {
     protected $app;
     protected $environment;
+
+    /**
+     * Detect app and environment from current path.
+     *
+     * @param InputInterface  $input  An InputInterface instance
+     * @param OutputInterface $output An OutputInterface instance
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        // Determine app and environment from path.
+        $cwd = getcwd();
+        $config = $this->getApplication()->getTerra()->getConfig();
+
+        foreach ($config->get('apps') as $app) {
+            foreach ($app['environments'] as $environment) {
+                if (strpos($cwd, $environment['path']) === 0) {
+                    $input->setArgument('app_name', $app['name']);
+                    $input->setArgument('environment_name', $environment['name']);
+
+                    $environment_string = $app['name'] . ':' . $environment['name'];
+
+                    $output->writeln("Using environment <question>$environment_string</question>");
+                }
+            }
+        }
+    }
 
     /**
      * Helper to ask a question only if a default argument is not present.
@@ -31,7 +60,7 @@ class Command extends CommandBase
      * @return mixed
      *               The value derived from either the argument/option or the value.
      */
-    public function getAnswer(InputInterface $input, OutputInterface $output, Question $question, $argument_name, $type = 'argument')
+    public function getAnswer(InputInterface $input, OutputInterface $output, Question $question, $argument_name, $type = 'argument', $required = FALSE)
     {
         $helper = $this->getHelper('question');
 
@@ -42,7 +71,19 @@ class Command extends CommandBase
         }
 
         if (empty($value)) {
-            $value = $helper->ask($input, $output, $question);
+
+            // If we are in non-interactive mode, we have no choice but to return nothing.
+            if ($input->getOption('yes')) {
+                return '';
+            }
+            if ($required) {
+                while (empty($value)) {
+                    $value = $helper->ask($input, $output, $question);
+                }
+            }
+            else {
+                $value = $helper->ask($input, $output, $question);
+            }
         }
 
         return $value;
@@ -136,5 +177,17 @@ class Command extends CommandBase
 
         // Set the environment for this command.
         $this->environment = (object) $this->app->environments[$environment_name];
+    }
+
+    /**
+     * Get an environmentFactory class
+     *
+     * @return \terra\Factory\EnvironmentFactory
+     *
+     * @api
+     */
+    public function getEnvironmentFactory()
+    {
+      return new EnvironmentFactory($this->environment, $this->app);
     }
 }

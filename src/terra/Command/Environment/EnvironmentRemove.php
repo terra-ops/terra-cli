@@ -2,6 +2,7 @@
 
 namespace terra\Command\Environment;
 
+use Symfony\Component\Console\Input\InputOption;
 use terra\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -43,13 +44,17 @@ class EnvironmentRemove extends Command
         }
       $environment_name = $this->environment->name;
       $app_name = $this->app->name;
+      $helper = $this->getHelper('question');
 
         // Confirm removal of the app.
-        $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion("Are you sure you would like to remove the environment <question>$app_name:$environment_name</question>?  All files at {$this->environment->path} will be deleted, and all containers will be killed. [y/N] ", false);
-        if (!$helper->ask($input, $output, $question)) {
+        if (!$input->getOption('yes')) {
+            $question = new ConfirmationQuestion("Are you sure you would like to remove the environment <question>$app_name:$environment_name</question>?  All files at {$this->environment->path} will be deleted, and all containers will be killed. [y/N] ", false);
+        }
+        else {
+            $output->writeln("<info>Running with --yes flag. Skipping confirmation step.</info>");
+        }
+        if (!$input->getOption('yes') && !$helper->ask($input, $output, $question)) {
             $output->writeln('<error>Cancelled</error>');
-
             return;
         } else {
             // Remove the environment from config registry.

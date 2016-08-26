@@ -18,10 +18,30 @@ terra environment:enable drupal local
 terra e:e drupal local
 
 # Drush alias will be created:
-# @drupal.local
+drush @drupal.local uli
 
 # Enable subdomain routing (drupal.local.example.com)
 terra url-proxy:enable
+
+# Rebuild environment from another drupal site via drush alias
+
+# To rebuild from the source alias defined in your app's .terra.yml file:
+#
+# .terra.yml:
+# |  rebuild_source: @source_alias
+#
+terra environment:rebuild
+
+# To rebuild from any source alias
+terra environment:rebuild -s @source_alias
+
+# Run a drush command inside the drush container
+terra environment:drush PROJECT ENVIRONMENT status
+terra environment:drush PROJECT ENVIRONMENT uli
+
+# Run an arbitrary command inside any container.  
+# Services are from docker composer: load, app, database, drush.
+terra environment:run PROJECT ENVIRONMENT SERVICE ping google.com
 
 # View logfiles
 docker logs drupallocal_app_1

@@ -10,4 +10,4 @@ pages:
   - [commands.md, 'General', 'Common Terra and Docker Commands']
 theme: readthedocs
 site_author: ""
-repo_url: https://github.com/terra-ops/terra-app
+repo_url: https://github.com/terra-ops/terra-cli

@@ -4,7 +4,7 @@
 # WORK IN PROGRESS!
 # This script is based on the Install Instructions for terra.
 
-# See https://github.com/terra-ops/terra-app/blob/master/docs/install.md
+# See https://github.com/terra-ops/terra-cli/blob/master/docs/install.md
 
 
 # Update Apt, Install PHP and Git
@@ -26,7 +26,7 @@ composer install
 ln -s /usr/share/drush/drush /usr/local/bin/drush
 
 # Install Terra Manually
-git clone https://github.com/terra-ops/terra-app.git /usr/share/terra
+git clone https://github.com/terra-ops/terra-cli.git /usr/share/terra
 cd /usr/share/terra
 composer install
 ln -s /usr/share/terra/bin/terra /usr/local/bin/terra
@@ -44,7 +44,7 @@ echo " Run the following command:"
 
 echo " $ usermod -aG docker your_user "
 echo " "
-echo " Thanks! If you have any issues, please submit to https://github.com/terra-ops/terra-app/issues"
+echo " Thanks! If you have any issues, please submit to https://github.com/terra-ops/terra-cli/issues"
 echo ""
 echo " Now run 'terra' to ensure that it installed correctly."
 echo ""

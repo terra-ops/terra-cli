@@ -3,12 +3,23 @@
 namespace terra\Console;
 
 use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Helper\DebugFormatterHelper;
+use Symfony\Component\Console\Helper\FormatterHelper;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\ProcessHelper;
+use Symfony\Component\Console\Helper\ProgressHelper;
+use Symfony\Component\Console\Helper\TableHelper;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use terra\Command;
 use terra\Factory;
 use terra\Terra;
+use terra\TerraQuestionHelper;
 
 /**
  * Class Application.
@@ -51,11 +62,51 @@ class Application extends BaseApplication
         $commands[] = new Command\Environment\EnvironmentScale();
         $commands[] = new Command\Environment\EnvironmentProxyEnable();
         $commands[] = new Command\Environment\EnvironmentTest();
+        $commands[] = new Command\Environment\EnvironmentRebuild();
+        $commands[] = new Command\Environment\EnvironmentDomains();
+        $commands[] = new Command\Environment\EnvironmentDrush();
+        $commands[] = new Command\Environment\EnvironmentRun();
+        $commands[] = new Command\Environment\EnvironmentUpdate();
         $commands[] = new Command\Status();
         $commands[] = new Command\Queue();
 
         return $commands;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultInputDefinition() {
+        return new InputDefinition(array(
+          new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
+
+          new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message'),
+          new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Do not output any message'),
+          new InputOption('--verbose', '-v|vv|vvv', InputOption::VALUE_NONE, 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug'),
+          new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this application version'),
+          new InputOption('--ansi', '', InputOption::VALUE_NONE, 'Force ANSI output'),
+          new InputOption('--no-ansi', '', InputOption::VALUE_NONE, 'Disable ANSI output'),
+          new InputOption('--yes', '-y', InputOption::VALUE_NONE, 'Answer "yes" to all prompts.'),
+          new InputOption('--no', '-n', InputOption::VALUE_NONE, 'Answer "no" to all prompts.'),
+        ));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDefaultHelperSet()
+    {
+        return new HelperSet(array(
+          new FormatterHelper(),
+          new DialogHelper(),
+          new ProgressHelper(),
+          new TableHelper(),
+          new DebugFormatterHelper(),
+          new ProcessHelper(),
+          new TerraQuestionHelper(),
+        ));
+    }
+
 
     /**
      * {@inheritdoc}

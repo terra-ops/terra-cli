@@ -4,31 +4,143 @@
 
 ## About
 
-Terra is a suite of tools for the purpose of standing up web apps with Docker quickly and easily.
+Terra is a suite of tools for the purpose of quickly and easily standing up web apps with Docker.
 
 It is designed to be as simple as possible for developers, while being powerful enough to use in production at scale.
 
-With Terra, all you care about is your site's code.  Stop wasting time setting up environments, let terra and docker do all the work for you.
+With Terra, all you care about is your site's code. Stop wasting time setting up environments. Let terra and docker do all the work for you.
+
+## .terra.yml
+
+Your .terra.yml file gives you tons of power.
+
+Check out a [sample .terra.yml file](https://github.com/terra-ops/terra-cli/blob/master/docs/.terra.yml) and put one in your app's source code.
 
 ## Community
 
-Please join the chat on Gitter.  We want as much feedback as possible!
+Please join the chat on Gitter. We want as much feedback as possible!
 
-[![Join the chat at https://gitter.im/opendevshop/devshop](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/terra-ops/terra-app)
+[![Join the chat at https://gitter.im/terra-ops/terra-cli](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/terra-ops/terra-cli)
 
 ## Documentation & Issues
 
-[Read the Docs](http://terra.readthedocs.org/) or help [improve the docs](https://github.com/terra/devshop/edit/0.x/README.md).
+[Read the Docs](http://terra.readthedocs.org/) or help [improve the docs](https://github.com/terra-ops/terra-cli/edit/master/docs/index.md).
 
-[Issues](https://github.com/terra-ops/terra-app/issues) and [Story Boarding](https://huboard.com/terra-ops/terra-app/)
+[Issues](https://github.com/terra-ops/terra-cli/issues) and [Story Boarding](https://huboard.com/terra-ops/terra-cli/)
+
+## Origin
+
+Terra was created as a proof of concept. Symfony CLI had proven itself worthy with projects like
+
+- https://github.com/pantheon-systems/terminus
+- https://github.com/platformsh/platformsh-cli
+- https://github.com/ericduran/flo
+- https://github.com/jonpugh/director
+
+The creator of Terra, Jon Pugh, is also the creator of [OpenDevShop](http://getdevshop.com). He was brought on as a maintainer of the [Aegir Project](http://aegirproject.org) by Christopher Gervais.
+
+Jon wanted to create a new CLI that could replace the [Provision](http://drupal.org/project/provision.org) project, and service as the backbone of products like Aegir and DevShop.
+
+The goal is to be more than just a simple CLI, more than a great local dev tool, but to also attempt to solve the bigger problems of scaling, testing, deploying, and monitoring web software.
+
+## Purpose
+
+To make having a website as easy as possible throughout it's entire lifetime, from localhost through large scale production, through entirely open source software.
+
+Terra is a human interface for working on, deploying, testing, and scaling web software projects. 
+
+Terra makes it quick and painless to manage your projects and environments.  
+
+Push a button to get a testing infrastructure.
+
+## "Apps"
+
+An "App" is your website. It is the source code for your project.  Terra knows the git URL and (will) know the available branches and tags.  Terra will help you update your app from it's upstream repository using git.
+
+## "Environment"
+
+The Environment is all of the systems needed to run the source code.
+
+The "EnvironmentFactory" class will be pluggable.  Out of the box it provides a working docker cluster, but we can extend it to work with a "multiple apache vhost" model or with a different container provider.
+
+Users will be able to use terra to control environments hosted by multiple hosting providers, including localhost all through the same interface.
+
+## Community & Collaboration is Key
+
+We wish to make this tool work for everyone.  We wish to get feedback from all parties interested in solving these problems in order to prioritize what to work on.
+
+Please join us in the Issue Queues on GitHub and the chat rooms on gitter.
+
+## Scalable Out of the Box
+
+We wanted to start from scalable.  Terra's purpose is to make scaling a push button affair.
+
+Currently Terra uses Docker and Docker compose to stand up and scale websites.  
+
+This makes it easy to get environments running quickly on hosted servers or on local computers for development.
+
+## Planning
+
+See https://huboard.com/terra-ops/terra-cli/ for the user story board.
+
+I am going to direct planning in an agile way as much as possible. Please post as much feedback as you can in the issue queues.
+
+## Requirements
+
+- **docker** 
+- **docker-compose**
+
+## Commands
+
+#### `terra status`
+  List all apps on this system.
+
+#### `terra app:add` 
+  Add a new app to the system.
+  
+  Currently only Drupal sites are supported.
+  
+#### `terra app:remove`
+  Remove an app from the system
+  
+#### `terra environment:add`
+  Add an environment for an app.
+  
+#### `terra environment:remove`
+  Remove an environment.
+
+#### `terra environment:enable`
+  Runs `docker-compose up` to initiate an environment.
+  
+#### `terra environment:disable`
+  Runs `docker-compose stop` to disable an environment.
+  
+#### `terra environment:rebuild`
+  Looks in your app's .terra.yml file for `rebuild_source: @drushalias`.  Syncs the database, copies the files, then runs the rebuild hooks.
+  
+#### `terra environment:status`
+  Provides status information about an environment, including path and URL.
+
+#### `terra environment:scale`
+  Set the number of "app" containers.  This command is a wrapper for `docker compose app=5`.
+
+# Vagrant
+
+There is a Vagrantfile in the repo that can be used to fire up a linux server with Terra installed.
+
+Use the Vagrant plugin "vagrant-hostsupdater" to automatically set your /etc/hosts file for the VM:
+  
+  ```
+  $ vagrant plugin install vagrant-hostsupdater
+  ```
 
 ## Tweak the Stack
 
-Since the beginning we knew we had to let users tweak the stack.  
+Since the beginning we knew we had to let users tweak the stack.
 
 We also wanted it to just work, out of the box, so we created  "Default" docker-compose stack that you can see here: https://raw.githubusercontent.com/terra-ops/terra-cli/master/docs/docker-compose-example.yml
 
-We allow your app's source code to change it's `docker-compose.yml` stack right now:
+We allow your app's source code to change its `docker-compose.yml` stack right now:
 
 ```.terra.yml
 
@@ -96,7 +208,7 @@ NuCivic submitted a working prototype for the 18F Agile BPA.
 
 We used Terra as the recommended method for recreating the site on another server.
 
-See the [instructions](example-setup.md) on setting up http://openfda.nucivic.build on another server using Terra. 
+See the [instructions](example-setup.md) on setting up http://openfda.nucivic.build on another server using Terra.
 
 ## Terra Apps
 
@@ -109,99 +221,6 @@ To see an example file, see https://github.com/terra-ops/terra-cli/blob/master/d
 The "Terra API" project serves as a web based interface for Terra. It is built on Drupal 8.
 
 See the [terra-api](https://github.com/terra-ops/terra-api/blob/master/README.md) GitHub repo for more information.
-
-## Origin
-
-Terra is the spiritual successor to [Aegir](http://aegirproject.org) & [DevShop](http://devshop.readthedocs.org), the Drupal site hosting platforms. It came from the idea that we could benefit from starting over. 
-
-The feeling was that with modern libraries like symfony, ansible, and docker we would be able to do a lot quickly, and, well I've been able to do a lot, pretty quickly.  
-
-Now I am on a mission to call everyone to action to work behind a common tool for us all.
-
-## Purpose
-
-To make having a website as easy as possible throughout it's entire lifetime, from localhost through large scale production, through entirely open source software.
-
-Terra is a human interface for working on, deploying, testing, and scaling web software projects. 
-
-Terra makes it quick and painless to manage your projects and environments.  
-
-Push a button to get a testing infrastructure.
-
-## "Apps"
-
-An "App" is your website. It is the source code for your project.  Terra knows the git URL and (will) know the available branches and tags.  Terra will help you update your app from it's upstream repository using git.
-
-## "Environment"
-
-The Environment is all of the systems needed to run the source code.
-
-The "EnvironmentFactory" class will be pluggable.  Out of the box it provides a working docker cluster, but we can extend it to work with a "multiple apache vhost" model or with a different container provider.
-
-Users will be able to use terra to control environments hosted by multiple hosting providers, including localhost all through the same interface.
-
-## Community & Collaboration is Key
-
-We wish to make this tool work for everyone.  We wish to get feedback from all parties interested in solving these problems in order to prioritize what to work on.
-
-Please join us in the Issue Queues on GitHub and the chat rooms on gitter.
-
-## Scalable Out of the Box
-
-We wanted to start from scalable.  Terra's purpose is to make scaling a push button affair.
-
-Currently Terra uses Docker and Docker compose to stand up and scale websites.  
-
-This makes it easy to get environments running quickly on hosted servers or on local computers for development.
-
-## Planning
-
-See https://huboard.com/terra-ops/terra-app/ for the user story board.
-
-I am going to direct planning in an agile way as much as possible.  Please post as much feedback as you can in the issue queues.
-
-## Requirements
-
-- **docker** 
-- **docker-compose**
-
-## Commands
-
-#### `terra status`
-  List all apps on this system.
-
-#### `terra app:add` 
-  Add a new app to the system.
-  
-  Currently only Drupal sites are supported.
-  
-#### `terra app:remove`
-  Remove an app from the system
-  
-#### `terra environment:add`
-  Add an environment for an app.
-  
-#### `terra environment:remove`
-  Remove an environment.
-
-#### `terra environment:enable`
-  Runs `docker-compose up` to initiate an environment.
-  
-#### `terra environment:status`
-  Provides status information about an environment, including path and URL.
-
-#### `terra environment:scale`
-  Set the number of "app" containers.  This command is a wrapper for `docker compose app=5`.
-
-# Vagrant
-
-There is a Vagrantfile in the repo that can be used to fire up a linux server with Terra installed.
-
-Use the vagrant plugin "vagrant-hostsupdater" to automatically set your /etc/hosts file for the VM:
-  
-  ```
-  $ vagrant plugin install vagrant-hostsupdater
-  ```
 
 # History
 
@@ -217,7 +236,7 @@ We love Kalabox and the Kalamuna team, but there are a few key differences:
 
 1. Terra is designed for all things: local development, testing, and production.
 2. Terra is written in PHP & Symfony: Kalabox is written in Node JS
-3. Terra is a proposed platform to power the future of Aegir & devshop.  We hope to recruit a large community from those tools.
+3. Terra is a proposed platform to power the future of Aegir & Devshop.  We hope to recruit a large community from those tools.
 4. Terra currently extends the kalabox/drush container to offer a container to SSH into.  
  
 We hope to collaborate with them on as much as possible.

@@ -39,7 +39,7 @@ This command does a few things:
 
    The `docker-compose.yml` is currently generated with PHP in `EnvironmentFactory::getDockerComposeArray()`.  This is currently hard coded to use the `terra` docker containers (https://registry.hub.docker.com/u/terra/drupal/), but the plan is to make pluggable "DockerStack" classes that change the docker-compose arrangement. 
    
-  The `docker-compose.yml` can already be overridden with data from the site's config.  See https://github.com/terra-ops/terra-app/blob/master/docs/.terra.yml and the `EnvironmentFactory
+  The `docker-compose.yml` can already be overridden with data from the site's config.  See https://github.com/terra-ops/terra-cli/blob/master/docs/.terra.yml and the `EnvironmentFactory
 
 Then, it asks if you wish to enable it.
 

@@ -58,6 +58,7 @@ class EnvironmentFactory
         // Check if clone already exists at this path. If so we can safely skip.
         if (file_exists($path)) {
             $wrapper = new GitWrapper();
+            $wrapper->setTimeout(3600);
 
             try {
                 $working_copy = new GitWorkingCopy($wrapper, $path);
@@ -81,6 +82,7 @@ class EnvironmentFactory
 
             // Clone repo
             $wrapper = new GitWrapper();
+            $wrapper->setTimeout(3600);
             $wrapper->streamOutput();
             $wrapper->cloneRepository($this->app->repo, $path);
 
@@ -153,12 +155,19 @@ class EnvironmentFactory
         // Look for .terra.yml
         $fs = new FileSystem();
         if ($fs->exists($this->getSourcePath().'/.terra.yml')) {
-            // Process any string replacements.
-            $environment_config_string = file_get_contents($this->getSourcePath().'/.terra.yml');
-            $this->config = Yaml::parse(strtr($environment_config_string, array(
-                '{{alias}}' => "@{$this->app->name}.{$this->environment->name}",
-                '{{uri}}' => $this->getUrl(),
-            )));
+            try {
+                // Process any string replacements.
+                $environment_config_string = file_get_contents($this->getSourcePath().'/.terra.yml');
+                $this->config = Yaml::parse(strtr($environment_config_string, array(
+                  '{{alias}}' => $this->getDrushAlias(),
+                  '{{uri}}' => $this->getUrl(),
+                  '{{environment}}' => $this->environment->name,
+                  '{{apps}}' => $this->app->name,
+                )));
+            }
+            catch (\Symfony\Component\Yaml\Exception\ParseException $e) {
+                $this->config = null;
+            }
         } else {
             $this->config = null;
         }
@@ -293,11 +302,21 @@ class EnvironmentFactory
             $ssh_authorized_keys = '';
         }
 
+        // Get Virtual Hosts array
+        $hosts = $this->getUrl();
+
+        if (!empty($this->environment->domains)) {
+            $hosts .= ',' . implode(',', $this->environment->domains);
+        }
+
+        $environment_label = $this->app->name . ':' .
+$this->environment->name;
+
         $compose = array();
         $compose['load'] = array(
             'image' => 'tutum/haproxy',
             'environment' => array(
-                'VIRTUAL_HOST' => $this->getUrl(),
+                'VIRTUAL_HOST' => $hosts,
             ),
             'links' => array(
                 'app',
@@ -308,7 +327,6 @@ class EnvironmentFactory
             'ports' => array(
                 $load_port,
             ),
-            'restart' => 'on-failure',
         );
         $compose['app'] = array(
             'image' => 'terra/drupal',
@@ -328,8 +346,7 @@ class EnvironmentFactory
             'expose' => array(
                 '80/tcp',
             ),
-            'restart' => 'on-failure',
-            );
+        );
         $compose['database'] = array(
             'image' => 'mariadb',
             'tty' => true,
@@ -340,7 +357,6 @@ class EnvironmentFactory
                 'MYSQL_USER' => 'drupal',
                 'MYSQL_PASSWORD' => 'drupal',
             ),
-            'restart' => 'on-failure',
         );
         $compose['drush'] = array(
             'image' => 'terra/drush',
@@ -350,7 +366,7 @@ class EnvironmentFactory
                 'database',
             ),
             'ports' => array(
-                22,
+                '22',
             ),
             'volumes' => array(
                 "$document_root:/var/www/html",
@@ -359,7 +375,6 @@ class EnvironmentFactory
             'environment' => array(
                 'AUTHORIZED_KEYS' => $ssh_authorized_keys,
             ),
-            'restart' => 'on-failure',
         );
 
         // Add "app_services": Additional containers linked to the app container.
@@ -369,10 +384,12 @@ class EnvironmentFactory
                 $compose['app']['links'][] = $service;
 
                 // Look for volume paths to change
-                foreach ($info['volumes'] as &$volume) {
-                    $volume = strtr($volume, array(
-                    '{APP_PATH}' => $source_root,
-                    ));
+                if (isset($info['volumes'])) {
+                    foreach ($info['volumes'] as &$volume) {
+                        $volume = strtr($volume, array(
+                          '{APP_PATH}' => $source_root,
+                        ));
+                    }
                 }
 
                 $compose[$service] = $info;
@@ -401,6 +418,16 @@ class EnvironmentFactory
                     $compose[$service] = $service_info;
                 }
             }
+        }
+
+        // Set global service config options
+        foreach ($compose as $name => $service) {
+            $compose[$name]['restart'] = 'on-failure';
+
+            $compose[$name]['labels']['io.rancher.stack.name'] = "terra_{$this->app->name}_{$this->environment->name}";
+            $compose[$name]['labels']['io.rancher.stack_service.name'] = "terra_{$this->app->name}_{$this->environment->name}/{$name}";
+
+            $compose[$name]['labels']['io.rancher.container.network'] = 'TRUE';
         }
 
         return $compose;
@@ -596,7 +623,7 @@ class EnvironmentFactory
      */
     public function writeDrushAlias()
     {
-        $drush_alias_file_path = "{$_SERVER['HOME']}/.drush/{$this->app->name}.aliases.drushrc.php";
+        $drush_alias_file_path = "{$_SERVER['HOME']}/.drush/terra.{$this->app->name}.aliases.drushrc.php";
 
         $drush_alias_file = array();
         $drush_alias_file[] = '<?php';
@@ -609,7 +636,7 @@ class EnvironmentFactory
             $drush_alias_file[] = "  'uri' => '{$factory->getHost()}:{$factory->getPort()}',";
             $drush_alias_file[] = "  'root' => '$path',";
             $drush_alias_file[] = "  'remote-host' => '{$factory->getHost()}',";
-            $drush_alias_file[] = "  'remote-user' => 'root',";
+            $drush_alias_file[] = "  'remote-user' => 'drush',";
             $drush_alias_file[] = "  'ssh-options' => '-p {$factory->getDrushPort()}',";
             $drush_alias_file[] = ');';
         }
@@ -629,7 +656,7 @@ class EnvironmentFactory
      * Get the name of the drush alias.
      */
     public function getDrushAlias() {
-        return "@{$this->app->name}.{$this->environment->name}";
+        return "@terra.{$this->app->name}.{$this->environment->name}";
     }
 
     /**
@@ -637,5 +664,56 @@ class EnvironmentFactory
      */
     public function getDocumentRoot() {
         return $this->environment->path . '/' . $this->config['document_root'];
+    }
+
+    /**
+     * Runs a drush command for a specified alias.
+     */
+    public function runDrushCommand($drush_command, $alias = NULL) {
+
+        if ($alias == NULL) {
+            $alias = $this->getDrushAlias();
+        }
+
+        $cmd = "drush {$alias} $drush_command";
+
+        $process = new Process($cmd);
+        $process->setTimeout(null);
+        $process->run();
+        return trim($process->getOutput());
+    }
+
+    /**
+     * Generates the `.terra.yml` file for this environment.
+     *
+     * @return string
+     */
+    public function getTerraYmlContent()
+    {
+        $dumper = new Dumper();
+
+        // A mix of comments and YAML output.
+        $content = "# The relative path to your exposed web files.\n";
+        $input = array('document_root' => $this->config['document_root']);
+        $content .= $dumper->dump($input, 10);
+
+        return $content;
+    }
+
+    /**
+     * Write the `.terra.yml` file.
+     *
+     * @return bool
+     */
+    public function writeTerraYml()
+    {
+        // Create the environment's terra.yml file.
+        $fs = new Filesystem();
+        try {
+            $fs->dumpFile($this->getSourcePath().'/.terra.yml', $this->getTerraYmlContent());
+            return true;
+        } catch (IOExceptionInterface $e) {
+            return false;
+        }
     }
 }

@@ -88,6 +88,12 @@ class Config implements ConfigurationInterface
               ->scalarNode('document_root')
               ->isRequired(true)
               ->end()
+
+              // Domains
+              ->variableNode('domains')
+                ->info("Virtual Host names for this environment.")
+                ->isRequired(false)
+              ->end()
         ;
 
         return $tree_builder;

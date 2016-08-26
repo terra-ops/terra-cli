@@ -90,6 +90,21 @@ class EnvironmentAdd extends Command
             // Load apps base path from Config.
             $config_path = $this->getApplication()->getTerra()->getConfig()->get('apps_basepath');
 
+            // If no apps path is set, ask for it now.
+            if (empty($config_path)) {
+                $default = $_SERVER['HOME'] . '/Apps';
+                $question = new Question("Where would you like to store your Apps source code? [$default] ", $default);
+
+                while (empty($config_path)) {
+                    $config_path = $helper->ask($input, $output, $question);
+                }
+
+                // Save to config.
+                $config = $this->getApplication()->getTerra()->getConfig();
+                $config->set('apps_basepath', $config_path);
+                $config->save();
+            }
+
             // If it already exists, use "realpath" to load it.
             if (file_exists($config_path)) {
               $default_path = realpath($config_path).'/'.$this->app->name.'/'.$environment_name;
@@ -98,14 +113,20 @@ class EnvironmentAdd extends Command
             else {
 
               // Offer to create the apps path.
-              $question = new ConfirmationQuestion("Create default apps path at $config_path? [y\N] ", false);
+              $question = new ConfirmationQuestion("Default apps folder {$config_path} is missing.  Create it? [y\N] ", false);
               if ($helper->ask($input, $output, $question)) {
                 mkdir($config_path);
                 $default_path = $_SERVER['HOME'] . '/Apps/' . $this->app->name . '/' . $environment_name;
               }
             }
-            $question = new Question("Path: ($default_path) ", $default_path);
-            $path = $helper->ask($input, $output, $question);
+            if (!$input->getOption('yes')) {
+                $question = new Question("Environment Source Code Path: ($default_path) ", $default_path);
+                $path = $helper->ask($input, $output, $question);
+            }
+            else {
+                $output->writeln("<info>Running with --yes flag. Using default path ($default_path).</info>");
+                $path = $default_path;
+            }
         }
 
         // Check for path
@@ -120,6 +141,10 @@ class EnvironmentAdd extends Command
             }
         }
 
+        // Ask for git version
+        $version_question = new Question('Git branch or tag? [default branch] ', '');
+        $version = $this->getAnswer($input, $output, $version_question, 'ref', 'option');
+
         // Environment object
         $environment = array(
             'app' => $this->app->name,
@@ -128,7 +153,8 @@ class EnvironmentAdd extends Command
             'document_root' => '',
             'url' => '',
             'port' => '',
-            'version' => $input->getOption('ref'),
+            'version' => $version,
+            'domains' => array(),
         );
 
         // Prepare the environment factory.
@@ -139,6 +165,10 @@ class EnvironmentAdd extends Command
         if ($environmentFactory->init($path)) {
             // Load config from file.
             $environmentFactory->getConfig();
+            
+            if ($environmentFactory->config == NULL) {
+                $this->createTerraYml($input, $output, $environmentFactory);
+            }
             $environment['document_root'] = isset($environmentFactory->config['document_root']) ? $environmentFactory->config['document_root'] : '';
 
             // Save current branch
@@ -161,7 +191,7 @@ class EnvironmentAdd extends Command
         // Offer to enable the environment
         $question = new ConfirmationQuestion("Enable this environment? [y\N] ", false);
         if ($input->getOption('enable') || $helper->ask($input, $output, $question)) {
-            // Run environment:add command.
+            // Run environment:enable command.
             $command = $this->getApplication()->find('environment:enable');
             $arguments = array(
               'app_name' => $this->app->name,
@@ -169,6 +199,34 @@ class EnvironmentAdd extends Command
             );
             $input = new ArrayInput($arguments);
             $command->run($input, $output);
+        }
+    }
+    
+    /**
+     * Help the user create their .terra.yml file.
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \terra\Factory\EnvironmentFactory                 $environment
+     */
+    protected function createTerraYml(InputInterface $input, OutputInterface $output, EnvironmentFactory $environment)
+    {
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion('No .terra.yml found. Would you like to create one? [y\N] ', false);
+
+        // If yes, gather the necessary info for creating .terra.yml.
+        if ($helper->ask($input, $output, $question)) {
+            $question = new Question('Please enter the relative path to your exposed web files: [.] ', '.');
+            $document_root = $helper->ask($input, $output, $question);
+            $environment->config['document_root'] = $document_root;
+
+            // Create the terra.yml file.
+            if($environment->writeTerraYml()) {
+                $output->writeln('.terra.yml has been created in the repository root.');
+            }
+            else{
+                $output->writeln('There was an error creating .terra.yml.');
+            }
         }
     }
 }
