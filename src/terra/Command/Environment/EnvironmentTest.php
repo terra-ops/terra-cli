@@ -41,6 +41,12 @@ class EnvironmentTest extends Command
             NULL,
             InputOption::VALUE_OPTIONAL
         )
+        ->addOption(
+            'save-config',
+            's',
+            InputOption::VALUE_NONE,
+            'Do not delete the dynamic behat.yml file terra creates.'
+        )
         ;
     }
 
@@ -153,7 +159,8 @@ class EnvironmentTest extends Command
         }
 
         $behat_yml_new = Yaml::dump($behat_yml, 5, 2);
-        $behat_path_new = 'behat.terra.yml';
+        $behat_path_new = $behat_path . '/behat.terra.' . $environment_factory->app->name . '.' . $environment_factory->environment->name . '.yml';
+
         $fs = new Filesystem();
         $fs->dumpFile($behat_path_new, $behat_yml_new);
 
@@ -198,6 +205,12 @@ class EnvironmentTest extends Command
             }
         });
         $output->writeln('');
+
+        // Delete config file, unless option was set.
+        if (!$input->getOption('save-config')) {
+            $fs->remove($behat_path_new);
+            $output->writeln('<fg=cyan>TERRA</> | Behat config file removed: ' . $behat_path_new);
+        }
 
         if (!$process->isSuccessful()) {
             $output->writeln('<fg=cyan>TERRA</> | <fg=red>Test Failed</> ');
