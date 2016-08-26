@@ -103,7 +103,7 @@ class AppAdd extends Command
 
 
         // Offer to enable the environment (only if interactive.)
-        if ($input->isInteractive()) {
+        if (!$input->isInteractive()) {
             return;
         }
 
