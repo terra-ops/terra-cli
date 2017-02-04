@@ -32,6 +32,9 @@ class Command extends CommandBase
         $config = $this->getApplication()->getTerra()->getConfig();
 
         foreach ($config->get('apps') as $app) {
+            if (!isset($app['environments'])) {
+              $app['environments'] = array();
+            }
             foreach ($app['environments'] as $environment) {
                 if (strpos($cwd, $environment['path']) === 0) {
                     $input->setArgument('app_name', $app['name']);
