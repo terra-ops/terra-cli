@@ -42,7 +42,8 @@ class EnvironmentEnable extends Command
         $app_name = $this->app->name;
 
         // Ensure that URL Proxy is running and if not offer to enable it.
-        $this->ensureProxy($input, $output);
+// @TODO: This method doesn't work.
+//        $this->ensureProxy($input, $output);
 
         // Attempt to enable the environment.
         $environment_factory = new EnvironmentFactory($this->environment, $this->app);
