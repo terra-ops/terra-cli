@@ -333,7 +333,7 @@ $this->environment->name;
                 'database',
             ),
             'volumes' => array(
-                "{$this->environment->path}:/app",
+                "{$this->environment->path}:/app:Z",
             ),
             'environment' => array(
                 'HOST_UID' => posix_getuid(),
