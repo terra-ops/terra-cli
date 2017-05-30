@@ -24,8 +24,8 @@ $coreCommandClasses = [
 $statusCode = \terra\Robo::run(
   $_SERVER['argv'],
   $coreCommandClasses,
-  'Terra',
-  '1.x'
+  \terra\Terra::NAME,
+  \terra\Terra::VERSION
 );
 
 exit($statusCode);
