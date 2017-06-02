@@ -17,17 +17,11 @@ if ($pharPath) {
 
 $discovery = new \Consolidation\AnnotatedCommand\CommandFileDiscovery();
 $discovery->setSearchPattern('*Commands.php');
-$commandClasses = $discovery->discover('src/Terra/Commands', "\Terra\Commands\\");
+$commands = $discovery->discover('src/Commands', '\Terra\Commands');
 
-print_r($commandClasses);
-$commands = [ \Terra\Commands\AppCommands::class ];
-print_r($commands);
-$commandClasses = [
-    \Terra\Commands\AppCommands::class,
-];
 $statusCode = \Robo\Robo::run(
     $_SERVER['argv'],
-    $commandClasses,
+    $commands,
     'Terra',
     '2.x'
 );
