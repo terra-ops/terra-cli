@@ -72,7 +72,7 @@ class Commands extends \Robo\Tasks {
       $user_config = array();
       $user_config_file = getenv('HOME').'/.terra/terra.yml';
       if ($fs->exists($user_config_file)) {
-        $user_config = Yaml::parse($user_config_file);
+        $user_config = Yaml::parse(file_get_contents($user_config_file));
       }
     
 //      $project_config = array();
