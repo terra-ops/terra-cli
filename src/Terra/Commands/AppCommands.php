@@ -19,8 +19,3 @@ class AppCommands extends Tasks {
     $this->say('wtf');
   }
 }
-
-
-$discovery = new \Consolidation\AnnotatedCommand\CommandFileDiscovery();
-$discovery->setSearchPattern('*Commands.php');
-$commandClasses = $discovery->discover('src/Terra/Commands', "\Terra\Commands\\");
