@@ -2,20 +2,33 @@
 
 namespace Terra\Commands;
 
-use Robo\Tasks;
+use Terra\Commands;
 
-class AppCommands extends Tasks {
-
-
+class AppCommands extends Commands {
+  
   /**
-   * This is the my:cat command
+   * Adds a new app.
    *
-   * This command will concatenate two parameters. If the --flip flag
-   * is provided, then the result is the concatenation of two and one.
-   *
-   * @command my:cat
+   * @param string $name The system name of the app.
+   * @param string $repository_url URL of the git repository.
+   * @param string $description Description of the app (optional).
    */
-  function appHello() {
-    $this->say('wtf');
+  public function appAdd($name = NULL, $repository_url = NULL, $description = NULL) {
+  
+    $this->getAnswer($name, 'System name of the app: ');
+    $this->getAnswer($repository_url, 'Git repository of the URL: ');
+    $this->getAnswer($description, 'Description: ');
+  
+    $description_label = empty($description)? 'none': $description;
+    $this->say("Adding app:$name with URL:$repository_url and description: $description_label");
+  
+    $app = [
+      'name' => $name,
+      'description' => $description,
+      'repo' => $repository_url,
+    ];
+  
+    $this->getConfig()->add('apps', $name, $app);
+    $this->getConfig()->save();
   }
 }
