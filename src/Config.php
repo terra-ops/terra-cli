@@ -31,8 +31,12 @@ class Config implements ConfigurationInterface
             $configs = func_get_args();
             $this->config = $processor->processConfiguration($this, $configs);
         } catch (\Exception $e) {
-            throw new \Exception('There is an error with your configuration: '.$e->getMessage());
+          
+          print $e->getMessage();
+//            throw new \Exception('There is an error with your configuration: '.$e->getMessage());
         }
+        
+        print_r($this->config);
     }
 
     /**
@@ -60,10 +64,6 @@ class Config implements ConfigurationInterface
             ->isRequired(false)
             ->end()
             ->scalarNode('repo')
-            ->isRequired(true)
-            ->end()
-            ->scalarNode('host')
-            ->defaultValue('localhost')
             ->isRequired(true)
             ->end()
             ->arrayNode('environments')
