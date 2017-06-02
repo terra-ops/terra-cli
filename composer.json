@@ -1,0 +1,11 @@
+{
+  "name": "terra/cli",
+  "require": {
+    "consolidation/Robo": "~1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Terra\\": "src"
+    }
+  }
+}
