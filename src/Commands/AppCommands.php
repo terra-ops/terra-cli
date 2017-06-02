@@ -20,7 +20,7 @@ class AppCommands extends Commands {
     $this->getAnswer($description, 'Description: ');
   
     $description_label = empty($description)? 'none': $description;
-    $this->say("Adding app:$name with URL:$repository_url and description: $description_label");
+    $this->say("Adding app:$name with URL:$repository_url and description:$description_label");
   
     $app = [
       'name' => $name,
