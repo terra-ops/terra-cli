@@ -14,7 +14,7 @@ install:
 
 script:
   - bin/terra
-  - bin/terra app:add drupal git@github.com:terra-ops/example-drupal.git --description='sample app' --create-environment --environment-name=demo
-  - bin/terra environment:enable drupal demo
+  - bin/terra app:add drupal git@github.com:terra-ops/example-drupal.git --description='sample app' --host=local.computer -n
+  - terra e:a drupal demo --enable -n
   - bin/terra status
   
