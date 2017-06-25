@@ -7,6 +7,7 @@ php:
   
 install:
   - composer install
+  - ls -la
 
-test:
+script:
   - bin/terra status
