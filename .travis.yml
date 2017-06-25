@@ -13,6 +13,7 @@ install:
   - ls -la
 
 script:
+  - bin/terra
   - bin/terra app:add drupal8 git@github.com:terra-ops/example-drupal.git 'sample app'
   - bin/terra env:add drupal8 travis --enable
   - bin/terra status
