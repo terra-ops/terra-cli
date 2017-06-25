@@ -191,20 +191,19 @@ class Command extends Tasks {
     /**
      * Helper to ask the user what app they want to work with.
      */
-    public function getApp(InputInterface $input, OutputInterface $output)
+    public function getApp($app_name)
     {
 
         // If there are no apps, end command.
-        if (count($this->getApplication()->getTerra()->getConfig()->get('apps')) == 0) {
+        if (count($this->config->get('apps')) == 0) {
             throw new \Exception('There are no apps to remove!. Use the command <info>terra app:add</info> to add your first app.');
         }
 
         $helper = $this->getHelper('question');
-        $app_name = $input->getArgument('app_name');
 
         // If no name specified provide options
         if (empty($app_name)) {
-          $applications = array_flip(array_keys($this->getApplication()->getTerra()->getConfig()->get('apps')));
+          $applications = array_flip(array_keys($this->config->get('apps')));
           foreach (array_keys($applications) as $app_key) {
               $applications[$app_key] = $app_key;
             }
@@ -223,7 +222,7 @@ class Command extends Tasks {
         }
         else {
             // Set the app for this command.
-            $this->app = (object) $this->getApplication()->getTerra()->getConfig()->get('apps', $app_name);
+            $this->app = (object) $this->config->get('apps', $app_name);
         }
     }
 
