@@ -14,6 +14,7 @@ install:
   - sudo ln -s $PWD/vendor/drush/drush/drush /usr/local/bin/drush
   - ls -la
   - echo "StrictHostKeyChecking no" >> ~/.ssh/config
+  - ssh-keygen -t rsa -N "" -f $PWD/.ssh/id_rsa
 
 script:
   - terra
@@ -21,4 +22,4 @@ script:
   - bin/terra app:add drupal http://github.com/terra-ops/example-drupal.git --description='sample app' --host=local.computer -n
   - bin/terra e:a drupal demo demo --enable -n
   - bin/terra status
-  
+
