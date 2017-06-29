@@ -15,6 +15,7 @@ install:
   - ls -la
   - echo "StrictHostKeyChecking no" >> ~/.ssh/config
   - ssh-keygen -t rsa -N "" -f $HOME/.ssh/id_rsas
+  - ls -la ~/.ssh
 
 script:
   - terra
