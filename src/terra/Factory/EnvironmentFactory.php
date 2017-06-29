@@ -333,7 +333,7 @@ $this->environment->name;
                 'database',
             ),
             'volumes' => array(
-                "{$this->environment->path}:/app:Z",
+                "{$this->environment->path}:/app:z",
             ),
             'environment' => array(
                 'HOST_UID' => posix_getuid(),
@@ -366,8 +366,8 @@ $this->environment->name;
                 '22',
             ),
             'volumes' => array(
-                "$document_root:/var/www/html",
-                "$source_root:/source",
+                "$document_root:/var/www/html:z",
+                "$source_root:/source:z",
             ),
             'environment' => array(
                 'AUTHORIZED_KEYS' => $ssh_authorized_keys,
