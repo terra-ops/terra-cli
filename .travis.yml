@@ -13,8 +13,7 @@ install:
   - sudo ln -s $PWD/bin/terra /usr/local/bin/terra
   - sudo ln -s $PWD/vendor/drush/drush/drush /usr/local/bin/drush
   - ls -la
-  - echo "Host * \n  StrictHostKeyChecking no" >> ~/.ssh/config
-  - cat ~/.ssh/config
+  - echo "StrictHostKeyChecking no" >> ~/.ssh/config
 
 script:
   - terra
