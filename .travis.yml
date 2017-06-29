@@ -10,6 +10,8 @@ services:
 
 install:
   - composer install
+  - alias terra=bin/terra
+  - alias drush=bin/drush
   - ls -la
 
 script:
