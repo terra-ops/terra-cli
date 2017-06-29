@@ -10,12 +10,13 @@ services:
 
 install:
   - composer install
-  - alias terra=bin/terra
-  - alias drush=bin/drush
+  - sudo ln -s {$PWD}/bin/terra /usr/local/bin/terra
+  - sudo ln -s {$PWD}/vendor/drush/drush/drush
   - ls -la
 
 script:
-  - bin/terra
+  - terra
+  - drush
   - bin/terra app:add drupal http://github.com/terra-ops/example-drupal.git --description='sample app' --host=local.computer -n
   - bin/terra e:a drupal demo demo --enable -n
   - bin/terra status
