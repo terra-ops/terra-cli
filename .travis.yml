@@ -14,7 +14,7 @@ install:
   - sudo ln -s $PWD/vendor/drush/drush/drush /usr/local/bin/drush
   - ls -la
   - echo "StrictHostKeyChecking no" >> ~/.ssh/config
-  - ssh-keygen -t rsa -N "" -f $HOME/.ssh/id_rsas
+  - ssh-keygen -t rsa -N "" -f $HOME/.ssh/id_rsa
   - ls -la ~/.ssh
 
 script:
