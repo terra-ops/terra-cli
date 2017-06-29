@@ -11,7 +11,7 @@ services:
 install:
   - composer install
   - sudo ln -s $PWD/bin/terra /usr/local/bin/terra
-  - sudo ln -s $PWD/vendor/drush/drush/drush /usr/local/bin/terra
+  - sudo ln -s $PWD/vendor/drush/drush/drush /usr/local/bin/drush
   - ls -la
 
 script:
