@@ -14,6 +14,7 @@ install:
   - sudo ln -s $PWD/vendor/drush/drush/drush /usr/local/bin/drush
   - ls -la
   - echo "Host * \n  StrictHostKeyChecking no" >> ~/.ssh/config
+  - cat ~/.ssh/config
 
 script:
   - terra
