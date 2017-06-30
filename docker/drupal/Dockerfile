@@ -13,6 +13,9 @@ ARG TERRA_UID=1000
 # TERRA_GID will default to TERRA_UID, unless passed as a build-arg to `docker-build`.
 ARG TERRA_GID=$TERRA_UID
 
+# This will be updated as drush is released.
+ARG DRUSH_VERSION=8.1.12
+
 ENV TERRA_USER=terra
 ENV TERRA_HOME=/var/terra
 
@@ -55,6 +58,13 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
     mv composer.phar /usr/local/bin/composer && \
     chmod +x /usr/local/bin/composer && \
     composer
+
+# Install Drush. We will handle site-local drush soon.
+RUN echo "Installing drush version $DRUSH_VERSION"
+RUN curl https://github.com/drush-ops/drush/releases/download/$DRUSH_VERSION/drush.phar -L -O -s && \
+    mv drush.phar /usr/local/bin/drush && \
+    chmod +x /usr/local/bin/drush && \
+    drush
 
 RUN cat /etc/sudoers.d/$TERRA_USER
 
