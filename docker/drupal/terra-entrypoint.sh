@@ -10,6 +10,7 @@ echo "export VIRTUAL_HOSTNAME=$VIRTUAL_HOSTNAME" >> /etc/apache2/envvars
 echo "TERRA || Launching apache2-foreground ..."
 sudo apache2-foreground&
 
+echo "TERRA || Writing drushrc.php ..."
 if [ ! -d "$HOME/.drush" ]; then
   mkdir "$HOME/.drush"
 fi
@@ -18,7 +19,7 @@ echo "TERRA || Writing drushrc.php ..."
 echo "<?php \
   \$options['root'] = '/var/www/html'; \
   \$options['uri'] = '$VIRTUAL_HOSTNAME'; \
-  " >> $HOME/.drush/drushrc.php
+  " > $HOME/.drush/drushrc.php
 
 echo "TERRA || Following log /var/log/terra ..."
 tail -f /var/log/terra
