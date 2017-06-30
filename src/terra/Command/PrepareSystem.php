@@ -71,6 +71,29 @@ class PrepareSystem extends Command
             echo 'DOCKER > '.$buffer;
           }
         });
+
+        if ($process->isSuccessful()) {
+
+          $output->writeln([
+            '',
+            "<info>Ok! Your Docker host now has an image for terra/drupal:local</info>",
+            "I'll use this image to launch your Drupal environments.",
+            '',
+          ]);
+        }
+        else {
+
+          $output->writeln([
+            "",
+            "<fg=red>Uh oh! The `docker-build` command failed!</>",
+            "The command I tried to run was: ",
+            "<comment>{$cmd}</comment>",
+            "",
+            "Please check your settings, try to run the command manually, then try again."
+          ]);
+
+          exit(1);
+        }
       }
       else {
         throw new \Exception("Hmm, sorry then. Terra can't work properly without ");
