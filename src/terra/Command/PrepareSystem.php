@@ -98,5 +98,47 @@ class PrepareSystem extends Command
       else {
         throw new \Exception("Hmm, sorry then. Terra can't work properly without ");
       }
+
+      $output->writeln([
+        "",
+        "Next up: URL Proxy. I need to launch a container with jwilder/nging-proxy for this to work.",
+        "You can review the Docker image here: https://hub.docker.com/r/jwilder/nginx-proxy/",
+        "",
+      ]);
+
+      $cmd = 'docker run --name terra-nginx-proxy -d -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro --security-opt label:disable jwilder/nginx-proxy';
+
+      $helper = $this->getHelper('question');
+      $question = new ConfirmationQuestion("I'd like to run `$cmd`  Ok?  ", false);
+
+      // If yes, gather the necessary info for creating .terra.yml.
+      if ($helper->ask($input, $output, $question)) {
+
+        $output->writeln([
+          "Great! running...",
+        ]);
+
+        $process = new Process($cmd);
+        $process->setTimeout(null);
+        $process->run(function ($type, $buffer) {
+          if (Process::ERR === $type) {
+            echo 'DOCKER > '.$buffer;
+          } else {
+            echo 'DOCKER > '.$buffer;
+          }
+        });
+
+        if ($process->isSuccessful()) {
+
+          $output->writeln([
+            "",
+            "Ok, that worked! You can now use full domain names to load sites.",
+            "",
+          ]);
+        }
+        else {
+          throw new \Exception("Ouch. Something went wrong when running the command. Review and try again.");
+        }
+      }
     }
 }
