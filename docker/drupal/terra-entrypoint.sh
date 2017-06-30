@@ -5,7 +5,7 @@ set -e
 # Save certain environment variables to /etc/apache2/envvars so they are available in Apache2 config.
 # To make environment variables available to the site itself, see apache-vhost.conf.
 echo "TERRA || Saving to /etc/apache2/envvars from environment variables ..."
-echo "export TERRA_ENVIRONMENT_URL=$TERRA_ENVIRONMENT_URL" >> /etc/apache2/envvars
+echo "export VIRTUAL_HOSTNAME=$VIRTUAL_HOSTNAME" >> /etc/apache2/envvars
 
 echo "TERRA || Launching apache2-foreground ..."
 sudo apache2-foreground&
@@ -17,7 +17,7 @@ fi
 echo "TERRA || Writing drushrc.php ..."
 echo "<?php \
   \$options['root'] = '/var/www/html'; \
-  \$options['uri'] = '$TERRA_ENVIRONMENT_URL'; \
+  \$options['uri'] = '$VIRTUAL_HOSTNAME'; \
   " >> $HOME/.drush/drushrc.php
 
 echo "TERRA || Following log /var/log/terra ..."
