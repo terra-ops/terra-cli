@@ -30,5 +30,8 @@ script:
   - bin/terra status
   - cd ~/.terra/environments/drupal/drupal-demo/
   - docker-compose logs
-  - curl http://drupal.demo.local.computer
+  - PORT=`docker inspect --format '{{ (index (index .NetworkSettings.Ports "80/tcp") 0).HostPort }}' drupaldemo_app_1`
+  - $URL="http://localhost:$PORT"
+  - echo $URL
+  - curl $URL
 
