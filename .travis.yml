@@ -21,6 +21,7 @@ script:
   - terra
   - drush
   - terra prepare:system -y
+  - docker logs terra-nginx-proxy
   - bin/terra app:add drupal http://github.com/terra-ops/example-drupal.git --description='sample app' --host=local.computer -n
   - bin/terra e:a drupal demo demo -n
   - cat ~/.terra/environments/drupal/drupal-demo/docker-compose.yml
