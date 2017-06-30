@@ -69,6 +69,7 @@ class Application extends BaseApplication
         $commands[] = new Command\Environment\EnvironmentUpdate();
         $commands[] = new Command\Status();
         $commands[] = new Command\Queue();
+        $commands[] = new Command\PrepareSystem();
 
         return $commands;
     }
