@@ -52,15 +52,16 @@ class PrepareSystem extends Command
       $path_to_drupal_docker = realpath(__DIR__ . '/../../../docker/drupal');
       $cmd = "docker build -t terra/drupal:local --build-arg TERRA_UID={$uid} {$path_to_drupal_docker}";
 
+      $output->writeln([
+        "I'd like to run `$cmd`  ..."
+      ]);
+
       $helper = $this->getHelper('question');
-      $question = new ConfirmationQuestion("I'd like to run `$cmd`  Ok?  ", false);
+      $question = new ConfirmationQuestion("Ok? [Y/n]", false);
 
       // If yes, gather the necessary info for creating .terra.yml.
       if ($helper->ask($input, $output, $question)) {
 
-        $output->writeln([
-          "Great! running...",
-        ]);
 
         $process = new Process($cmd);
         $process->setTimeout(null);
@@ -201,6 +202,9 @@ class PrepareSystem extends Command
           $output->writeln([
             "",
             "Ok, that worked! You can now use VIRTUAL_HOST domain names to load sites.",
+            "Look for the URL like http://app.environment.local.computer. You can click to access your sites if you are using terra on your local machine.",
+            "You can also fire up more containers manually with the Environment variable VIRTUAL_HOST=mydomain.local.computer to route requests for that domain to that container.",
+            "For more information, visit https://github.com/jwilder/nginx-proxy",
             "",
           ]);
         }
