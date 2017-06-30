@@ -106,17 +106,85 @@ class PrepareSystem extends Command
         "",
       ]);
 
+      $process = new Process('docker inspect terra-nginx-proxy');
+      $process->setTimeout(null);
+      $process->run();
+      if ($process->isSuccessful()) {
+
+        $output->writeln([
+          "",
+          "Wait a minute, it looks like you already have a container 'terra-nginx-proxy',",
+        ]);
+
+        $process = new Process('docker ps --filter name=terra-nginx-proxy -q');
+        $process->run();
+        // docker ps with filter outputs empty but OK if there are no containers.
+        if (!empty($process->getOutput())) {
+          $output->writeln([
+            "and it is running.",
+            "I can remove it for you by running `$cmd`... We can just launch a new one. ",
+          ]);
+
+          // Ask to remove it.
+          $cmd = 'docker kill terra-nginx-proxy; docker rm -fv terra-nginx-proxy';
+          $question = new ConfirmationQuestion("Ok?  [y/N]", false);
+          if ($helper->ask($input, $output, $question)) {
+            $process = new Process($cmd);
+            $process->run(function ($type, $buffer) {
+              if (Process::ERR === $type) {
+                echo 'DOCKER > '.$buffer;
+              } else {
+                echo 'DOCKER > '.$buffer;
+              }
+            });
+
+            if (!$process->isSuccessful()) {
+              $output->writeln([
+                "",
+                "<fg=red>Uh oh! The `docker kill` and `docker rm` commands failed!</>",
+              ]);
+            }
+          }
+        }
+        else {
+          $output->writeln([
+            "but it is not running. Would you like me to remove it before starting a new container?",
+          ]);
+
+          // Ask to remove it.
+          $cmd = 'docker rm -fv terra-nginx-proxy';
+          $question = new ConfirmationQuestion("Would you like me to stop and remove it by running `$cmd`? We can just launch anotherone next. Ok?  ", false);
+          if ($helper->ask($input, $output, $question)) {
+            $process = new Process($cmd);
+            $process->run(function ($type, $buffer) {
+              if (Process::ERR === $type) {
+                echo 'DOCKER > '.$buffer;
+              } else {
+                echo 'DOCKER > '.$buffer;
+              }
+            });
+
+            if (!$process->isSuccessful()) {
+              $output->writeln([
+                "",
+                "<fg=red>Uh oh! The `docker kill` and `docker rm` commands failed!</>",
+              ]);
+            }
+          }
+        }
+      }
+
       $cmd = 'docker run --name terra-nginx-proxy -d -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro --security-opt label:disable jwilder/nginx-proxy';
 
+      $output->writeln([
+        "I'd like to run `$cmd`  "
+      ]);
+
       $helper = $this->getHelper('question');
-      $question = new ConfirmationQuestion("I'd like to run `$cmd`  Ok?  ", false);
+      $question = new ConfirmationQuestion("Ok?  [Y/n]", false);
 
       // If yes, gather the necessary info for creating .terra.yml.
       if ($helper->ask($input, $output, $question)) {
-
-        $output->writeln([
-          "Great! running...",
-        ]);
 
         $process = new Process($cmd);
         $process->setTimeout(null);
@@ -132,7 +200,7 @@ class PrepareSystem extends Command
 
           $output->writeln([
             "",
-            "Ok, that worked! You can now use full domain names to load sites.",
+            "Ok, that worked! You can now use VIRTUAL_HOST domain names to load sites.",
             "",
           ]);
         }
