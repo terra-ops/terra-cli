@@ -10,5 +10,15 @@ echo "export TERRA_ENVIRONMENT_URL=$TERRA_ENVIRONMENT_URL" >> /etc/apache2/envva
 echo "TERRA || Launching apache2-foreground ..."
 sudo apache2-foreground&
 
+if [ ! -d "$HOME/.drush" ]; then
+  mkdir "$HOME/.drush"
+fi
+
+echo "TERRA || Writing drushrc.php ..."
+echo "<?php \
+  \$options['root'] = '/var/www/html'; \
+  \$options['uri'] = '$TERRA_ENVIRONMENT_URL'; \
+  " >> $HOME/.drush/drushrc.php
+
 echo "TERRA || Following log /var/log/terra ..."
 tail -f /var/log/terra
