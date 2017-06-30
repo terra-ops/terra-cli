@@ -27,5 +27,7 @@ script:
 
   - bin/terra e:e drupal demo
   - bin/terra status
+  - cd ~/.terra/environments/drupal/drupal-demo/
+  - docker-compose logs
   - curl http://drupal.demo.local.computer
 
