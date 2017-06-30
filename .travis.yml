@@ -27,4 +27,5 @@ script:
 
   - bin/terra e:e drupal demo
   - bin/terra status
+  - curl http://drupal.demo.local.computer
 
