@@ -41,7 +41,7 @@ class PrepareSystem extends Command
           throw new \Exception("UID not found. The command `id -u` failed and returned `$uid`. Please pass your user's UID as an argument to this command: `terra prepare:system 1100`");
         }
         $output->writeln([
-          "No UID argument entered, so I looked. Your ID was found to be $uid.",
+          "It looks like your UID is $uid.",
         ]);
       }
       else {
