@@ -31,6 +31,22 @@ RUN adduser $TERRA_USER www-data
 RUN echo "Granting sudo apache2-foreground access to $TERRA_USER"
 RUN echo "Defaults:$TERRA_USER !requiretty \n$TERRA_USER ALL=NOPASSWD: /usr/local/bin/apache2-foreground" >> /etc/sudoers.d/$TERRA_USER
 
+# Add our own Apache configuration
+COPY apache-vhost.conf /etc/apache2/sites-available/000-default.conf
+
+# Set ownership of /etc/apache2/envvars so hubdrop-entrypoint.sh can write to it
+RUN chown $TERRA_USER /etc/apache2/envvars
+
+# Prepare log file
+RUN touch /var/log/terra
+RUN chown $TERRA_USER /var/log/terra
+RUN chgrp $TERRA_USER /var/log/terra
+
+# Add our own entrypoint
+COPY terra-entrypoint.sh /usr/local/bin/terra-entrypoint
+RUN chmod +x /usr/local/bin/terra-entrypoint
+
+
 RUN cat /etc/sudoers.d/$TERRA_USER
 
 USER $TERRA_USER
@@ -40,4 +56,4 @@ VOLUME /var/www/html/
 EXPOSE 80
 
 # Default for drupal:7-apache is apache2-foreground. We want to run as Terra user so we use sudo.
-CMD ["sudo", "apache2-foreground"]
+CMD ["/usr/local/bin/terra-entrypoint"]
