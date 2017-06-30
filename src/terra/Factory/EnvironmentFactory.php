@@ -311,7 +311,7 @@ $this->environment->name;
 
         $compose = array();
         $compose['app'] = array(
-            'image' => 'terra/drupal',
+            'image' => 'terra/drupal:local',
             'tty' => true,
             'stdin_open' => true,
             'volumes' => array(
