@@ -37,8 +37,14 @@ class Command extends CommandBase
             }
             foreach ($app['environments'] as $environment) {
                 if (strpos($cwd, $environment['path']) === 0) {
-                    $input->setArgument('app_name', $app['name']);
-                    $input->setArgument('environment_name', $environment['name']);
+                  
+                    if ($input->hasArgument('app_name')) {
+                      $input->setArgument('app_name', $app['name']);
+                    }
+                    
+                    if ($input->hasArgument('environment_name')) {
+                      $input->setArgument('environment_name', $environment['name']);
+                    }
 
                     $environment_string = $app['name'] . ':' . $environment['name'];
 
