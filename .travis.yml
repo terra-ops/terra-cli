@@ -35,4 +35,7 @@ script:
   - URL="http://localhost:$PORT"
   - echo $URL
   - curl $URL
-
+  - docker-compose exec app drush site-install -y
+  - curl $URL
+  - docker-compose exec app drush status
+  - docker-compose exec app drush uli
