@@ -96,6 +96,52 @@ class PrepareSystem extends Command
       }
       }
       
+      $path_to_drupal_docker = realpath(__DIR__ . '/../../../docker/drush');
+      $cmd = "docker build -t terra/drush:local {$path_to_drupal_docker}";
+  
+      $output->writeln([
+        "I'd like to run `$cmd`  ..."
+      ]);
+  
+      $helper = $this->getHelper('question');
+      $question = new ConfirmationQuestion("Ok? [Y/n]", false);
+  
+      // If yes, gather the necessary info for creating .terra.yml.
+      if ($helper->ask($input, $output, $question)) {
+    
+        $process = new Process($cmd);
+        $process->setTimeout(null);
+        $process->run(function ($type, $buffer) {
+          if (Process::ERR === $type) {
+            echo 'DOCKER > '.$buffer;
+          } else {
+            echo 'DOCKER > '.$buffer;
+          }
+        });
+    
+        if ($process->isSuccessful()) {
+      
+          $output->writeln([
+            '',
+            "<info>Ok! Your Docker host now has an image for terra/drupal:local</info>",
+            "I'll use this image to launch your Drupal environments.",
+            '',
+          ]);
+        }
+        else {
+      
+          $output->writeln([
+            "",
+            "<fg=red>Uh oh! The `docker-build` command failed!</>",
+            "The command I tried to run was: ",
+            "<comment>{$cmd}</comment>",
+            "",
+            "Please check your settings, try to run the command manually, then try again."
+          ]);
+      
+          exit(1);
+        }
+      }
      
       $output->writeln([
         "",

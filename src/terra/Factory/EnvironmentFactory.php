@@ -342,7 +342,7 @@ $this->environment->name;
             ),
         );
         $compose['drush'] = array(
-            'image' => 'terra/drush',
+            'image' => 'terra/drush:local',
             'tty' => true,
             'stdin_open' => true,
             'links' => array(
