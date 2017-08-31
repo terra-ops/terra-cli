@@ -201,10 +201,7 @@ class PrepareSystem extends Command
 
           $output->writeln([
             "",
-            "Ok, that worked! You can now use VIRTUAL_HOST domain names to load sites.",
-            "Look for the URL like http://app.environment.local.computer. You can click to access your sites if you are using terra on your local machine.",
-            "You can also fire up more containers manually with the Environment variable VIRTUAL_HOST=mydomain.local.computer to route requests for that domain to that container.",
-            "For more information, visit https://github.com/jwilder/nginx-proxy",
+            "Ok, that worked! Now you have a container bound to port 80 on your host.",
             "",
           ]);
         }
@@ -212,5 +209,67 @@ class PrepareSystem extends Command
           throw new \Exception("Ouch. Something went wrong when running the command. Review and try again.");
         }
       }
+      
+      // ADD NETWORK
+      $output->writeln([
+        "",
+        "Last step: For the URL Proxy to work, we need to add a docker network called 'terra-nginx-network'.",
+        "",
+      ]);
+  
+      $process = new Process('docker network inspect terra-nginx-network');
+      $process->setTimeout(NULL);
+      $process->run();
+      if ($process->isSuccessful()) {
+    
+        $output->writeln([
+          "",
+          "Wait a minute, it looks like you already have a network called 'terra-nginx-network'.  You should be good to go!",
+        ]);
+      }
+      else {
+    
+        $cmds = [];
+        $cmds[] = 'docker network create terra-nginx-network';
+        $cmds[] = 'docker network connect terra-nginx-network terra-nginx-proxy';
+    
+        $output->writeln([
+          "I'd like to run:"
+        ]);
+        $output->writeln($cmds);
+    
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion("Ok?  [Y/n]", FALSE);
+        if ($helper->ask($input, $output, $question)) {
+      
+          foreach ($cmds as $cmd) {
+            $process = new Process($cmd);
+            $process->setTimeout(NULL);
+            $process->run(function ($type, $buffer) {
+              if (Process::ERR === $type) {
+                echo 'DOCKER > ' . $buffer;
+              }
+              else {
+                echo 'DOCKER > ' . $buffer;
+              }
+            });
+  
+            if ($process->isSuccessful()) {
+              $output->writeln([
+                "Command success!",
+              ]);
+            }
+            else {
+              throw new \Exception("Ouch. Something went wrong when running the command. Review and try again.");
+            }
+          }
+      
+        }
+      }
+  
+      $output->writeln([
+        "",
+        "You should be good to go! Try `terra app:add` to get started!",
+      ]);
     }
 }
