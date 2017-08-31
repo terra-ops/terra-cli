@@ -61,7 +61,6 @@ class Application extends BaseApplication
         $commands[] = new Command\Environment\EnvironmentDeploy();
         $commands[] = new Command\Environment\EnvironmentShell();
         $commands[] = new Command\Environment\EnvironmentScale();
-        $commands[] = new Command\Environment\EnvironmentProxyEnable();
         $commands[] = new Command\Environment\EnvironmentTest();
         $commands[] = new Command\Environment\EnvironmentRebuild();
         $commands[] = new Command\Environment\EnvironmentDomains();
