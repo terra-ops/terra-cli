@@ -224,7 +224,7 @@ class PrepareSystem extends Command
     
         $output->writeln([
           "",
-          "Wait a minute, it looks like you already have a network called 'terra-nginx-network'.  You should be good to go!",
+          "Wait a minute, it looks like you already have a network called 'terra-nginx-network'.",
         ]);
       }
       else {
