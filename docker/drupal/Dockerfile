@@ -23,6 +23,8 @@ ENV TERRA_HOME=/var/terra
 # @TODO: Add this to a new upstream image.
 RUN apt-get -qq update && apt-get -qq -y install \
   git \
+  mysql-client \
+  php5-mysql \
   sudo \
   zip
 
