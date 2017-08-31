@@ -1,5 +1,5 @@
 # Officially maintained by Docker.
-FROM drupal:7-apache
+FROM drupal:5-apache
 
 # terra/drupal (this file) maintained by THINKDROP
 MAINTAINER Jon Pugh <jon@thinkdrop.net>
