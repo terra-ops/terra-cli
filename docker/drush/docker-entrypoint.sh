@@ -8,7 +8,7 @@ if [ ! `id -u drush` ]; then
     echo $HOST_UID
     echo $HOST_GID
 
-    adduser --uid $HOST_UID --gid $HOST_GID --system  --disabled-password --home /home/drush drush
+    adduser --uid $HOST_UID --gid $HOST_GID --system --shell /bin/bash --disabled-password --home /home/drush drush
 
     mkdir /home/drush/.ssh
     mkdir /home/drush/.drush
