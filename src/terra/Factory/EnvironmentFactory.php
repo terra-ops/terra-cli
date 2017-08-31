@@ -312,6 +312,7 @@ $this->environment->name;
         $compose = array();
         $compose['app'] = array(
             'image' => 'terra/drupal:local',
+            'hostname' => $this->app->name . '_' . $this->environment->name . '.app',
             'tty' => true,
             'stdin_open' => true,
             'volumes' => array(
@@ -343,6 +344,7 @@ $this->environment->name;
         );
         $compose['drush'] = array(
             'image' => 'terra/drush:local',
+          'hostname' => $this->app->name . '_' . $this->environment->name . '.drush',
             'tty' => true,
             'stdin_open' => true,
             'links' => array(
@@ -623,7 +625,7 @@ $this->environment->name;
             $drush_alias_file[] = "  'uri' => '{$factory->getHost()}:{$factory->getPort()}',";
             $drush_alias_file[] = "  'root' => '$path',";
             $drush_alias_file[] = "  'remote-host' => '{$factory->getHost()}',";
-            $drush_alias_file[] = "  'remote-user' => 'terra',";
+            $drush_alias_file[] = "  'remote-user' => 'drush',";
             $drush_alias_file[] = "  'ssh-options' => '-p {$factory->getDrushPort()}',";
             $drush_alias_file[] = ');';
         }
