@@ -3,7 +3,7 @@
 
 # @TODO: Remove this block once we can use FROM drupal:7-apache-php5
 # BEGIN Dockerfile for drupal:7-apache-php5
-FROM php:5.5-apache
+FROM php:5.6-apache
 RUN a2enmod rewrite
 RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev libpq-dev \
 	&& rm -rf /var/lib/apt/lists/* \
