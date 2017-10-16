@@ -1,5 +1,15 @@
 # Officially maintained by Docker.
-FROM drupal:5-apache
+# FROM drupal:7-apache-php5
+
+# @TODO: Remove this block once we can use FROM drupal:7-apache-php5
+# BEGIN Dockerfile for drupal:7-apache-php5
+FROM php:5.5-apache
+RUN a2enmod rewrite
+RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev libpq-dev \
+	&& rm -rf /var/lib/apt/lists/* \
+	&& docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
+	&& docker-php-ext-install gd mbstring pdo pdo_mysql pdo_pgsql
+# END Dockerfile for drupal:7-apache-php5
 
 # terra/drupal (this file) maintained by THINKDROP
 MAINTAINER Jon Pugh <jon@thinkdrop.net>
@@ -26,6 +36,7 @@ RUN apt-get -qq update && apt-get -qq -y install \
   mysql-client \
   php5-mysql \
   sudo \
+  wget \
   zip
 
 RUN echo "Creating user $TERRA_USER with UID $TERRA_UID and GID $TERRA_GID and HOME of $TERRA_HOME"
@@ -52,14 +63,12 @@ COPY terra-entrypoint.sh /usr/local/bin/terra-entrypoint
 RUN chmod +x /usr/local/bin/terra-entrypoint
 
 # Add composer CLI
-# Instructions from from https://getcomposer.org/download/
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-    php -r "if (hash_file('SHA384', 'composer-setup.php') === '669656bab3166a7aff8a7506b8cb2d1c292f042046c5a994c43155c0be6190fa0355160742ab2e1c88d40d5be660b410') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"  && \
-    php composer-setup.php  && \
-    php -r "unlink('composer-setup.php');" && \
+# Instructions from from https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
+# Get SHA from new releases from https://github.com/composer/getcomposer.org/commits/master
+RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/4449596339f6ee0b9bbe21117eb7998fd46fbd25/web/installer -O - -q | php -- --quiet && \
     mv composer.phar /usr/local/bin/composer && \
     chmod +x /usr/local/bin/composer && \
-    composer
+    sudo -u terra composer
 
 # Install Drush. We will handle site-local drush soon.
 RUN echo "Installing drush version $DRUSH_VERSION"
