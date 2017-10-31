@@ -85,5 +85,8 @@ VOLUME $TERRA_HOME
 VOLUME /var/www/html/
 EXPOSE 80
 
+# Extra PHP Configurations
+COPY php.ini /usr/local/etc/php/
+
 # Default for drupal:7-apache is apache2-foreground. We want to run as Terra user so we use sudo.
 CMD ["/usr/local/bin/terra-entrypoint"]
